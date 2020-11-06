@@ -1,0 +1,153 @@
+#!/bin/sh
+# MAC
+alias \
+		ls="ls -hN --color=auto --group-directories-first" \
+		la="ls -a -hN --color=auto --group-directories-first" \
+		grep="grep --color=auto" 
+
+#{{ if eq .chezmoi.osRelease.id "arch" -}}
+# Arch-Pacman-yay
+alias \
+		sup="sudo pacman" \
+		pqq="pacman -Qq" \
+		pqqn="pacman -Qq | wc -l" \
+		sups="sup -S" \
+		suqs="sup -Qs" \
+		ys="yay -S " \
+		yqu="yay -Qu " \
+		yqs="yay -Qs " \
+		ysy="yay -Syy " \
+		ysyu="yay -Syyu " \
+		pf="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+#{{ end }}
+
+alias \
+		..="cd .."\
+		cl="clear"\
+		...="cd ../.."
+		
+alias \
+		cp="cp -iv" \
+		mv="mv -iv" \
+		rm="rm -vI" \
+		mkd="mkdir -pv"
+
+alias \
+		ka="killall" \
+		ff="fzf" \
+		systemctl_list="systemctl list-unit-files --state=enabled" \
+		ss_full="flameshot full -p ~/pictures/screenshot/" \
+		v="nvim" \
+		vim="nvim" \
+		vimdiff="nvim -d" \
+		vi="nvim" \
+		suv="sudo nvim" \
+		z="zathura" \
+		tabz='tabbed -c zathura -e' \
+		dragon="dragon-drag-and-drop" \
+		sx="sxiv" \
+		py="python" \
+		py2="python2" \
+		mon50="sudo ddccontrol -r 0x10 -w 50 dev:/dev/i2c-8" \
+		mon100="sudo ddccontrol -r 0x10 -w 100 dev:/dev/i2c-8" \
+		ktest="klavaro" \
+		udm="udisksctl mount -b" \
+		udum="udisksctl unmount -b" 
+# Tmux
+alias \
+		tks="tmux kill-session" \
+		tn="tmux new -t " \
+		tls="tmux ls" \
+		ta="tmux attach -t " 
+alias \
+		yt="youtube-dl" \
+		yt-f="youtube-dl -f" \
+		yt-F="youtube-dl -F" \
+		yts="yt --write-sub --skip-download" \
+		yts-all="yts --all-subs" \
+		yts-best="yts --sub-format "best"" \
+		yts-srt="yts --sub-format "srt"" \
+		yts-ass="yts --sub-format "ass"" \
+		yts-F="yt --list-subs" \
+		ytsl="yts --sub-lang" \
+		ytsl-auto="yt --write-auto-sub" \
+		ytsl-ar="yts --sub-lang ar" \
+		ytsl-ru="yts --sub-lang ru" \
+		ytsl-id="yts --sub-lang id" \
+		ytsl-en="yts --sub-lang en" \
+		ytt="yt --write-thumbnail --skip-download " \
+		ytt-all="yt --write-all-thumbnails --skip-download " \
+		ytt-F="yt --list-thumbnail" \
+		yta-fbest="youtube-dl -f bestaudio" \
+		yta-best="youtube-dl --x --audio-format best" \
+		yta-aac="youtube-dl --x --audio-format aac" \
+		yta-mp3="youtube-dl --x --audio-format mp3" \
+		yta-flac="youtube-dl --x --audio-format flac" \
+		yta-wav="youtube-dl --x --audio-format wav" \
+		yta-opus="youtube-dl --x --audio-format opus" \
+		yta-vorbis="youtube-dl --x --audio-format vorbis" \
+		ytv-best="youtube-dl --add-metadata -i -f bestvideo+bestaudio" \
+		ytv-mp4="youtube-dl --add-metadata -i -f mp4" \
+		ytv-mkv="yt-dl --add-metadata -i -f mkv"
+
+#chezmoi
+alias \
+		chez="chezmoi" \
+		chezed="chezmoi edit" \
+		chezap="chezmoi -v apply" \
+		chezcd="chezmoi cd" \
+		chezad="chezmoi add" \
+		chezup="chezmoi update"
+#GIT
+alias \
+		g="git" \
+		gst="git status" \
+		glo="git log" \
+		gre="git revert" \
+		gbr="git branch" \
+		gch="git checkout" \
+		gcl="git clone" \
+		gclb="git clone --bare" \
+		gad="git add" \
+		gpu="git push" \
+		gpuom="git push -u origin master" \
+		gcom="git commit" \
+		grem="git remote" \
+		gin="git init" \
+		ginb="git init --bare"
+
+#GIT BARE
+alias \
+		rdf="/usr/bin/git --git-dir=$HOME/repos/mario/bare/dotfiles/ --work-tree=$HOME" \
+		rsm="/usr/bin/git --git-dir=$XDG_BARE_HOME/suckless-mario --work-tree=$HOME" \
+		rdd="/usr/bin/git --git-dir=$XDG_BARE_HOME/dumpdot --work-tree=$HOME" \
+		rdt="/usr/bin/git --git-dir=$HOME/repos/test --work-tree=$HOME" \
+		rdfut="rdf config --local status.showUntrackedFiles no" \
+		rsmut="rsm config --local status.showUntrackedFiles no" 
+
+alias \
+		fc="make clean && rm -rf config.h && git reset --hard origin/master" \
+		fm="make && sudo make clean install"
+
+#files (linux only)
+alias \
+		cf="lf $XDG_CONFIG_HOME" \
+		cfu="lf $HOME/crossdisk/Root/Romario/Documents/UNKRIS-DOC/" \
+		cfc="lf $HOME/crossdisk/Code"\
+		cdcfc="cd $HOME/crossdisk/Code"\
+		cdcfn="lf $HOME/Dropbox/org"\
+		cfn="v $HOME/Dropbox/org"\
+		cfC="v $HOME/crossdisk/Code"\
+		cfa="$EDITOR $XDG_CONFIG_HOME/aliasrc" \
+		cfvs="$EDITOR $XDG_CONFIG_HOME/VSCodium/user-data/User/" \
+		cft="$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf" \
+		cfe="$EDITOR $XDG_CONFIG_HOME/doom/config.el" \
+		cfdw="$EDITOR $HOME/suckless/dwm" \
+		cfdm="$EDITOR $HOME/suckless/dmenu" \
+		cfx="$EDITOR $XDG_CONFIG_HOME/xmonad/xmonad.hs" \
+		cfst="$EDITOR $HOME/suckless/st" \
+		cfv="$EDITOR $XDG_CONFIG_HOME/nvim/" \
+		cdcfv="cd $XDG_CONFIG_HOME/nvim/" \
+		cfb="$EDITOR $XDG_CONFIG_HOME/bash/.bashrc" \
+		cfz="$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc" 
+
