@@ -1,6 +1,12 @@
-{{ if ne .chezmoi.os "darwin" }}
-.config/aliasrc_darwin
-{{ end }}
-{{if ne .chezmoi.os "linux" }}
-.config/aliasrc_linux
-{{ end }}
+# not include if "macOS"
+{{- if eq .chezmoi.os "darwin" }}
+.config/user-dirs.dirs
+.config/pavucontrol.ini
+.config/mimeapps.list
+.config/Dharkael
+.config/gtk-3.0
+.config/gtk-2.0
+.xinitrc
+.xprofile
+{{- end }}
+

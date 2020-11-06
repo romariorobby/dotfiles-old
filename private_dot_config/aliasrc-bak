@@ -1,10 +1,26 @@
 #!/bin/sh
+{{ if (eq .chezmoi.os "darwin") }}
 alias \
-		ls="ls -hN --color=auto --group-directories-first" \
-		la="ls -a -hN --color=auto --group-directories-first" \
+		ls="gls -hN --color=auto --group-directories-first" \
+		la="gls -a -hN --color=auto --group-directories-first" \
 		grep="grep --color=auto" 
-
-#{{ if eq .chezmoi.osRelease.id "arch" -}}
+{{ end }}
+{{ if (eq .chezmoi.os "linux") }}
+alias \
+		ls="gls -hN --color=auto --group-directories-first" \
+		la="gls -a -hN --color=auto --group-directories-first" \
+		grep="grep --color=auto" 
+{{ end }}
+alias \
+		cp="cp -iv" \
+		mv="mv -iv" \
+		rm="rm -vI" \
+		mkd="mkdir -pv" \
+		cl="clear" \
+		..="cd .." \
+		...="cd ../.." \
+		ka="killall"
+{{ if eq .chezmoi.osRelease.id "arch" -}}
 # Arch-Pacman-yay
 alias \
 		sup="sudo pacman" \
@@ -18,23 +34,14 @@ alias \
 		ysy="yay -Syy " \
 		ysyu="yay -Syyu " \
 		pf="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
-#{{ end }}
-
+{{ end }}
+{{ if (eq .chezmoi.os "linux") }}
 alias \
-		..="cd .."\
-		cl="clear"\
-		...="cd ../.."
-		
+		systemctl_list="systemctl list-unit-files --state=enabled"
+{{ end }}
+# APP
 alias \
-		cp="cp -iv" \
-		mv="mv -iv" \
-		rm="rm -vI" \
-		mkd="mkdir -pv"
-
-alias \
-		ka="killall" \
 		ff="fzf" \
-		systemctl_list="systemctl list-unit-files --state=enabled" \
 		ss_full="flameshot full -p ~/pictures/screenshot/" \
 		v="nvim" \
 		vim="nvim" \
@@ -128,25 +135,48 @@ alias \
 		fc="make clean && rm -rf config.h && git reset --hard origin/master" \
 		fm="make && sudo make clean install"
 
-#files (linux only)
+#FILES
 alias \
-		cf="lf $XDG_CONFIG_HOME" \
-		cfu="lf $HOME/crossdisk/Root/Romario/Documents/UNKRIS-DOC/" \
-		cfc="lf $HOME/crossdisk/Code"\
-		cdcfc="cd $HOME/crossdisk/Code"\
-		cdcfn="lf $HOME/Dropbox/org"\
-		cfn="v $HOME/Dropbox/org"\
-		cfC="v $HOME/crossdisk/Code"\
-		cfa="$EDITOR $XDG_CONFIG_HOME/aliasrc" \
-		cfvs="$EDITOR $XDG_CONFIG_HOME/VSCodium/user-data/User/" \
-		cft="$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf" \
-		cfe="$EDITOR $XDG_CONFIG_HOME/doom/config.el" \
-		cfdw="$EDITOR $HOME/suckless/dwm" \
-		cfdm="$EDITOR $HOME/suckless/dmenu" \
-		cfx="$EDITOR $XDG_CONFIG_HOME/xmonad/xmonad.hs" \
-		cfst="$EDITOR $HOME/suckless/st" \
-		cfv="$EDITOR $XDG_CONFIG_HOME/nvim/" \
+		cdcf="cd $XDG_CONFIG_HOME" \
+		lcfu="lf $HOME/documents/UNKRIS-DOC/" \
+		lcfc="lf $HOME/code/"\
+		cdcfc="cd $HOME/code"\
+		vcfc="v $HOME/code"\
+		cdcfn="cd $HOME/Dropbox/org"\
+		lcfn="lf $HOME/Dropbox/org"\
+		vcfa="$EDITOR $XDG_CONFIG_HOME/aliasrc" \
+		vcfvs="$EDITOR $XDG_CONFIG_HOME/VSCodium/user-data/User/" \
+		vcft="$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf" \
+		vcfe="$EDITOR $XDG_CONFIG_HOME/doom/config.el" \
+		vcfdw="$EDITOR $HOME/suckless/dwm" \
+		vcfdm="$EDITOR $HOME/suckless/dmenu" \
+		vcfx="$EDITOR $XDG_CONFIG_HOME/xmonad/xmonad.hs" \
+		vcfst="$EDITOR $HOME/suckless/st" \
+		vcfv="$EDITOR $XDG_CONFIG_HOME/nvim/" \
 		cdcfv="cd $XDG_CONFIG_HOME/nvim/" \
-		cfb="$EDITOR $XDG_CONFIG_HOME/bash/.bashrc" \
-		cfz="$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc" 
+		vcfb="$EDITOR $XDG_CONFIG_HOME/bash/.bashrc" \
+		vcfz="$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc" 
 
+
+{{ if (eq .chezmoi.os "darwin") }}
+#files (Mac)
+alias \
+		cdcf="cd $HOME/.config" \
+		cfu="cd $HOME/Documents/UNKRIS-DOC/" \
+		cdcfc="cd $HOME/code"\
+		vcfc="v $HOME/code"\
+		cdcfn="cd $HOME/Dropbox/org"\
+		vcfn="v $HOME/Dropbox/org"\
+		vcfa="v $HOME/.config/aliasrc" \
+		vcfvs="v $HOME/.config/VSCodium/user-data/User/" \
+		vcft="v $HOME/.config/tmux/tmux.conf" \
+		vcfe="v $HOME/.config/doom/config.el" \
+		vcfdw="v $HOME/suckless/dwm" \
+		vcfdm="v $HOME/suckless/dmenu" \
+		vcfx="v $HOME/.config/xmonad/xmonad.hs" \
+		vcfst="v $HOME/suckless/st" \
+		vcfv="v $HOME/.config/nvim/" \
+		cdcfv="cd $HOME/.config/nvim/" \
+		vcfb="v $HOME/.config/bash/.bashrc" \
+		vcfz="v $HOME/.config/zsh/.zshrc" 
+{{ end }}

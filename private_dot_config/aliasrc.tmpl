@@ -1,6 +1,182 @@
-{{ if eq .chezmoi.os "darwin" }}
-{{ include ".config/aliasrc_darwin" }}
+#!/bin/sh
+{{ if (eq .chezmoi.os "darwin") }}
+alias \
+		ls="gls -hN --color=auto --group-directories-first" \
+		la="gls -a -hN --color=auto --group-directories-first" \
+		grep="grep --color=auto" 
 {{ end }}
-{{ if eq .chezmoi.os "linux" }}
-{{ include ".config/aliasrc_linux" }}
+{{ if (eq .chezmoi.os "linux") }}
+alias \
+		ls="gls -hN --color=auto --group-directories-first" \
+		la="gls -a -hN --color=auto --group-directories-first" \
+		grep="grep --color=auto" 
+{{ end }}
+alias \
+		cp="cp -iv" \
+		mv="mv -iv" \
+		rm="rm -vI" \
+		mkd="mkdir -pv" \
+		cl="clear" \
+		..="cd .." \
+		...="cd ../.." \
+		ka="killall"
+{{ if (eq .chezmoi.os "linux") }}
+# Arch-Pacman-yay
+alias \
+		sup="sudo pacman" \
+		pqq="pacman -Qq" \
+		pqqn="pacman -Qq | wc -l" \
+		sups="sup -S" \
+		suqs="sup -Qs" \
+		ys="yay -S " \
+		yqu="yay -Qu " \
+		yqs="yay -Qs " \
+		ysy="yay -Syy " \
+		ysyu="yay -Syyu " \
+		pf="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+{{ end }}
+{{ if (eq .chezmoi.os "linux") }}
+alias \
+		systemctl_list="systemctl list-unit-files --state=enabled"
+{{ end }}
+# APP
+alias \
+		ff="fzf" \
+		ss_full="flameshot full -p ~/pictures/screenshot/" \
+		v="nvim" \
+		vim="nvim" \
+		vimdiff="nvim -d" \
+		vi="nvim" \
+		suv="sudo nvim" \
+		z="zathura" \
+		tabz='tabbed -c zathura -e' \
+		dragon="dragon-drag-and-drop" \
+		sx="sxiv" \
+		py="python" \
+		py2="python2" \
+		mon50="sudo ddccontrol -r 0x10 -w 50 dev:/dev/i2c-8" \
+		mon100="sudo ddccontrol -r 0x10 -w 100 dev:/dev/i2c-8" \
+		ktest="klavaro" \
+		udm="udisksctl mount -b" \
+		udum="udisksctl unmount -b" 
+# Tmux
+alias \
+		tks="tmux kill-session" \
+		tn="tmux new -t " \
+		tls="tmux ls" \
+		ta="tmux attach -t " 
+alias \
+		yt="youtube-dl" \
+		yt-f="youtube-dl -f" \
+		yt-F="youtube-dl -F" \
+		yts="yt --write-sub --skip-download" \
+		yts-all="yts --all-subs" \
+		yts-best="yts --sub-format "best"" \
+		yts-srt="yts --sub-format "srt"" \
+		yts-ass="yts --sub-format "ass"" \
+		yts-F="yt --list-subs" \
+		ytsl="yts --sub-lang" \
+		ytsl-auto="yt --write-auto-sub" \
+		ytsl-ar="yts --sub-lang ar" \
+		ytsl-ru="yts --sub-lang ru" \
+		ytsl-id="yts --sub-lang id" \
+		ytsl-en="yts --sub-lang en" \
+		ytt="yt --write-thumbnail --skip-download " \
+		ytt-all="yt --write-all-thumbnails --skip-download " \
+		ytt-F="yt --list-thumbnail" \
+		yta-fbest="youtube-dl -f bestaudio" \
+		yta-best="youtube-dl --x --audio-format best" \
+		yta-aac="youtube-dl --x --audio-format aac" \
+		yta-mp3="youtube-dl --x --audio-format mp3" \
+		yta-flac="youtube-dl --x --audio-format flac" \
+		yta-wav="youtube-dl --x --audio-format wav" \
+		yta-opus="youtube-dl --x --audio-format opus" \
+		yta-vorbis="youtube-dl --x --audio-format vorbis" \
+		ytv-best="youtube-dl --add-metadata -i -f bestvideo+bestaudio" \
+		ytv-mp4="youtube-dl --add-metadata -i -f mp4" \
+		ytv-mkv="yt-dl --add-metadata -i -f mkv"
+
+#chezmoi
+alias \
+		chez="chezmoi" \
+		chezed="chezmoi edit" \
+		chezap="chezmoi -v apply" \
+		chezcd="chezmoi cd" \
+		chezad="chezmoi add" \
+		chezup="chezmoi update"
+#GIT
+alias \
+		g="git" \
+		gst="git status" \
+		glo="git log" \
+		gre="git revert" \
+		gbr="git branch" \
+		gch="git checkout" \
+		gcl="git clone" \
+		gclb="git clone --bare" \
+		gad="git add" \
+		gpu="git push" \
+		gpuom="git push -u origin master" \
+		gcom="git commit" \
+		grem="git remote" \
+		gin="git init" \
+		ginb="git init --bare"
+
+#GIT BARE
+alias \
+		rdf="/usr/bin/git --git-dir=$HOME/repos/mario/bare/dotfiles/ --work-tree=$HOME" \
+		rsm="/usr/bin/git --git-dir=$XDG_BARE_HOME/suckless-mario --work-tree=$HOME" \
+		rdd="/usr/bin/git --git-dir=$XDG_BARE_HOME/dumpdot --work-tree=$HOME" \
+		rdt="/usr/bin/git --git-dir=$HOME/repos/test --work-tree=$HOME" \
+		rdfut="rdf config --local status.showUntrackedFiles no" \
+		rsmut="rsm config --local status.showUntrackedFiles no" 
+
+alias \
+		fc="make clean && rm -rf config.h && git reset --hard origin/master" \
+		fm="make && sudo make clean install"
+
+#FILES
+alias \
+		cdcf="cd $XDG_CONFIG_HOME" \
+		lcfu="lf $HOME/documents/UNKRIS-DOC/" \
+		lcfc="lf $HOME/code/"\
+		cdcfc="cd $HOME/code"\
+		vcfc="v $HOME/code"\
+		cdcfn="cd $HOME/Dropbox/org"\
+		lcfn="lf $HOME/Dropbox/org"\
+		vcfa="$EDITOR $XDG_CONFIG_HOME/aliasrc" \
+		vcfvs="$EDITOR $XDG_CONFIG_HOME/VSCodium/user-data/User/" \
+		vcft="$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf" \
+		vcfe="$EDITOR $XDG_CONFIG_HOME/doom/config.el" \
+		vcfdw="$EDITOR $HOME/suckless/dwm" \
+		vcfdm="$EDITOR $HOME/suckless/dmenu" \
+		vcfx="$EDITOR $XDG_CONFIG_HOME/xmonad/xmonad.hs" \
+		vcfst="$EDITOR $HOME/suckless/st" \
+		vcfv="$EDITOR $XDG_CONFIG_HOME/nvim/" \
+		cdcfv="cd $XDG_CONFIG_HOME/nvim/" \
+		vcfb="$EDITOR $XDG_CONFIG_HOME/bash/.bashrc" \
+		vcfz="$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc" 
+
+
+{{ if (eq .chezmoi.os "darwin") }}
+#files (Mac)
+alias \
+		cdcf="cd $HOME/.config" \
+		cfu="cd $HOME/Documents/UNKRIS-DOC/" \
+		cdcfc="cd $HOME/code"\
+		vcfc="v $HOME/code"\
+		cdcfn="cd $HOME/Dropbox/org"\
+		vcfn="v $HOME/Dropbox/org"\
+		vcfa="v $HOME/.config/aliasrc" \
+		vcfvs="v $HOME/.config/VSCodium/user-data/User/" \
+		vcft="v $HOME/.config/tmux/tmux.conf" \
+		vcfe="v $HOME/.config/doom/config.el" \
+		vcfdw="v $HOME/suckless/dwm" \
+		vcfdm="v $HOME/suckless/dmenu" \
+		vcfx="v $HOME/.config/xmonad/xmonad.hs" \
+		vcfst="v $HOME/suckless/st" \
+		vcfv="v $HOME/.config/nvim/" \
+		cdcfv="cd $HOME/.config/nvim/" \
+		vcfb="v $HOME/.config/bash/.bashrc" \
+		vcfz="v $HOME/.config/zsh/.zshrc" 
 {{ end }}
