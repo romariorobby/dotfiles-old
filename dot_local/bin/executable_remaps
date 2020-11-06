@@ -1,0 +1,17 @@
+#!/bin/bash
+# Increased key speed via rate change
+xset r rate 300 50
+
+# Maps capslok to delete key with repeated 
+setxkbmap -option caps:backspace
+setxkbmap -option shift:both_capslock
+xmodmap -e "clear Lock"
+# TODO and i want this to be change one only pressed caps to esc But not work
+killall xcape 2>/dev/null ; xcape -e 'Caps_Lock=Escape'
+# Map the menu button (on the righ) to right Super 
+#xmodmap -e 'keycode 135 = Super_R'
+
+# Quick switch between (Alt+Space) default Layout and Dvorak Programmer (Required Dvorak Programmer)
+# yay -S programmer-dvorak
+setxkbmap -layout us,us -variant ,dvp -option "lv3:rwin_switch,grp:alt_space_toggle"
+

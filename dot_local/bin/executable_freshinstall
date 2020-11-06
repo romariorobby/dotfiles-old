@@ -1,0 +1,210 @@
+#!/bin/bash
+set -o nounset
+set -o errexit
+# Base Package
+basepkgmac() { \ 
+	#brew install neovim #stable version
+	brew install --HEAD neovim #Development version
+	brew install dropbox
+	brew install iterm2
+#	brew install stow
+	brew install brave-browser
+	brew cask install monitorcontrol
+	brew install lf
+	brew install fzf ripgrep
+}
+basepkgarch() { \
+	sudo pacman -S alacritty
+	sudo pacman -S stow
+	sudo pacman -S fzf ripgrep
+	yay -S lf
+	yay -S brave-bin
+	yay -S neovim-nightly
+#	yay -S dropbox
+
+}
+#just random
+basepkgubuntu() { \
+	sudo apt install alacritty
+}
+
+installbasepkg() { \
+	echo "Installing base package.."
+	[ "$(uname)" == "Darwin" ] && basepkgmac
+	[ -f "/etc/arch-release" ] && basepkgarch
+	[ -n "$(uname -a | grep Ubuntu)" ] && basepkgubuntu
+} 
+
+# Node 
+nodemac() { \
+	brew install node
+	brew install lua
+}
+nodearch() { \
+	sudo pacman -S nodejs
+	sudo pacman -S npm
+}
+nodeubuntu() { \
+	sudo apt install nodejs
+	sudo apt install npm
+}
+installnode() { \
+	echo "Installing node..."
+	[ "$(uname)" == "Darwin" ] && nodearch
+	[ -f "/etc/arch-release" ] && nodearch
+	[ -n "$(uname -a | grep Ubuntu)" ] && nodeubuntu
+	sudo npm -i -g neovim
+}
+
+# Document & Notes
+docmac() { \
+	brew install notion
+	brew cask install obsidian
+}
+docarch() { \
+	yay -S notion-app
+	yay -S obsidian-appimage
+}
+# just random
+docubuntu() { \
+	sudo apt install notion-app
+}
+installdoc() { \
+	echo "Downloading Document and Notes Packages related..." 
+	[ "$(uname)" == "Darwin" ] && docmac
+	[ -f "/etc/arch-release" ] && docarch
+	[ -n "$(uname -a | grep Ubuntu)" ] && docubuntu
+}
+
+# Multimedia
+multmac() { \
+	brew install spotify
+	brew install khanhas/tap/spicetify-cli
+}
+multarch() { \
+	yay -S spotify
+	yay -S spicetify-cli
+	sudo chmod a+wr /opt/spotify
+	sudo chmod a+wr /opt/spotify/Apps -R
+}
+multubuntu() { \
+	sudo apt install spotify
+}
+intallmult() { \
+	echo "installing Multimedia packages..."
+	[ "$(uname)" == "Darwin" ] && multarch
+	[ -f "/etc/arch-release" ] && multarch
+	[ -n "$(uname -a | grep Ubuntu)" ] && multubuntu
+}
+
+# Social
+socmac() { \
+	brew install discord
+}
+socarch() { \
+	yay -S discord
+	yay -S betterdiscordcli-git
+}
+socubuntu() { \
+	sudo apt install discord
+}
+installsoc() { \
+	echo "Installing soydev social media package..."
+	[ "$(uname)" == "Darwin" ] && socmac
+	[ -f "/etc/arch-release" ] && socarch
+	[ -n "$(uname -a | grep Ubuntu)" ] && socubuntu
+}
+
+# Python
+pymac() { \
+	brew install python
+}
+
+pyarch() { \
+	sudo pacman -S python
+}
+pyubuntu() { \
+	sudo apt install python
+}
+installpy() { \
+	echo "Installing Python..."
+	[ "$(uname)" == "Darwin" ] && pymac
+	[ -f "/etc/arch-release" ] && pyarch
+	[ -n "$(uname -a | grep Ubuntu)" ] && pyubuntu
+}
+
+# PIP
+pipmac() { \
+	sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+	python3 get-pip.py
+	rm get-pip.py
+}
+piparch() { \
+	sudo pacman -S python-pip
+}
+pipubuntu() { \
+	sudo apt install python3-pip > /dev/null
+}
+installpip() { \
+	echo "Installing pip..."
+	[ "$(uname)" == "Darwin" ] && piparch
+	[ -f "/etc/arch-release" ] && piparch
+	[ -n "$(uname -a | grep Ubuntu)" ] && pipubuntu
+}
+
+#Clone My Config
+cloneconfig() { \ 
+	echo "Cloning your all Configuration on github..."
+	git clone https://github.com/romariorobby/dotfiles.git ~/repos/dotfiles
+}
+
+stowningvim() { \ 
+	echo "stowing your nvim"
+	cd $HOME/repos/dotfiles && stow -Svt ~ nvim
+}
+
+installnvimplug() { \
+	echo "Installing Plugins..."
+	nvim --headless +PlugInstall +qall > /dev/null 2>&1
+}
+
+installcocextensions() { \
+  # Install extensions
+  mkdir -p ~/.config/coc/extensions
+  cd ~/.config/coc/extensions
+  [ ! -f package.json ] && echo '{"dependencies":{}}'> package.json
+  # Change extension names to the extensions you need
+  # sudo npm install coc-explorer coc-snippets coc-json coc-actions --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
+  sudo npm install coc-tsserver coc-markdown coc-snippets coc-html coc-css coc-explorer coc-snippets coc-python coc-json coc-actions coc-yaml coc-css --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
+}
+
+cloneconfig
+
+stowningvim
+
+asktoinstallnode() { \
+	echo "Node not found!"
+	echo -n "Install node now (y/n)?"
+	read answer
+	[ "$answer" != "${answer#[Yy]}" ] && installnode && installcocextensions
+}
+asktoinstallpip() { \
+	echo "pip not found"
+	echo -n "Install pip now (y/n)"
+	read answer
+	[ "$answer" != "${answer#[Yy]}" ] && installpip
+}
+
+# Intro
+echo 'Bootstraping aqs'
+
+which node > /dev/null && echo "Pip Installed, next.." || asktoinstallnode
+
+which node > /dev/null && echo "Node Installed, next.." || asktoinstallnode
+
+which nvim > /dev/null && installnvimplug
+
+installcocextensions
+
+echo "## Recommended to installing https://github.com/ryanoasis/nerd-fonts"
+

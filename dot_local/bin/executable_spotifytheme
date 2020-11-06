@@ -1,0 +1,46 @@
+#!/bin/bash
+themepath="$HOME/.config/spicetify/Themes/"
+extpath="$HOME/.config/spicetify/Extensions/"
+
+clonethemearch() { \
+	git clone https://github.com/romariorobby/spicetify-themes.git ~/.config/spicetify/Themes
+}
+clonethememac() { \
+	git clone https://github.com/romariorobby/spicetify-themes.git ~/.spicetify-data/Themes
+}
+doclone(){ \
+	echo "Cloning Spicetify-theme..."
+	[ "$(uname)" == "Darwin" ] && clonethememac
+	[ -f "/etc/arch-release" ] && clonethemearch
+	[ -n "$(uname -a | grep Ubuntu)" ] && basepkgubuntu
+
+}
+choosetheme() { \
+	echo " Choose themes ? "
+	selectedtheme=`du --max-depth=1 $themepath | awk '{print $2}' | fzf --cycle | cut -d'/' -f7`
+	echo " Choose Extensions ? "
+	checkext=`du -a $HOME/.config/spicetify/Themes/$selectedtheme/ | awk '{print $2}' | fzf --cycle | cut -d'/' -f7` 
+	selectedext=`du -a $extpath | awk '{print $2}' | fzf --cycle | cut -d'/' -f7`
+	echo -n "Do you want to install '$selectedtheme' theme and '$selectedext' extensions ? "
+	read answer
+	[ "$answer" != "${answer#[Yy]}" ] && installtheme
+}
+installtheme() { \
+	echo "Installing $selectedtheme and $selectedext ..."
+	cd "$(dirname "$(spicetify -c)")/Themes/$selectedtheme"
+	spicetify config extensions $selectedext
+	spicetify config inject_css 1 replace_colors 1 overwrite_assets 1
+	spicetify config current_theme $selectedtheme color_scheme dark
+	spicetify apply
+}
+
+# still doesn't worked
+#configpath(){ \
+#	config=`grep -o "base" $HOME/.config/spicetify/Themes/$selected/color.ini`
+#}
+#colorsch() { \
+#	scheme=`configpath`
+#}
+doclone
+choosetheme
+exit
