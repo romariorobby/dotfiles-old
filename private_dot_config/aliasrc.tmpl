@@ -24,6 +24,8 @@ alias \
 # Arch-Pacman-yay
 alias \
 		sup="sudo pacman" \
+		supbl="sudo pacman -Sgg | grep blackarch | cut -d ' ' -f2 | sort -u"
+		supbg="sudo pacman -Sg | grep blackarch"
 		pqq="pacman -Qq" \
 		pqqn="pacman -Qq | wc -l" \
 		sups="sup -S" \
@@ -44,6 +46,7 @@ alias \
 		ff="fzf" \
 		ss_full="flameshot full -p ~/pictures/screenshot/" \
 		v="nvim" \
+		vf="fzf | xargs -r nvim" \
 		vim="nvim" \
 		vimdiff="nvim -d" \
 		vi="nvim" \
@@ -180,3 +183,8 @@ alias \
 		vcfb="v $HOME/.config/bash/.bashrc" \
 		vcfz="v $HOME/.config/zsh/.zshrc" 
 {{ end }}
+
+# Bind Bash only
+bind -m emacs-standard -x '"\ef": "vf"'
+bind -m vi-command -x '"\ef": "vf"'
+bind -m vi-insert -x '"\ef": "vf"'

@@ -15,3 +15,5 @@ HISTFILE=~/.cache/zsh/history
 # FZF
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+#custom fzf
+[ -f $HOME/.local/bin/fzf/binding.zsh ] && source $HOME/.local/bin/fzf/binding.zsh

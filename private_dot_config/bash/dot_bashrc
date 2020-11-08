@@ -14,3 +14,5 @@ set -o vi
 # FZF
 [ -f /usr/share/fzf/completion.bash ] && source /usr/share/fzf/completion.bash 
 [ -f /usr/share/fzf/key-bindings.bash ] && source /usr/share/fzf/key-bindings.bash 
+# custom fzf
+[ -f $HOME/.local/bin/fzf/binding.bash ] && source $HOME/.local/bin/fzf/binding.bash
