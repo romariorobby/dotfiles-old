@@ -8,50 +8,91 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 " Base
-Plug 'sheerun/vim-polyglot'
-Plug 'preservim/nerdtree'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-fugitive'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'mbbill/undotree'
-"Plug 'fannheyward/coc-terminal'
-" LF 
-Plug 'ptzz/lf.vim'
-Plug 'rbgrouleff/bclose.vim'
+	Plug 'sheerun/vim-polyglot'
+	Plug 'preservim/nerdtree'
+	" Better comments
+	" Plug 'tpope/vim-commentary'
+	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+	Plug 'junegunn/fzf.vim'
+    "Plug 'yuki-ycino/fzf-preview.vim', { 'branch': 'release', 'do': ':UpdateRemotePlugins' }
+	Plug 'neoclide/coc.nvim', {'branch': 'release'}
+	Plug 'mbbill/undotree'
+	" Have the file system follow you around
+    "Plug 'airblade/vim-rooter'
+	" auto pair for '(' '[' '{'
+    "Plug 'jiangmiao/auto-pairs'
+    "Plug 'tpope/vim-surround'
+	" View and search LSP symbols , tags
+    "Plug 'liuchengxu/vista.vim'
+	"GIT
+	" Support more VCS
+	" Plug 'mhinz/vim-signify'
+    "Plug 'airblade/vim-gitgutter'
+	Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-rhubarb'
+    Plug 'junegunn/gv.vim'
+    Plug 'rhysd/git-messenger.vim'
+	"Plug 'fannheyward/coc-terminal'
+" . 
+    "Plug 'kevinhwang91/rnvimr'
+	"Plug 'ptzz/lf.vim'
+	Plug 'rbgrouleff/bclose.vim'
 " Float-term
-Plug 'voldikss/vim-floaterm'
+	Plug 'voldikss/vim-floaterm'
 
-Plug 'mattn/emmet-vim'
-Plug 'turbio/bracey.vim', {'do': 'npm install --prefix server'}
+	Plug 'mattn/emmet-vim'
+	Plug 'turbio/bracey.vim', {'do': 'npm install --prefix server'}
 
 " Motion 
-Plug 'easymotion/vim-easymotion'
-" Plug 'justinmk/vim-sneak'
+	Plug 'easymotion/vim-easymotion'
+	" Plug 'justinmk/vim-sneak'
 
 " Themes 
-Plug 'itchyny/lightline.vim'
-Plug 'ryanoasis/vim-devicons'
-Plug 'sainnhe/gruvbox-material'
-Plug 'morhetz/gruvbox'
-Plug 'christianchiarulli/nvcode.vim'
+	"Statusline	
+	"Plug 'glepnir/galaxyline.nvim'
+	Plug 'vim-airline/vim-airline'
+	Plug 'vim-airline/vim-airline-themes'
+	"Plug 'itchyny/lightline.vim'
+	" Icon
+	Plug 'ryanoasis/vim-devicons'
+	Plug 'kyazdani42/nvim-web-devicons'
+	" colorshceme
+	Plug 'sainnhe/gruvbox-material'
+	Plug 'morhetz/gruvbox'
+	Plug 'christianchiarulli/nvcode.vim'
 " Color 
-Plug 'norcalli/nvim-colorizer.lua'
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-"Plug 'vbe0201/vimdiscord'
-"Plug 'junegunn/goyo.vim'
-"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
-"Plug 'liuchengxu/vim-which-key'
-"Plug 'airblade/vim-gitgutter'
+	Plug 'norcalli/nvim-colorizer.lua'
+	Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+	"Plug 'vbe0201/vimdiscord'
+	"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 " Note
-Plug 'jceb/vim-orgmode'
-Plug 'ferrine/md-img-paste.vim'
-Plug 'vimwiki/vimwiki'
+	Plug 'jceb/vim-orgmode'
+	Plug 'ferrine/md-img-paste.vim'
+	Plug 'vimwiki/vimwiki'
+	" Manage todolist.
+	Plug 'vuciv/vim-bujo'
+    " Markdown Preview
+    "Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install'  }
 " Misc
-Plug 'aurieh/discord.nvim', { 'do': ':UpdateRemotePlugins'}
-Plug 'ThePrimeagen/vim-be-good', {'do': './install.sh'}
+	"
+	" Manpage in vim
+	Plug 'vim-utils/vim-man'
+	" Discord 
+	Plug 'aurieh/discord.nvim', { 'do': ':UpdateRemotePlugins'}
+	Plug 'ThePrimeagen/vim-be-good', {'do': './install.sh'}
+	" Emacs like
+	"Plug 'liuchengxu/vim-which-key'
+	" Zen Mode
+	"Plug 'junegunn/goyo.vim'
+    " Start Screen
+    "Plug 'mhinz/vim-startify'
+    " Debugging
+    "Plug 'puremourning/vimspector'
+    "Plug 'szw/vim-maximizer'
+	" Telescope
+	"Plug 'nvim-lua/popup.nvim'
+	"Plug 'nvim-lua/plenary.nvim'
+	"Plug 'nvim-lua/telescope.nvim'
 call plug#end()
 
 " Auto install missing plugins on startup

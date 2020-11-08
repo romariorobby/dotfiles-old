@@ -257,3 +257,4 @@ map gdr cd ~/Dropbox/
 map gdl cd ~/downloads/
 map gD cd ~/crossdisk/Root/Unorganize/Cross-Download/
 map gcf. cd ~/.config/
+map gch. cd ~/.local/share/chezmoi/

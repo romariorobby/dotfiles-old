@@ -20,6 +20,8 @@ source $HOME/.config/nvim/plugconfig/nerdtree.vim
 source $HOME/.config/nvim/plugconfig/fzf.vim 
 source $HOME/.config/nvim/plugconfig/discord.vim 
 source $HOME/.config/nvim/plugconfig/mdimgpaste.vim 
-source $HOME/.config/nvim/plugconfig/lf.vim 
+source $HOME/.config/nvim/plugconfig/airline.vim 
 source $HOME/.config/nvim/plugconfig/floaterm.vim 
 luafile $HOME/.config/nvim/plugconfig/colorizer.lua
+"luafile $HOME/.config/nvim/lua/galaxy-line.lua
+"source $HOME/.config/nvim/plugconfig/lf.vim 
