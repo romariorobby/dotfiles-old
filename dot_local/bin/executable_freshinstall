@@ -17,6 +17,7 @@ basepkgarch() { \
 	sudo pacman -S alacritty
 	sudo pacman -S stow
 	sudo pacman -S fzf ripgrep
+	yay -S whitesur-gtk-theme-git
 	yay -S lf
 	yay -S brave-bin
 	yay -S neovim-nightly

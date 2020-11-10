@@ -24,8 +24,8 @@ alias \
 # Arch-Pacman-yay
 alias \
 		sup="sudo pacman" \
-		supbl="sudo pacman -Sgg | grep blackarch | cut -d ' ' -f2 | sort -u"
-		supbg="sudo pacman -Sg | grep blackarch"
+		supbl="sudo pacman -Sgg | grep blackarch | cut -d ' ' -f2 | sort -u" \
+		supbg="sudo pacman -Sg | grep blackarch" \
 		pqq="pacman -Qq" \
 		pqqn="pacman -Qq | wc -l" \
 		sups="sup -S" \
@@ -35,7 +35,8 @@ alias \
 		yqs="yay -Qs " \
 		ysy="yay -Syy " \
 		ysyu="yay -Syyu " \
-		pf="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+		fsups="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S" \
+		fys="pacman -Slq | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
 {{ end }}
 {{ if (eq .chezmoi.os "linux") }}
 alias \
