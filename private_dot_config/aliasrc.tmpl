@@ -36,7 +36,7 @@ alias \
 		ysy="yay -Syy " \
 		ysyu="yay -Syyu " \
 		fsups="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S" \
-		fys="pacman -Slq | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
+		fys="yay -Slq | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
 {{ end }}
 {{ if (eq .chezmoi.os "linux") }}
 alias \
