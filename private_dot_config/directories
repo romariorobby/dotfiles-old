@@ -1,14 +1,14 @@
+#cd & ls -a
 d	~/documents/
 cru	~/crossdisk/Root/Romario/Documents/UNKRIS-DOC/
-PC	~/crossdisk/Code/
+cfc	~/crossdisk/Code/
 D	~/downloads/
 crd	~/crossdisk/Root/Unorganize/Cross-Download/
 h	${HOME:-~/}
 m	~/music
 pp	~/pictures
 vv	~/videos
-cff	${XDG_CONFIG_HOME:-$HOME/.config}
-cf	~/.config/
+cf	${XDG_CONFIG_HOME:-$HOME/.config}
 cac	${XDG_CACHE_HOME:-$HOME/.cache}
 mn	/mnt
 cr	~/crossdisk/
