@@ -16,6 +16,7 @@ exc	 ~/crossdisk/Code/
 exD	 ~/crossdisk/Root/Unorganize/Cross-Downloads/
 mn	 /mnt
 lb 	 ~/.local/bin
+lbb  ~/.local/bin/blocks/
 ch	 ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi
 hr	 ~/repos/
 hrm	 ~/repos/mario/
