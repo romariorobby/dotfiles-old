@@ -1,0 +1,11 @@
+#!/bin/sh
+case $1 in
+    1) exec pavucontrol ;;
+    2) pamixer --toggle-mute ;;
+    4) pamixer --allow-boost -i 1; sigdwmblocks 5;;
+    5) pamixer --allow-boost -d 1; sigdwmblocks 5;;
+    3) notify-send "^^ Volume Module" "\- Shows Volume >, o if muted.
+- Middle Click to mute.
+- Scroll to change" ;;
+    6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
