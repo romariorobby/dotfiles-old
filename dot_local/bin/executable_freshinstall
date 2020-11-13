@@ -19,6 +19,7 @@ basepkgarch() { \
 	sudo pacman -S fzf ripgrep
 	yay -S whitesur-gtk-theme-git
 	yay -S whitesur-icon-theme-git
+	yay -S zsh-fast-syntax-highlighting-git
 	yay -S lf
 	yay -S brave-bin
 	yay -S neovim-nightly
@@ -77,7 +78,13 @@ installdoc() { \
 	[ -f "/etc/arch-release" ] && docarch
 	[ -n "$(uname -a | grep Ubuntu)" ] && docubuntu
 }
-
+pacmaneye(){ \ 
+	grep -q "^Color" /etc/pacman.conf || sed -i "s/^#Color$/Color/" /etc/pacman.conf
+	grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
+}
+installpacmaneye(){ \
+	[ -f "/etc/arch-release" ] && pacmaneye
+}
 # Multimedia
 multmac() { \
 	brew install spotify

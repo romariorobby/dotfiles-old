@@ -24,12 +24,12 @@ alias \
 # Arch-Pacman-yay
 alias \
 		sup="sudo pacman" \
-		supbl="sudo pacman -Sgg | grep blackarch | cut -d ' ' -f2 | sort -u" \
-		supbg="sudo pacman -Sg | grep blackarch" \
+		pgbl="sudo pacman -Sgg | grep blackarch | cut -d ' ' -f2 | sort -u" \
+		pbl="sudo pacman -Sg | grep blackarch" \
 		pqq="pacman -Qq" \
-		pqqn="pacman -Qq | wc -l" \
-		sups="sup -S" \
-		suqs="sup -Qs" \
+		pqqc="pacman -Qq | wc -l" \
+		ps="sup -S" \
+		pqs="sup -Qs" \
 		ys="yay -S " \
 		yqu="yay -Qu " \
 		yqs="yay -Qs " \
@@ -113,22 +113,24 @@ alias \
 #GIT
 alias \
 		g="git" \
+		gs="git status" \
 		gst="git status" \
-		glo="git log" \
-		gre="git revert" \
+		glr="git log --oneline" \
+		glo="git log --oneline" \
+		grv="git revert" \
 		gbr="git branch" \
-		gch="git checkout" \
+		gco="git checkout" \
 		gcl="git clone" \
 		gclm="cd $HOME/repos/mario/; git clone" \
 		gclo="cd $HOME/repos/others/; git clone" \
-		gclb="git clone --bare" \
+		gclB="git clone --bare" \
 		gad="git add" \
-		gpu="git push" \
-		gpuom="git push -u origin master" \
-		gcom="git commit" \
-		grem="git remote" \
+		gp="git push" \
+		gpom="git push -u origin master" \
+		gci="git commit" \
+		grm="git remote" \
 		gin="git init" \
-		ginb="git init --bare"
+		ginB="git init --bare"
 
 #GIT BARE
 #alias \

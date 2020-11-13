@@ -1,2 +1,2 @@
-bindkey -s "\ef" 'vf^M'
+bindkey -s "\ef" 'fv^M'
 
