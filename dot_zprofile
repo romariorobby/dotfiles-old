@@ -18,14 +18,24 @@ export BROWSER="brave"
 export READER="zathura"
 export QT_QPA_PLATFORMTHEME="qt5ct"
 # ~/ Clean-up: 
+export PASSWORD_STORE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/password-store"
+export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/wget/wgetrc"
+export NOTMUCH_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/notmuch"
 export XDG_CONFIG_HOME="$HOME/.config"
+export LESSHISTFILE="-"
 export VSCODE_PORTABLE="$XDG_CONFIG_HOME/VSCodium"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_BARE_HOME="$HOME/repos/mario/bare"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export BASHRCDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/bash"
-
+export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
+export KODI_DATA="${XDG_DATA_HOME:-$HOME/.local/share}/kodi"
+export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
+export LEDGER_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/hledger.journal"
+export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
+export GRADLE_USER_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/gradle"
+export INPUTRC="${XDG_CONFIG_HOME:-$HOME/.config}/inputrc"
 # ANDROID
 #
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="${XDG_CONFIG_HOME}/java"
@@ -34,6 +44,8 @@ export ANDROID_AVD_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/android"
 export ANDROID_EMULATOR_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/android"
 export ANDROID_VENDOR_KEY="${XDG_CONFIG_HOME:-$HOME/.config}/android"
 
+export QT_QPA_PLATFORMTHEME="gtk2"	# Have QT use gtk2 theme.
+export _JAVA_AWT_WM_NONREPARENTING=1	# Fix for Java applications in dwm
 # XMONAD
 export XMONAD_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/xmonad"
 export XMONAD_DATA_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/xmonad"
@@ -112,3 +124,5 @@ ex=🎯:\
 *.jar=♨:\
 *.java=♨:\
 "
+
+[ ! -f ${XDG_CONFIG_HOME:-$HOME/.config}/shortcutrc ] && shortcuts >/dev/null 2>&1 &

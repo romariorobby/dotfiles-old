@@ -7,6 +7,7 @@ nitrogen --restore &
 deadd-notification-center &
 nm-applet &
 dwmblocks &
+#sxkhd &
 #volumeicon &
 #xrdb ${XDG_CONFIG_HOME:$HOME/.config}/Xresources & # Uncomment to user Xresources color/settings on startup 
 blueman-applet &

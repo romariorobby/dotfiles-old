@@ -15,4 +15,6 @@ cfmb	${XDG_CONFIG_HOME:-$HOME/.config}/ncmpcpp/bindings
 cfmc	${XDG_CONFIG_HOME:-$HOME/.config}/ncmpcpp/config
 cffc	${XDG_CONFIG_HOME:-$HOME/.config}/fontconfig/fonts.conf
 cfdc	${XDG_CONFIG_HOME:-$HOME/.config}/doom/config.el
-cfxc	${XDG_CONFIG_HOME:-$HOME/.config}/xmonad/xmonad.hs
+cfxmc	${XDG_CONFIG_HOME:-$HOME/.config}/xmonad/xmonad.hs
+cfkc	${XDG_CONFIG_HOME:-$HOME/.config}/sxhkd/sxhkdrc
+cfbsc	${XDG_CONFIG_HOME:-$HOME/.config}/bspwm/bspwmrc
