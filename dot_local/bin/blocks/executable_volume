@@ -3,10 +3,10 @@
 # Prints the current volume or 🔇 if muted.
 
 case $1 in
-    1) setsid -f "$TERMINAL" -e pulsemixer ;;
-    2) pamixer -t ;;
-    4) pamixer --allow-boost -i 1;; 
-    5) pamixer --allow-boost -d 1;;
+    1) setsid -f "$TERMINAL" -e pulsemixer ; sigdwmblocks 5;;
+    2) pamixer -t ; sigdwmblocks 5;;
+    4) pamixer --allow-boost -i 1; sigdwmblocks 5;; 
+    5) pamixer --allow-boost -d 1; sigdwmblocks 5;;
     3) notify-send "📢 Volume Module" "\- Shows Volume 🔊, 🔇 if muted.
 - Middle Click to mute.
 - Scroll to change" ;;
