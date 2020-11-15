@@ -13,6 +13,7 @@ set incsearch
 set nu 
 set termguicolors
 set noshowmode
+set splitbelow splitright
 set hidden
 set colorcolumn=80
 " Vimwiki 
@@ -24,6 +25,7 @@ set nowritebackup
 set updatetime=300
 set shortmess+=c
 
-autocmd BufRead,BufNewFile *.md,*.rmd,*.Rmd,*.txt set filetype=markdown
-autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
-autocmd BufRead,BufNewFile *.tex set filetype=tex
+" Turns off highlighting on the bits of code that are changed, so the line that is changed is highlighted but the actual text that has changed stands out on the line and is readable.
+if &diff
+    highlight! link DiffText MatchParen
+endif

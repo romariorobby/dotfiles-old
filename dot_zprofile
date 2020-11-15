@@ -18,6 +18,7 @@ export BROWSER="brave"
 export READER="zathura"
 export QT_QPA_PLATFORMTHEME="qt5ct"
 # ~/ Clean-up: 
+#export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority" # This line will break some DMs.
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/password-store"
 export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/wget/wgetrc"
 export NOTMUCH_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/notmuch"

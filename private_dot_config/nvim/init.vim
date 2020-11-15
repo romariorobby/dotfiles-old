@@ -5,6 +5,7 @@ if exists('g:vscode')
 	source $HOME/.config/nvim/vscode/setting.vim
 endif
 source $HOME/.config/nvim/general/settings.vim
+source $HOME/.config/nvim/general/autocmd.vim
 source $HOME/.config/nvim/vimplug/plugins.vim
 source $HOME/.config/nvim/keys/mapping.vim
 source $HOME/.config/nvim/keys/documents.vim

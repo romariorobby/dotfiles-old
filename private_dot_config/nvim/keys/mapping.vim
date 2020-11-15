@@ -107,6 +107,10 @@ nnoremap <F5> :DiscordUpdatePresence<CR>
 " Hexokinase
 nnoremap <leader>` :HexokinaseToggle<CR>
 " Emmet
-let g:user_emmet_expandabbr_key='<A-Space>'
+let g:user_emmet_expandabbr_key='<C-e>'
 " Save File as sudo on that require root permission
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+" VIMWIKI
+map <leader><F9> :VimwikiIndex
+" Open corresponding .pdf/.html or preview
+map <leader><F5> :!opout <c-r>%<CR><CR>

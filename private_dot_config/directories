@@ -5,7 +5,7 @@ hD	 ${XDG_MUSIC_DIR:-$HOME/downloads}
 hp	 ${XDG_MUSIC_DIR:-$HOME/pictures}
 hm   ${XDG_MUSIC_DIR:-$HOME/music}
 hv	 ${XDG_MUSIC_DIR:-$HOME/videos}
-cf	 ${XDG_CONFIG_HOME:-$HOME/.config}
+hcf	 ${XDG_CONFIG_HOME:-$HOME/.config}
 hca	 ${XDG_CACHE_HOME:-$HOME/.cache}
 cfv	 ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/
 cfd	 ${XDG_CONFIG_HOME:-$HOME/.config}/doom/
@@ -17,7 +17,10 @@ exD	 ~/crossdisk/Root/Unorganize/Cross-Downloads/
 mn	 /mnt
 lb 	 ~/.local/bin
 lbb  ~/.local/bin/blocks/
-ch	 ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi
+dt	 ${XDG_DATA_HOME:-$HOME/.local/share}
+dtch ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi
+dtchd ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi/private_dot_config
+dtchl ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi/dot_local/
 hr	 ~/repos/
 hrm	 ~/repos/mario/
 hro	 ~/repos/others/
