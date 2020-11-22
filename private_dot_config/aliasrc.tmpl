@@ -9,7 +9,8 @@ alias \
 alias \
 		ls="ls -hN --color=auto --group-directories-first" \
 		la="ls -a -hN --color=auto --group-directories-first" \
-		grep="grep --color=auto" 
+		grep="grep --color=auto" \
+		greprdos="grep -r 'TODO\:\:'" 
 {{ end }}
 alias \
 		cp="cp -iv" \
@@ -109,6 +110,7 @@ alias \
 		cv="chezmoi edit" \
 		chezap="chezmoi -v apply" \
 		chezcd="chezmoi cd" \
+		dtch="chezmoi cd" \
 		chezad="chezmoi add" \
 		chezup="chezmoi -v update"
 #GIT
