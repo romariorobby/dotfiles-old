@@ -15,7 +15,12 @@ alias \
 alias \
 		cp="cp -iv" \
 		mv="mv -iv" \
+{{ if (eq .chezmoi.os "darwin") }}
+		rm="rm -vi" \
+{{ end }}
+{{ if (eq .chezmoi.os "linux") }}
 		rm="rm -vI" \
+{{ end }}
 		mkd="mkdir -pv" \
 		cl="clear" \
 		..="cd .." \

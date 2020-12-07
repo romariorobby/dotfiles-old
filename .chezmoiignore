@@ -6,6 +6,12 @@
 .config/Dharkael
 .local/share/applications/
 .config/gtk-3.0
+.config/gtk-3.0
+.config/bspwm
+.config/sxhkd
+.config/dunst
+.config/Xresources
+.local/bin/blocks
 .config/gtk-2.0
 .xinitrc
 .xprofile
