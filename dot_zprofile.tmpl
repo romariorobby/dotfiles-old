@@ -2,7 +2,9 @@
 # zsh profile file. Runs on login. Environmental variables are set here.
 # 
 # Adds `~/.local/bin` to $PATH
+{{ if (eq .chezmoi.os "linux") }}
 export PATH="$PATH:$(du "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
+{{ end }}
 export PATH="$HOME/.local/bin${PATH:+:${PATH}}"
 
 
