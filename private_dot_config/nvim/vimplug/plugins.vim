@@ -59,7 +59,7 @@ call plug#begin('~/.config/nvim/plugged')
 	" colorshceme
 	Plug 'sainnhe/gruvbox-material'
 	Plug 'morhetz/gruvbox'
-	Plug 'christianchiarulli/nvcode.vim'
+	"Plug 'christianchiarulli/nvcode.vim'
 " Color 
 	Plug 'norcalli/nvim-colorizer.lua'
 	Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
