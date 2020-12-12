@@ -12,10 +12,12 @@ basepkgmac() { \
 	brew cask install monitorcontrol
 	brew install lf
 	brew install fzf ripgrep
+	brew install chezmoi
 }
 basepkgarch() { \
 	sudo pacman -S alacritty
-	sudo pacman -S stow
+#	sudo pacman -S stow
+	sudo pacman -S chezmoi	
 	sudo pacman -S fzf ripgrep
 	yay -S whitesur-gtk-theme-git
 	yay -S whitesur-icon-theme-git
@@ -171,6 +173,10 @@ stowningvim() { \
 	echo "stowing your nvim"
 	cd $HOME/repos/dotfiles && stow -Svt ~ nvim
 }
+chezmoiconfig(){ \
+	echo "Cloning config with chezmoi ..."
+	chezmoi init https://github.com/romariorobby/dotfiles.git 
+}
 
 installnvimplug() { \
 	echo "Installing Plugins..."
@@ -184,12 +190,12 @@ installcocextensions() { \
   [ ! -f package.json ] && echo '{"dependencies":{}}'> package.json
   # Change extension names to the extensions you need
   # sudo npm install coc-explorer coc-snippets coc-json coc-actions --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
-  sudo npm install coc-tsserver coc-markdown coc-snippets coc-html coc-css coc-explorer coc-snippets coc-python coc-json coc-actions coc-yaml coc-css --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
+  sudo npm install coc-tsserver coc-snippets coc-html coc-css coc-explorer coc-snippets coc-python coc-json coc-actions coc-yaml coc-css --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 }
 
-cloneconfig
+#cloneconfig
 
-stowningvim
+#stowningvim
 
 asktoinstallnode() { \
 	echo "Node not found!"
@@ -207,7 +213,7 @@ asktoinstallpip() { \
 # Intro
 echo 'Bootstraping aqs'
 
-which node > /dev/null && echo "Pip Installed, next.." || asktoinstallnode
+which pip > /dev/null && echo "Pip Installed, next.." || asktoinstallpip
 
 which node > /dev/null && echo "Node Installed, next.." || asktoinstallnode
 

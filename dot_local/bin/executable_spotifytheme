@@ -1,19 +1,22 @@
 #!/bin/bash
-themepath="$HOME/.config/spicetify/Themes/"
-extpath="$HOME/.config/spicetify/Extensions/"
+linux_base="$HOME/.config/spicetify"
+linux_theme="$HOME/.config/spicetify/Themes/"
+linux_ext="$HOME/.config/spicetify/Extensions/"
+linux_apps="$HOME/.config/spicetify/CustomApps/"
 
 clonethemearch() { \
 	git clone https://github.com/romariorobby/spicetify-themes.git ~/.config/spicetify/Themes
+	git clone https://github.com/khanhas/genius-spicetify ~/.config/spicetify/CustomApps/genius
 }
 clonethememac() { \
-	git clone https://github.com/romariorobby/spicetify-themes.git ~/.spicetify-data/Themes
+	git clone https://github.com/romariorobby/spicetify-themes.git ~/.config/Spicetify/Themes
+	git clone https://github.com/khanhas/genius-spicetify ~/.config/Spicetify/CustomApps/genius
 }
-doclone(){ \
+doclonethemes(){ \
 	echo "Cloning Spicetify-theme..."
 	[ "$(uname)" == "Darwin" ] && clonethememac
 	[ -f "/etc/arch-release" ] && clonethemearch
 	[ -n "$(uname -a | grep Ubuntu)" ] && basepkgubuntu
-
 }
 choosetheme() { \
 	echo " Choose themes ? "
@@ -25,13 +28,17 @@ choosetheme() { \
 	read answer
 	[ "$answer" != "${answer#[Yy]}" ] && installtheme
 }
-installtheme() { \
+installtheme(){ \
 	echo "Installing $selectedtheme and $selectedext ..."
 	cd "$(dirname "$(spicetify -c)")/Themes/$selectedtheme"
 	spicetify config extensions $selectedext
 	spicetify config inject_css 1 replace_colors 1 overwrite_assets 1
 	spicetify config current_theme $selectedtheme color_scheme dark
+}
+installgenius(){ \
+	spicetify config custom_apps genius
 	spicetify apply
+
 }
 
 # still doesn't worked
@@ -41,6 +48,7 @@ installtheme() { \
 #colorsch() { \
 #	scheme=`configpath`
 #}
-doclone
-choosetheme
+doclonethemes
+installgenius
+#choosetheme
 exit

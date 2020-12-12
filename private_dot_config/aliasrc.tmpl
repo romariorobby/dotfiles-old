@@ -4,6 +4,7 @@ alias \
 		ls="gls -hN --color=auto --group-directories-first" \
 		la="gls -a -hN --color=auto --group-directories-first" \
 		grep="grep --color=auto" 
+		rm="rm -vi" \
 {{ end }}
 {{ if (eq .chezmoi.os "linux") }}
 alias \
@@ -11,16 +12,11 @@ alias \
 		la="ls -a -hN --color=auto --group-directories-first" \
 		grep="grep --color=auto" \
 		greprdos="grep -r 'TODO\:\:'" 
+		rm="rm -vI" \
 {{ end }}
 alias \
 		cp="cp -iv" \
 		mv="mv -iv" \
-{{ if (eq .chezmoi.os "darwin") }}
-		rm="rm -vi" \
-{{ end }}
-{{ if (eq .chezmoi.os "linux") }}
-		rm="rm -vI" \
-{{ end }}
 		mkd="mkdir -pv" \
 		cl="clear" \
 		..="cd .." \

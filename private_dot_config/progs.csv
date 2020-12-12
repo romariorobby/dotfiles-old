@@ -38,7 +38,7 @@ X,gimp,
 ,blueman, [app]
 ,bluez-utils,
 ,pulsemixer,is an audio controler.
-,pamixer,is a command-line audio interface.
+A,pamixer-git,is a command-line audio interface.
 ,maim,can take quick screenshots at your request.
 ,abook,is an offline addressbook usable by neomutt.
 ,unclutter,hides an inactive mouse.
