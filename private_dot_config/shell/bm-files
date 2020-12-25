@@ -9,9 +9,11 @@ cfvc	${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim
 cfdwm	$HOME/.local/src/dwm/config.h
 cfst	$HOME/.local/src/st/config.h
 cfdmen	$HOME/.local/src/dmenu/config.h
-cfdwmb	$HOME/.local/src/yadav-dwmblocks/config.h
+cfdwmb	$HOME/.local/src/yadav-dwmblocks/blocks.h
 cftc	${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf
 cfec	${XDG_CONFIG_HOME:-$HOME/.config}/mutt/muttrc
+cfxi	${XDG_CONFIG_HOME:-$HOME/.config}/x11/xinitrc
+cfxp	${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile
 cfxr	${XDG_CONFIG_HOME:-$HOME/.config}/Xresources
 cfnu	${XDG_CONFIG_HOME:-$HOME/.config}/newsboat/urls
 cfnc	${XDG_CONFIG_HOME:-$HOME/.config}/newsboat/config

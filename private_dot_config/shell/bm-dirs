@@ -8,6 +8,7 @@ hv	 ${XDG_MUSIC_DIR:-$HOME/videos}
 hcf	 ${XDG_CONFIG_HOME:-$HOME/.config}
 hca	 ${XDG_CACHE_HOME:-$HOME/.cache}
 cfv	 ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/
+cfsh ${XDG_CONFIG_HOME:-$HOME/.config}/shell/
 cfd	 ${XDG_CONFIG_HOME:-$HOME/.config}/doom/
 hc	 ~/code/
 exd	 ~/crossdisk/Root/Romario/Documents/

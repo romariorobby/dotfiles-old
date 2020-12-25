@@ -14,8 +14,10 @@ DWM is Windows Manager by suckless.
       MOD + o / O     - Move to master or viceversa
       MOD + g         - Toggle Gap
       MOD + Ctrl + BackSpace - Default gaps
+      MOD + f         - Toggle Fullscreen Window
+      MOD + F         - Toggle Floating
+      MOD + s         - Toggle Sticky Window
       MOD + b         - Toggle Bar
-      MOD + f         - Toggle Floating
       MOD + B         - Toggle System Tray Bar
       MOD + B         - Toggle System Tray Bar
       MOD + 1-9       - Select Workspace 
@@ -23,10 +25,8 @@ DWM is Windows Manager by suckless.
       MOD + Shift + 1-9 - Move windows to {1-9} workspaces
       MOD + q         - Close Window
       MOD + Q         - sysact {lock,renew,reboot,poweroff}
-      MOD + s         - Toggle Sticky Window
-      MOD + f         - Toggle Fullscreen Window
  Layout
-      SUPER + t / T - Tiled / Monocle
-      SUPER + y / Y - 
-      SUPER + u / U -
-      SUPER + i / I -
+      SUPER + t / T - ([]) Tiled / ([M])Monocle (1 & 2)
+      SUPER + y / Y - (===) bstackhorizontal / (HHH) grid
+      SUPER + u / U - (###) nrowgrid / (---) horizgrid
+      SUPER + i / I - (|M|) Centeredmaster / (:::) Gappless grid
