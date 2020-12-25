@@ -221,5 +221,13 @@ which nvim > /dev/null && installnvimplug
 
 installcocextensions
 
+# Make pacman and yay colorful and adds eye candy on the progress bar because why not.
+
+grep -q "^Color" /etc/pacman.conf || sed -i "s/^#Color$/Color/" /etc/pacman.conf
+grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
+
+# Use all cores for compilation.
+sed -i "s/-j2/-j$(nproc)/;s/^#MAKEFLAGS/MAKEFLAGS/" /etc/makepkg.conf
+
 echo "## Recommended to installing https://github.com/ryanoasis/nerd-fonts"
 

@@ -13,6 +13,8 @@ application/x-xpinstall=zotero.desktop
 inode/directory=Thunar.desktop
 x-scheme-handler/obsidian=obsidian.desktop
 x-scheme-handler/org-protocol=org-protocol.desktop
+x-scheme-handler/mailspring=mailspring.desktop
+x-scheme-handler/mailto=mailspring.desktop
 
 [Added Associations]
 text/html=nvim.desktop;
@@ -21,6 +23,7 @@ inode/directory=exo-file-manager.desktop;
 application/xhtml+xml=firefox.desktop;brave-browser.desktop;
 application/geo+json=nvim.desktop;
 application/x-xpinstall=zotero.desktop;
+application/apkg=anki.desktop;
 application/zip=org.gnome.Nautilus.desktop;
 x-scheme-handler/trash=exo-file-manager.desktop;
 x-scheme-handler/magnet=torrent.desktop

@@ -21,6 +21,7 @@ dt	 ${XDG_DATA_HOME:-$HOME/.local/share}
 dtch ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi
 dtchd ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi/private_dot_config
 dtchl ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi/dot_local/
+dts  ~/.local/src/
 hr	 ~/repos/
 hrm	 ~/repos/mario/
 hro	 ~/repos/others/

@@ -1,11 +1,15 @@
 #$EDITOR and chezmoi
-cff		${XDG_CONFIG_HOME:-$HOME/.config}/files
-cfd		${XDG_CONFIG_HOME:-$HOME/.config}/directories
+cff		${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-files
+cfd		${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs
 cfb		${XDG_CONFIG_HOME:-$HOME/.config}/bookmarks
-cfa		${XDG_CONFIG_HOME:-$HOME/.config}/aliasrc
+cfa		${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc
 cfzc	$ZDOTDIR/.zshrc
 cfbc	$BASHRCDOTDIR/.bashrc
 cfvc	${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim
+cfdwm	$HOME/.local/src/dwm/config.h
+cfst	$HOME/.local/src/st/config.h
+cfdmen	$HOME/.local/src/dmenu/config.h
+cfdwmb	$HOME/.local/src/yadav-dwmblocks/config.h
 cftc	${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf
 cfec	${XDG_CONFIG_HOME:-$HOME/.config}/mutt/muttrc
 cfxr	${XDG_CONFIG_HOME:-$HOME/.config}/Xresources

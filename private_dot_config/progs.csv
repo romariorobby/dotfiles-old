@@ -3,10 +3,12 @@
 ,xorg-xwininfo,allows querying information about windows.
 ,xorg-xinit,starts the graphical server.
 ,ttf-linux-libertine,provides the sans and serif fonts for LARBS.
+,ttf-librebaskerville,for doom emacs font 
 ,noto-fonts-emoji,is an emoji font.
 A,nerd-fonts-sf-mono, apple like font patched nerdfont
 A,nerf-fonts-hack, Patched font nerdfont
 A,siji-git, Bitmap font
+,cmake, vterm defendency packages
 ,arandr,is a UI for screen adjustment.
 ,bc,is used for a dropdown calculator.
 ,calcurse, [app] is a lightweight terminal-based calendar.
@@ -22,6 +24,7 @@ X,gimp,
 ,xwallpaper,sets the wallpaper.
 ,ffmpeg,can record and splice video and audio on the command line.
 ,gnome-keyring,serves as the system keyring.
+A,libgnome-keyring,
 ,ttf-joypixels,
 ,chezmoi, Manage Dotfiles across multiples machines
 ,ripgrep,serch tool
@@ -65,6 +68,7 @@ X,qutebrowser,
 ,xorg-xbacklight,enables changing screen brightness levels.
 ,alacritty, GPU-Accelarated Terminal Emulator.
 ,slock,"allows you to lock your computer, and quickly unlock with your password."
+,pass, encrypt password
 ,npm, a Package manager for javascript
 ,nodejs,
 ,python, high-level languages and scripting language
@@ -75,6 +79,7 @@ X,qutebrowser,
 ,pavucontrol, [app]
 ,networkmanager,
 ,network-manager-applet,
+,networkmanager-openvpn,
 ,flameshot, [app]
 ,cronie, [services] runs specified program at scheduled times.
 ,tmux, a terminal multiplexer
@@ -119,7 +124,7 @@ A,bitwarden-bin, [app] Password manager
 A,programmer-dvorak, Programmer-Dvorak keyboard
 A,spicetify-cli, CLI tool to customize spotify
 A,discord, [app] Soydev voice and text chat 
-A,betterdiscordcli-git, Managing BetterDiscord
+A,betterdiscordctl-git, Managing BetterDiscord
 G,https://github.com/romariorobby/sucklessaqs.git, dmenu dwm st dwmblocks programs.
 B,--HEAD neovim, a tidier vim with some useful features
 B,iterm2, a tidier vim with some useful features
