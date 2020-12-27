@@ -13,6 +13,7 @@
 .config/Xresources
 .local/bin/blocks
 .config/gtk-2.0
+.config/x11
 .xinitrc
 .xprofile
 {{- end }}

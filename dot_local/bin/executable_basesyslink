@@ -3,3 +3,5 @@ ln -sf ~/.config/x11/xinitrc ~/.xinitrc
 ln -sf ~/.config/x11/xprofile ~/.xprofile
 ln -sf ~/.config/shell/profile ~/.profile
 ln -sf ~/.config/shell/profile ~/.zprofile
+shortcut
+echo "done"

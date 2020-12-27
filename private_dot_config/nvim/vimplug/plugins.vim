@@ -23,7 +23,7 @@ call plug#begin('~/.config/nvim/plugged')
     "Plug 'jiangmiao/auto-pairs'
     "Plug 'tpope/vim-surround'
 	" View and search LSP symbols , tags
-    "Plug 'liuchengxu/vista.vim'
+    " Plug 'liuchengxu/vista.vim'
 	"GIT
 	" Support more VCS
 	" Plug 'mhinz/vim-signify'
@@ -70,7 +70,7 @@ call plug#begin('~/.config/nvim/plugged')
 	Plug 'ferrine/md-img-paste.vim'
 	Plug 'vimwiki/vimwiki'
 	" Manage todolist.
-	Plug 'vuciv/vim-bujo'
+	"Plug 'vuciv/vim-bujo'
     " Markdown Preview
     "Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install'  }
 " Misc
@@ -78,8 +78,8 @@ call plug#begin('~/.config/nvim/plugged')
 	" Manpage in vim
 	Plug 'vim-utils/vim-man'
 	" Discord 
-	Plug 'aurieh/discord.nvim', { 'do': ':UpdateRemotePlugins'}
-	Plug 'ThePrimeagen/vim-be-good', {'do': './install.sh'}
+	"Plug 'aurieh/discord.nvim', { 'do': ':UpdateRemotePlugins'}
+	"Plug 'ThePrimeagen/vim-be-good', {'do': './install.sh'}
 	" Emacs like
 	"Plug 'liuchengxu/vim-which-key'
 	" Zen Mode

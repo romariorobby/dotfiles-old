@@ -13,6 +13,8 @@ alias \
 		grep="grep --color=auto" \
 		greprdos="grep -r 'TODO\:\:'" 
 		rm="rm -vI" \
+		xevs='xev |	awk -F"[ )]+" "/^KeyPress/ { a[NR+2] } NR in a { printf \"%-3s %s\n\", \$5, \$8 } "' \
+		xevg="xev | grep -A6 KeyPress"\
 {{ end }}
 alias \
 		cp="cp -iv" \

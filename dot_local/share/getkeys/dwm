@@ -5,28 +5,45 @@
  \__,_| \_/\_/ |_| |_| |_|
                           
 DWM is Windows Manager by suckless.
-      MOD + return    - $TERMINAL
-      MOD + Shift + return    - Dmenu
-      MOD + space     - Move master
-      MOD + j/k       - move around
-      MOD + h/l       - resize windows
-      MOD + z/x/c     - Toggle Shortcuts Programs (Scratchpads)
-      MOD + o / O     - Move to master or viceversa
-      MOD + g         - Toggle Gap
-      MOD + Ctrl + BackSpace - Default gaps
-      MOD + f         - Toggle Fullscreen Window
-      MOD + F         - Toggle Floating
-      MOD + s         - Toggle Sticky Window
-      MOD + b         - Toggle Bar
-      MOD + B         - Toggle System Tray Bar
-      MOD + B         - Toggle System Tray Bar
-      MOD + 1-9       - Select Workspace 
-      MOD + n / p     - Next / Previous Workspaces
-      MOD + Shift + 1-9 - Move windows to {1-9} workspaces
-      MOD + q         - Close Window
-      MOD + Q         - sysact {lock,renew,reboot,poweroff}
- Layout
-      SUPER + t / T - ([]) Tiled / ([M])Monocle (1 & 2)
-      SUPER + y / Y - (===) bstackhorizontal / (HHH) grid
-      SUPER + u / U - (###) nrowgrid / (---) horizgrid
-      SUPER + i / I - (|M|) Centeredmaster / (:::) Gappless grid
+> {M} = MODKEY / SUPER (Windows Key)
+> {C} = CTRL
+> {S} = SHIFT
+> {A} = ALT
+      {M} + return    - $TERMINAL
+      {M} + {S} + return    - Dmenu
+      {M} + space     - Move master
+      {M} + j/k       - move around
+      {M} + h/l       - resize windows
+      {M} + z/x/c     - Toggle Shortcuts Programs (Scratchpads)
+      {M} + o / O     - Move to master or viceversa
+      {M} + g         - Toggle Gap
+      {M} + {C} + BackSpace - Default gaps
+      {M} + f         - Toggle Fullscreen Window
+      {M} + {S} + f   - Toggle Floating
+      {M} + s         - Toggle Sticky Window
+      {M} + b         - Toggle Bar
+      {M} + {S} + b   - Toggle System Tray Bar
+      {M} + 1-9       - Select Workspace 
+      {M} + n / p     - Next / Previous Workspaces
+      {M} + {S} + 1-9 - Move windows to {1-9} workspaces
+      {M} + q         - Close Window
+      {M} + {S} + q   - sysact {lock,renew,reboot,poweroff}
+      {M} + {C} + Space         - sysact {lock,renew,reboot,poweroff}
+ LAYOUT
+      {M} + t - ([]) Tiled           [0]
+      {M} + y - ([M]) Monocle        [1]
+        {M} + {S}/{C}/{A} + y :
+          - Spiral                   [2]
+          - Dwindle                  [3]
+          - Deck                     [4]
+      {M} + u - Bstack               [5]
+        {M} + {S}/{C}/{A} + u
+          - Bstack Horizontal        [6] 
+          - Grid                     [7]
+          - Nrowgrid                 [8]
+      {M} + i - Horizontal Grid      [9]
+        {M} + {S}/{C}/{A} + i
+          - Gappless Grid            [10]
+          - Centered Master          [11]
+          - Centered Floating Master [12]
+

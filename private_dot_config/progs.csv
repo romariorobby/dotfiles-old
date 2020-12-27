@@ -8,6 +8,7 @@
 A,nerd-fonts-sf-mono, apple like font patched nerdfont
 A,nerf-fonts-hack, Patched font nerdfont
 A,siji-git, Bitmap font
+A,dragon-drag-and-drop-git, simple drag and drop source/sink for X
 ,cmake, vterm defendency packages
 ,arandr,is a UI for screen adjustment.
 ,bc,is used for a dropdown calculator.

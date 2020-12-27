@@ -1,0 +1,10 @@
+#!/bin/bash
+if [ $(nmcli radio wifi | awk '/led/ {print}') = 'enabled' ] ; then
+	nmcli radio wifi off
+	notify-send -i network-wireless-none "Wireless" "Wireless Disabled"
+	echo 'wifi off'
+else
+	nmcli radio wifi on
+	notify-send -i network-wireless-none "Wireless" "Wireless Enabled"
+	echo 'wifi on'
+fi

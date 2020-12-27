@@ -11,7 +11,7 @@ xmodmap -e "clear Lock"
 killall xcape 2>/dev/null ; xcape -e 'XF86WakeUp=Escape'
 # Map the menu button (on the righ) to right Super 
 #xmodmap -e 'keycode 135 = Super_R'
-
+#xset -q | grep "Caps Lock:\s*on" && xdotool key Caps_Lock
 # Quick switch between (Alt+Space) default Layout and Dvorak Programmer (Required Dvorak Programmer)
 # yay -S programmer-dvorak
 setxkbmap -layout us,us -variant ,dvp -option "lv3:rwin_switch,grp:alt_space_toggle"
