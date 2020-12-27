@@ -1,0 +1,21 @@
+     _                    _     _            _        
+  __| |_      ___ __ ___ | |__ | | ___   ___| | _____ 
+ / _` \ \ /\ / / '_ ` _ \| '_ \| |/ _ \ / __| |/ / __|
+| (_| |\ V  V /| | | | | | |_) | | (_) | (__|   <\__ \
+ \__,_| \_/\_/ |_| |_| |_|_.__/|_|\___/ \___|_|\_\___/
+                                                      
+sigdwmblocks {num}
+  1. Clock
+  2. Battery
+  3. Cputemp
+  4. Internet
+  5. Volume
+  6. Mailbox
+  7. Forecast
+  8. Disk
+  9. Packages
+  10. News
+  11. Net Traffic
+  12. Help
+  13. 
+  14. 

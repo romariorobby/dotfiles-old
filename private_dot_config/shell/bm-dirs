@@ -19,10 +19,13 @@ mn	 /mnt
 lb 	 ~/.local/bin
 lbb  ~/.local/bin/blocks/
 dt	 ${XDG_DATA_HOME:-$HOME/.local/share}
+dtgk ${XDG_DATA_HOME:-$HOME/.local/share}/getkeys/
 dtch ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi
 dtchd ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi/private_dot_config
 dtchl ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi/dot_local/
 dts  ~/.local/src/
+hep	 ~/exdrive/phone/
+heu	 ~/exdrive/usb/
 hr	 ~/repos/
 hrm	 ~/repos/mario/
 hro	 ~/repos/others/

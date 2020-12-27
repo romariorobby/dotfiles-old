@@ -1,0 +1,25 @@
+                      
+  ___ _ __ ___  _ __  
+ / __| '__/ _ \| '_ \ 
+| (__| | | (_) | | | |
+ \___|_|  \___/|_| |_|
+
+
+
+    |--------- Minutes (0 - 59)   
+    |    
+    | |------------ Hour (0 - 23)
+    | | 
+    | | |--------------- Day of month (1 - 31)
+    | | |
+    | | | |--------------------- Month (1 - 12)
+    | | | |
+    | | | | |---------------------- Day Of Week (0 - 6)
+    | | | | |
+    | | | | |
+    * * * * * {your command goes here}                       
+
+    + + + + +      Some Commands:
+    | | | | |         - {sudo} crontab -e - edit the cronjobs
+    M H D m u         - {sudo} crontab -l - list the cronjobs
+    | | | | |
