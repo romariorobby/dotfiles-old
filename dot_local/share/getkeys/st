@@ -1,0 +1,22 @@
+ ____ _____ 
+/ ___|_   _|
+\___ \ | |  
+ ___) || |  
+|____/ |_|  
+            
+{M}  = MODKEY {A}
+{TM} = TERMMOD ({A}+{S})
+ --
+ BASIC
+ --
+	- {TM} + c              - Copy 
+	- {TM} + v              - Paste 
+	- {TM} + y              - Paste 
+	- {S} + Insert          - Paste 
+	- {TM} + k/j or up/down - Inc/Dec Font 
+	- {S} + PageUp/Down or 
+		{M} + u/d			- Scroll Up/Down
+	- {M} + k/j or up/down  - Smooth Scroll Up/Down
+	- {M} + l               - Open URL
+	- {M} + y               - Copy URL
+	- {M} + o               - Copy Output Command

@@ -54,8 +54,10 @@ X,p7zip,
 ,lynx,is a terminal browser.
 A,brave-bin, [app]"is an elegant browser with built-in adblocking, tor and other features."
 X,qutebrowser,
+,perl-file-mimeinfo, Mime opener
 ,xcape,gives the special escape/super mappings of LARBS.
 ,xclip,allows for copying and pasting from the command line.
+,xsel,allows for copying and pasting from the command line.
 ,xdotool,provides window action utilities on the command line.
 ,xorg-xdpyinfo,aids with resolution determination and screen recording.
 ,youtube-dl,can download any YouTube video (or playlist or channel) when given the link.

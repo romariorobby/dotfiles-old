@@ -1,4 +1,4 @@
------------YOUTUBE----------------
+            YOUTUBE
 https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg "computer" "linux" "~DistroTube"
 https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA "linux" "computer" "~Luke Smith"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCld68syR8Wi-GY_n4CaoJGA "linux" "computer" "~Brodie Robertons"
@@ -30,6 +30,7 @@ https://www.youtube.com/feeds/videos.xml?playlist_id=PLUl4u3cNGP60UlabZBeeqOuoLu
 https://www.youtube.com/feeds/videos.xml?playlist_id=PLB7540DEDD482705B "playlist" "math"
 https://www.youtube.com/feeds/videos.xml?playlist_id=PLWKjhJtqVAbmGw5fN5BQlwuug-8bDmabi "playlist" "programming"
 https://www.youtube.com/feeds/videos.xml?playlist_id=PLhQjrBD2T380xvFSUmToMMzERZ3qB5Ueu "playlist"
+https://www.youtube.com/feeds/videos.xml?channel_id=UC1v2bdQblPEcYdoKuJtY0lA "playlist" "~Anna's Analysis" "productivity"
 https://www.youtube.com/feeds/videos.xml?channel_id=
 https://www.youtube.com/feeds/videos.xml?channel_id=
 https://www.youtube.com/feeds/videos.xml?channel_id=
@@ -38,12 +39,14 @@ https://www.youtube.com/feeds/videos.xml?channel_id=
 https://www.youtube.com/feeds/videos.xml?channel_id=UCrdWRLq10OHuy7HmSckV3Vg "productivity" "~Nathaniel Drew"
 -#
 https://www.youtube.com/feeds/videos.xml?channel_id=UCYk4LJI0Pr6RBDWowMm-KUw "podcast" "~Deddy Corbuzier"
---------------NEWS-------------
+             NEWS
 https://www.archlinux.org/feeds/news/ "news"
------------PODCAST-----------
+            PODCAST
 https://notrelated.libsyn.com/rss "podcast"
--------------TWITCH----------------
+             TWITCH
 https://twitchrss.appspot.com/vod/planey "stream" "twitch" "~Planey"
 https://twitchrss.appspot.com/vod/tgltn "stream" "twitch" "~TGLTN"
 https://twitchrss.appspot.com/vod/kaymind "stream" "twitch" "~Kaymind"
 https://twitchrss.appspot.com/vod/georgehotz "stream" "twitch" "computer" "programming" "~Georgehotz"
+	         PeerTube
+https://videos.lukesmith.xyz/feeds/videos.xml?sort=-publishedAt&filter=local

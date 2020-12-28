@@ -15,8 +15,12 @@ cfec	${XDG_CONFIG_HOME:-$HOME/.config}/mutt/muttrc
 cfxi	${XDG_CONFIG_HOME:-$HOME/.config}/x11/xinitrc
 cfxp	${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile
 cfxr	${XDG_CONFIG_HOME:-$HOME/.config}/Xresources
+cflfc	${XDG_CONFIG_HOME:-$HOME/.config}/lf/lfrc
+cflfs	${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope
 cfnu	${XDG_CONFIG_HOME:-$HOME/.config}/newsboat/urls
 cfnc	${XDG_CONFIG_HOME:-$HOME/.config}/newsboat/config
+cfmpvc	${XDG_CONFIG_HOME:-$HOME/.config}/mpv/mpv.conf
+cfmpvi	${XDG_CONFIG_HOME:-$HOME/.config}/mpv/input.conf
 cfmb	${XDG_CONFIG_HOME:-$HOME/.config}/ncmpcpp/bindings
 cfmc	${XDG_CONFIG_HOME:-$HOME/.config}/ncmpcpp/config
 cffc	${XDG_CONFIG_HOME:-$HOME/.config}/fontconfig/fonts.conf

@@ -2,41 +2,16 @@
 set shell bash
 set icons
 set period 1
-
-# set '-eu' options for shell commands
-# These options are used to have safer shell commands. Option '-e' is used to
-# exit on error and option '-u' is used to give error for unset variables.
-# Option '-f' disables pathname expansion which can be useful when $f, $fs, and
-# $fx variables contain names with '*' or '?' characters. However, this option
-# is used selectively within individual commands as it can be limiting at
-# times.
 set shellopts '-eu'
-
-# set internal field separator (IFS) to "\n" for shell commands
-# This is useful to automatically split file names in $fs and $fx properly
-# since default file separator used in these variables (i.e. 'filesep' option)
-# is newline. You need to consider the values of these options and create your
-# commands accordingly.
 set ifs "\n"
-
-# leave some space at the top and the bottom of the screen
 set scrolloff 10
-
-# use enter for shell commands
 map \ shell
 
-# execute current file (must be executable)
-map E $$f
-map e !$f
 
-# dedicated keys for file opener actions
-map o &mimeopen $f
-map O $mimeopen --ask $f
+# Vars that depend on environmental variables
+$lf -remote "send $id set previewer ${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope"
 
-# define a custom 'open' command
-# This command is called when current file is not a directory. You may want to
-# use either file before extentions
-# text files and a file opener for the rest.
+# CMDs/Functions
 cmd open ${{
     case $(file --mime-type $f -b) in
     image/vnd.djvu|application/pdf|application/octet-stream) setsid -f zathura $fx >/dev/null 2>&1 ;;
@@ -206,10 +181,14 @@ cmd copyto ${{
 	done &&
 	notify-send "📋 File(s) copied." "File(s) copies to $dest."
 }}
+
+cmd setbg "$1"
+
 # Unmap
 map r
 map d
 # Basic Function
+map W $setbg $f
 map P paste
 map w paste2
 map R reload
@@ -228,6 +207,15 @@ map tl push :!clear;trash-list<enter>
 map tr restore_trash
 map V push :!nvim<space>
 map C clear
+
+# dedicated keys for file opener actions
+map o &mimeopen $f
+map O $mimeopen --ask $f
+
+# execute current file (must be executable)
+map E $$f
+map e !$f
+
 #Create
 map <a-d> push :mkdir<space>
 map <a-n> mkfile
@@ -242,6 +230,7 @@ map ds dragon-stay
 map di dragon-individual
 # Rename 
 map rA rename # at very end
+map rb bulkrename
 map ra push rA<a-b> # after extension
 map rc push rA<c-u> # New Rename
 map rI push rA<c-a> # at very beginning
@@ -251,7 +240,7 @@ map <c-e> down
 map <c-y> up
 # Undirect Movement
 map <c-f> $lf -remote "send $id select '$(fzf)'"
-map J $lf -remote "send $id cd $(cut -d'	' -f2 ${XDG_CONFIG_HOME:-$HOME/.config}/directories | fzf)"
+map J $lf -remote "send $id cd $(cut -d'	' -f2 ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf)"
 # Direct Movement
 map gdo cd ~/documents/
 map gcr cd ~/crossdisk/

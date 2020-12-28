@@ -29,7 +29,36 @@ DWM is Windows Manager by suckless.
       {M} + q         - Close Window
       {M} + {S} + q   - sysact {lock,renew,reboot,poweroff}
       {M} + {C} + Space         - sysact {lock,renew,reboot,poweroff}
- LAYOUT
+----------
+ APPS
+----------
+      {M} + n         - vimwiki        
+        {M} + {S}/{C}/{A} + n :
+          - Notion
+          - Obsidian
+          - remnote
+      {M} + w         - $BROWSER
+      {M} + m         - Spotify
+      {M} + r         - Newsboat (RSS)
+      {M} + e         - Neomutt (Email Client)
+
+      {M} + F1        - Manual Info.mom 
+      {M} + F2        - Pulsemixer
+      {M} + F3        - Pavucontrol
+      {M} + F8        - NMTUI
+      {M} + F10       - Dmenu
+      {M} + F11       - Toggle Webcam
+      {M} + F12       - Neomutt Sync
+      {M} + Print     - Screenshoot Dmenu (Maimpick)
+            Print     - Screenshoot Fullscreen (Maimpick)
+      {M} + {C} + Space - Emoji
+
+      {M} + z         - Scratchpad 1
+      {M} + x         - Scratchpad 2
+      {M} + c         - Scratchpad 3
+-----------
+ LAYOUT   
+-----------
       {M} + t - ([]) Tiled           [0]
       {M} + y - ([M]) Monocle        [1]
         {M} + {S}/{C}/{A} + y :
@@ -46,4 +75,15 @@ DWM is Windows Manager by suckless.
           - Gappless Grid            [10]
           - Centered Master          [11]
           - Centered Floating Master [12]
-
+---------
+MOUSEY
+---------
+   Statusbar 
+      {S} + Right - Open dwmblocks config
+      {S} + Right - Open dwmblocks config
+   Window
+      {M} + Right - Resize Windows & Move Mouse
+      {M} + Scroll UP/DOWN - Inc/Dec Gaps
+      {M} + Middle - Reset to default Gaps
+   Base Window
+        Right -  Toggle Bar
