@@ -3,6 +3,7 @@
 alias \
 		ls="gls -hN --color=auto --group-directories-first" \
 		la="gls -a -hN --color=auto --group-directories-first" \
+		ll="gls -l -hN --color=auto --group-directories-first" \
 		grep="grep --color=auto" 
 		rm="rm -vi" \
 {{ end }}
@@ -10,6 +11,7 @@ alias \
 alias \
 		ls="ls -hN --color=auto --group-directories-first" \
 		la="ls -a -hN --color=auto --group-directories-first" \
+		ll="ls -l -hN --color=auto --group-directories-first" \
 		grep="grep --color=auto" \
 		grt="grep -r 'TODO\:\:'" \
 		rm="rm -vI" \
@@ -56,9 +58,9 @@ alias \
 		vim="nvim" \
 		vimm="vim"\
 		vimdiff="nvim -d" \
-		abook="abook --config "XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DATA_HOME"/abook/addressbook" \
 		suv="sudo nvim" \
 		z="zathura" \
+		gk="getkeys" \
 		tabz='tabbed -c zathura -e' \
 		dragon="dragon-drag-and-drop" \
 		sx="sxiv" \
@@ -69,6 +71,7 @@ alias \
 		ktest="klavaro" \
 		udm="udisksctl mount -b" \
 		udum="udisksctl unmount -b" 
+		#abook="abook --config "XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DATA_HOME"/abook/addressbook" \
 # Tmux
 alias \
 		tks="tmux kill-session" \

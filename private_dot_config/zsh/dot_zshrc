@@ -65,7 +65,13 @@ lfcd () {
         [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
     fi
 }
+
+openvim() {
+    fzf | xargs -r nvim
+}
 bindkey -s '^o' 'lfcd\n'
+
+bindkey -s '^n' 'openvim\n'
 
 bindkey -s '^a' 'bc -lq\n'
 

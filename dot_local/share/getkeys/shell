@@ -9,7 +9,9 @@
 /___|___/_| |_| |_.__/ \__,_|___/_| |_|
                         
                         
+{C} + n - fzf and open with nvim
 {C} + o - use lf to switch dir
 {C} + a - open calculator
-{C} + f - auto cd with fzf
+{C} + f - auto cd with fzf (read files)
+{A} + c - auto cd with fzf (only read dir)
 {C} + e - edit to nvim

@@ -17,7 +17,9 @@ DWM is Windows Manager by suckless.
       {M} + z/x/c     - Toggle Shortcuts Programs (Scratchpads)
       {M} + o / O     - Move to master or viceversa
       {M} + g         - Toggle Gap
+      {M} + {C} + h/l - Inc/Dec Gap 
       {M} + {C} + BackSpace - Default gaps
+      {M} + {S} + j/k - Inc/Dec Horizontal Gaps (slave) 
       {M} + f         - Toggle Fullscreen Window
       {M} + {S} + f   - Toggle Floating
       {M} + s         - Toggle Sticky Window

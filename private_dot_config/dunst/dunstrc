@@ -22,7 +22,7 @@
     sort = yes
 
     idle_threshold = 120
-    font = Monospace 11
+    font = Hack Nerd Font 11
     line_height = 0
     markup = full
 
@@ -47,8 +47,8 @@
     hide_duplicate_count = true
     show_indicators = yes
     icon_position = left
-    max_icon_size = 40
-    #icon_path = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/:/usr/share/icons/Adwaita/256x256/status/
+    max_icon_size = 20
+    icon_path = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/:/usr/share/icons/Adwaita/256x256/status/
     sticky_history = yes
     history_length = 20
     dmenu = /usr/bin/dmenu -p dunst:
@@ -83,12 +83,14 @@
     background = "#008080"
     foreground = "#ebdbb2"
     timeout = 5
+    icon = /home/mario/.config/dunst/normal.png
 
 [urgency_critical]
     background = "#cc2421"
     foreground = "#ebdbb2"
     frame_color = "#fabd2f"
-    timeout = 0
+    timeout = 5
+    icon = /home/mario/.config/dunst/critical.png
 
 # Every section that isn't one of the above is interpreted as a rules to
 # override settings for certain messages.

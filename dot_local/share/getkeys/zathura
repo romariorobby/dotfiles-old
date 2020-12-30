@@ -6,4 +6,12 @@
                                 
 
 PDF Reader
-- 
+u - scroll half-up
+d - scroll half-down
+D - toggle page mode
+r - Reload 
+R - Rotate
+K - Zoom in
+J - Zoom out
+i - change light/dark mode
+p - print

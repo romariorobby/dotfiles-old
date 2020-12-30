@@ -18,3 +18,13 @@ set -o vi
 [ -f /usr/share/fzf/key-bindings.bash ] && source /usr/share/fzf/key-bindings.bash 
 # custom fzf
 [ -f $HOME/.local/bin/fzf/binding.bash ] && source $HOME/.local/bin/fzf/binding.bash
+openvim() {
+	fzf | xargs -r nvim
+}
+bind -m emacs-standard -x '"^n": openvim'
+bind -m vi-command -x '"^n": openvim'
+bind -m vi-insert -x '"^n": openvim'
+
+#bind -m emacs-standard -x '"\ef": openvim'
+#bind -m vi-command -x '"\ef": openvim'
+#bind -m vi-insert -x '"\ef": openvim'

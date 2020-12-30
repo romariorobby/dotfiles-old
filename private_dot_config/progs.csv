@@ -144,6 +144,7 @@ B,obsidian, [app](cask)
 B,spotify,[app]
 B,khankhas/tap/spicetify-cli,
 B,python,
+B,coreutils, GNU Coreutils linux for macOS 
 X,rambox-bin, [app] All-in-One Messaging
 X,vscodium-bin, [app] VSCode without Microsoft Telematry
 X,emacs, [app] emacs
