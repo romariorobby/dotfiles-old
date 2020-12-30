@@ -4,6 +4,7 @@
 \__ \>  <| |\ V /
 |___/_/\_\_| \_/
 sxiv is the image viewer.
+{M} - ctrl-x
 	h/j/k/l - Pan image
 	-/+ - Zoom out/in
 	Enter - Toggle thumbnail mode
@@ -12,4 +13,11 @@ sxiv is the image viewer.
 	r - Reload image if changed
 	m - Mark/unmark image
 	w - Zoom to fit window
-	ctrl-x - Run external command (see ~/.config/sxiv/exec/key-handler for options)
+	{M} = ctrl-x - Run external command (see ~/.config/sxiv/exec/key-handler for options)
+    {M} + w   - Set background 
+    {M} + r/R - Rotate Image
+    {M} + y/Y - Copy to clipboard
+    {M} + d   - Delete files
+    {M} + g   - Open with Gimp
+    {M} + i   - File Information
+

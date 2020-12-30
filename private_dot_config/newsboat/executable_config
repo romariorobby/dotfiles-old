@@ -21,12 +21,12 @@ bind-key J next-feed articlelist
 bind-key K prev-feed articlelist
 bind-key x pb-delete
 
-color listnormal cyan default
-color listfocus black yellow standout bold
-color listnormal_unread blue default
-color listfocus_unread yellow default bold
-color info red black bold
-color article white default bold
+color listnormal        cyan    default
+color listfocus         black   yellow  standout bold
+color listnormal_unread blue    default
+color listfocus_unread  yellow  default bold
+color info              red     black   bold
+color article           white   default bold
 
 browser linkhandler
 macro a set browser "youtube-dl --add-metadata -xic -f bestaudio/best" ; open-in-browser ; set browser linkhandler

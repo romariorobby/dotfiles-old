@@ -21,6 +21,10 @@ chh   ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi
 chcf  ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi/private_dot_config
 chl   ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi/dot_local/
 dts   ~/.local/src/
+sdwm  ~/.local/src/dwm/
+sst   ~/.local/src/st/
+sdm   ~/.local/src/dmenu/
+sdwmb ~/.local/src/yadav-dwmblocks/
 hex	  ~/exdrive/
 exp	  ~/exdrive/phone/
 exu	  ~/exdrive/usb/

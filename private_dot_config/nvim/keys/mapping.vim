@@ -114,3 +114,21 @@ cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 map <leader><F9> :VimwikiIndex
 " Open corresponding .pdf/.html or preview
 map <leader><F5> :!opout <c-r>%<CR><CR>
+
+let s:hidden_all = 1
+function! ToggleHiddenAll()
+    if s:hidden_all  == 0
+        let s:hidden_all = 1
+        set noshowmode
+        set noruler
+        set laststatus=0
+        set noshowcmd
+    else
+        let s:hidden_all = 0
+        set showmode
+        set ruler
+        set laststatus=2
+        set showcmd
+    endif
+endfunction
+nnoremap <leader>B :call ToggleHiddenAll()<CR>

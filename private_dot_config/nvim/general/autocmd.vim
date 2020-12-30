@@ -3,7 +3,7 @@ autocmd BufRead,BufNewFile *.md,*.rmd,*.Rmd,*.txt set filetype=markdown
 autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
 autocmd BufRead,BufNewFile *.tex set filetype=tex
 " When shortcut files are updated, renew bash and ranger configs with new material:
-	autocmd BufWritePost files,directories !shortcut
+	autocmd BufWritePost bm-files,bm-dirs !shortcut
 " Run xrdb whenever Xdefaults or Xresources are updated.
 	autocmd BufWritePost *Xresources,*Xdefaults !xrdb %
 " Update binds when sxhkdrc is updated.

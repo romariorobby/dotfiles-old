@@ -11,7 +11,7 @@ alias \
 		ls="ls -hN --color=auto --group-directories-first" \
 		la="ls -a -hN --color=auto --group-directories-first" \
 		grep="grep --color=auto" \
-		greprdos="grep -r 'TODO\:\:'" 
+		grt="grep -r 'TODO\:\:'" \
 		rm="rm -vI" \
 		xevs='xev |	awk -F"[ )]+" "/^KeyPress/ { a[NR+2] } NR in a { printf \"%-3s %s\n\", \$5, \$8 } "' \
 		xevg="xev | grep -A6 KeyPress"\

@@ -5,6 +5,7 @@
 |____/ |_|  
             
 {M}  = MODKEY {A}
+{C}  = CTRL
 {TM} = TERMMOD ({A}+{S})
  --
  BASIC
@@ -20,3 +21,4 @@
 	- {M} + l               - Open URL
 	- {M} + y               - Copy URL
 	- {M} + o               - Copy Output Command
+	- {C} + e               - Open on vim buffer

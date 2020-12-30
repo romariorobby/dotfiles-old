@@ -5,7 +5,7 @@
 
 case $1 in
 	1) setsid -f "$TERMINAL" -e neomutt ;;
-	2) setsid -f mw sync >/dev/null ;;
+	2) setsid -f mw -Y >/dev/null ; sigdwmblocks 6 ;;
 	3) notify-send "📬 Mail module" "\- Shows unread mail
 - Shows 🔃 if syncing mail
 - Left click opens neomutt

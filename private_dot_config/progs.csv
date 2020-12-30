@@ -5,6 +5,11 @@
 ,ttf-linux-libertine,provides the sans and serif fonts for LARBS.
 ,ttf-librebaskerville,for doom emacs font 
 ,noto-fonts-emoji,is an emoji font.
+A,ttf-amiri, arabic font
+A,qurancomplex-fonts, arabic font
+,adobe-source-han-sans-cn-fonts,
+,adobe-source-han-serif-cn-fonts,
+A,klavaro, Typing Tutor
 A,nerd-fonts-sf-mono, apple like font patched nerdfont
 A,nerf-fonts-hack, Patched font nerdfont
 A,siji-git, Bitmap font

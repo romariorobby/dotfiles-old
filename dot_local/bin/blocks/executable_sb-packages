@@ -19,10 +19,10 @@
 
 case $1 in
 	1) setsid -f "$TERMINAL" -e sb-popupg ;;
-	2) notify-send "$(/usr/bin/pacman -Qu)" ;;
+	2) notify-send "$(/usr/bin/pacman -Qu)"; sigdwmblocks 9 ;;
 	3) notify-send "🎁 Upgrade module" "📦: number of upgradable packages
 - Left click to upgrade packages
-- Middle click to show upgradable packages" ;;
+- Middle click to show upgradable packages"; sigdwmblocks 9 ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 

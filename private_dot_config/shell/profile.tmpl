@@ -7,9 +7,8 @@ export PATH="$PATH:$(du "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
 {{ end }}
 export PATH="$HOME/.local/bin${PATH:+:${PATH}}"
 
-
-
 export PATH=$PATH:~/.config/emacs/bin
+export NPM_CONFIG_PREFIX=~/.local/
 
 # Default programs:
 export TERMINAL="st"
