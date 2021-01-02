@@ -8,11 +8,13 @@ setxkbmap -option shift:both_capslock
 xmodmap -e "clear Lock"
 # TODO and i want this to be change one only pressed caps to esc But not work
 #killall xcape 2>/dev/null ; xcape -e 'BackSpace=Escape'
+# Fn to Escape
 killall xcape 2>/dev/null ; xcape -e 'XF86WakeUp=Escape'
 # Map the menu button (on the righ) to right Super 
 #xmodmap -e 'keycode 135 = Super_R'
-#xset -q | grep "Caps Lock:\s*on" && xdotool key Caps_Lock
+# Turn off the caps lock if on since there is no longer a key for it.
+xset -q | grep "Caps Lock:\s*on" && xdotool key Caps_Lock
 # Quick switch between (Alt+Space) default Layout and Dvorak Programmer (Required Dvorak Programmer)
-# yay -S programmer-dvorak
+# required: yay -S programmer-dvorak
 setxkbmap -layout us,us -variant ,dvp -option "lv3:rwin_switch,grp:alt_space_toggle"
 
