@@ -7,10 +7,10 @@ cfp	    ${XDG_CONFIG_HOME:-$HOME/.config}/shell/profile
 cfzc	$ZDOTDIR/.zshrc
 cfbc	$BASHRCDOTDIR/.bashrc
 cfvc	${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim
-cfdwmc	$HOME/.local/src/dwm/config.h
-cfstc	$HOME/.local/src/st/config.h
-cfdmc	$HOME/.local/src/dmenu/config.h
-cfdwmbc	$HOME/.local/src/yadav-dwmblocks/blocks.h
+sdwmc	$HOME/.local/src/dwm/config.h
+sstc	$HOME/.local/src/st/config.h
+sdmc	$HOME/.local/src/dmenu/config.h
+sdwmbc	$HOME/.local/src/yadav-dwmblocks/blocks.h
 cftc	${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf
 cfec	${XDG_CONFIG_HOME:-$HOME/.config}/mutt/muttrc
 cfxi	${XDG_CONFIG_HOME:-$HOME/.config}/x11/xinitrc

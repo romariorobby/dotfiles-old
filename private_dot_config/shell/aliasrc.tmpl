@@ -51,26 +51,31 @@ alias \
 # APP
 alias \
 		ff="fzf" \
-		ss_full="flameshot full -p ~/pictures/screenshot/" \
 		v="nvim" \
-		fv="fzf | xargs -r nvim" \
-		fmpv="fzf | xargs -r mpv" \
 		vim="nvim" \
 		vimm="vim"\
-		vimdiff="nvim -d" \
 		suv="sudo nvim" \
-		z="zathura" \
 		gk="getkeys" \
+		z="zathura" \
+		sx="sxiv" \
+		eb="epy" \
+		fv='nvim "$(fzf)"' \
+		feb='epy "$(fzf)"'\
+		fmpv='mpv "$(fzf)"'\
+		vimdiff="nvim -d" \
 		tabz='tabbed -c zathura -e' \
 		dragon="dragon-drag-and-drop" \
-		sx="sxiv" \
 		py="python" \
 		py2="python2" \
-		mon50="sudo ddccontrol -r 0x10 -w 50 dev:/dev/i2c-8" \
-		mon100="sudo ddccontrol -r 0x10 -w 100 dev:/dev/i2c-8" \
 		ktest="klavaro" \
 		udm="udisksctl mount -b" \
 		udum="udisksctl unmount -b" 
+		# deprecated
+		#fv="fzf | xargs -r nvim" \
+		#fmpv="fzf | xargs -r mpv" \
+		#mon50="sudo ddccontrol -r 0x10 -w 50 dev:/dev/i2c-8" \
+		#mon100="sudo ddccontrol -r 0x10 -w 100 dev:/dev/i2c-8" \
+		#ss_full="flameshot full -p ~/pictures/screenshot/" \
 		#abook="abook --config "XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DATA_HOME"/abook/addressbook" \
 # Tmux
 alias \

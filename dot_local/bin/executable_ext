@@ -35,6 +35,7 @@ if [ -f "$archive" ] ; then
 		*.zip) unzip "$archive" ;;
 		*.Z) uncompress "$archive" ;;
 		*.7z) 7z x "$archive" ;;
+		*.dmg) 7z x "$archive" ;;
 		*.xz) unxz "$archive" ;;
 		*.exe) cabextract "$archive" ;;
 		*) printf "extract: '%s' - unknown archive method\\n" "$archive" ;;

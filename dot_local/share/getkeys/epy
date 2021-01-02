@@ -1,0 +1,25 @@
+                  
+  ___ _ __  _   _ 
+ / _ \ '_ \| | | |
+|  __/ |_) | |_| |
+ \___| .__/ \__, |
+     |_|    |___/ 
+k/j - Scroll up/down 
+u/d - Scroll half-up/down
+K/J - Shrink/enlarge 
+=   - Set Width
+M   - Metadata 
+g/G - Beginning of Chapter / End of Chapter
+n/p - Next/Previous Chapter
+t   - TOC
+F   - Follow 
+O   - Open Image
+/   - Regex Search
+s   - Toggle Progress
+D   - Define a word with (stardict or dict)
+m   - Mark Position
+b   - Add Bookmark
+B   - Show Bookmarks
+q   - Quit
+i   - Switch Color
+?   - Help

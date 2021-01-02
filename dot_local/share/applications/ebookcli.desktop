@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=E-Book Reader CLI
+Comment=Viewer CLI for E-books in all the major formats
+Exec=/usr/bin/epy %f

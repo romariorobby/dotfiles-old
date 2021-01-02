@@ -8,6 +8,7 @@ hm    ${XDG_MUSIC_DIR:-$HOME/music}
 hv	  ${XDG_VIDEOS_DIR:-$HOME/videos}
 hcf	  ${XDG_CONFIG_HOME:-$HOME/.config}
 hca	  ${XDG_CACHE_HOME:-$HOME/.cache}
+hl	  ~/.local/
 cfv	  ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/
 cfsh  ${XDG_CONFIG_HOME:-$HOME/.config}/shell/
 cfd	  ${XDG_CONFIG_HOME:-$HOME/.config}/doom/

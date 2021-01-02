@@ -15,7 +15,7 @@
 # [Action]
 # Description = Updating statusbar...
 # When = PostTransaction
-# Exec = /usr/bin/pkill -RTMIN+8 dwmblocks # Or i3blocks if using i3. / [yadav-dwmblocks] - sigdwmblocks {int} 
+# Exec = /usr/bin/pkill -RTMIN+8 dwmblocks # Or i3blocks if using i3. / [yadav-dwmblocks] - /usr/local/bin/sigdwmblocks {int} 
 
 case $1 in
 	1) setsid -f "$TERMINAL" -e sb-popupg ;;

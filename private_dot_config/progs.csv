@@ -5,6 +5,8 @@
 ,ttf-linux-libertine,provides the sans and serif fonts for LARBS.
 ,ttf-librebaskerville,for doom emacs font 
 ,noto-fonts-emoji,is an emoji font.
+,noto-fonts-emoji-apple,is an apple emoji replace for noto .
+A,epy-git, epub reader CLI
 A,ttf-amiri, arabic font
 A,qurancomplex-fonts, arabic font
 ,adobe-source-han-sans-cn-fonts,
@@ -27,9 +29,12 @@ A,dragon-drag-and-drop-git, simple drag and drop source/sink for X
 ,sxiv,is a minimalist image viewer.
 X,imagemagic,
 X,gimp,
+A,vidir,
 ,xwallpaper,sets the wallpaper.
 ,ffmpeg,can record and splice video and audio on the command line.
 ,gnome-keyring,serves as the system keyring.
+,gvfs-mtp,
+,gvfs-gphoto2,
 A,libgnome-keyring,
 ,ttf-joypixels,
 ,chezmoi, Manage Dotfiles across multiples machines
