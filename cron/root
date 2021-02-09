@@ -1,0 +1,2 @@
+5 */3 * * * /usr/bin/pacman -Sy
+0,30 * * * * /usr/bin/updatedb

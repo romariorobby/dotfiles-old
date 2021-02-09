@@ -39,11 +39,14 @@ nnoremap <C-\> :call Term_toggle(10)<cr>
 
 " Exit Terminal mode
 tnoremap <Esc> <C-\><C-n>
-
-nnoremap <leader>q :q!<CR>
-nnoremap <leader>d :close<CR>
-nnoremap <leader>x :qa!<CR>
-nnoremap <leader>e :wq!<CR>
+" depracted
+" nnoremap <leader>q :q!<CR>
+" nnoremap <leader>d :close<CR>
+" nnoremap <leader>x :qa!<CR>
+" nnoremap <leader>e :wq!<CR> 
+nnoremap ZW :w<CR>
+nnoremap ZC :close<CR>
+nnoremap ZX :qa!<CR>
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 nnoremap <A-h> :tabp<CR>
@@ -96,8 +99,8 @@ nnoremap <C-h> :vertical resize -2<CR>
 nnoremap <C-j> :resize -2<CR>
 nnoremap <C-k> :resize +2<CR>
 
-nnoremap <leader>bb :Bracey<CR>
-nnoremap <leader>bs :BraceyStop<CR>
+nnoremap <A-b>b :Bracey<CR>
+nnoremap <A-b>r :BraceyStop<CR>
 nnoremap <leader>br :BraceyReload<CR>
 nnoremap <F5> :DiscordUpdatePresence<CR>
 " Indenting
@@ -132,3 +135,4 @@ function! ToggleHiddenAll()
     endif
 endfunction
 nnoremap <leader>B :call ToggleHiddenAll()<CR>
+" nnoremap <silent><leader>, :WhichKey '<Space>'<CR>

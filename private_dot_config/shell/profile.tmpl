@@ -3,9 +3,11 @@
 # 
 # Adds `~/.local/bin` to $PATH
 {{ if (eq .chezmoi.os "linux") }}
-export PATH="$PATH:$(du "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
+# export PATH="$PATH:$(du "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
+export PATH="$PATH:${$(find ~/.local/bin -type d -printf %p:)%%:}"
 {{ end }}
 export PATH="$HOME/.local/bin${PATH:+:${PATH}}"
+unsetopt PROMPT_SP
 
 export PATH=$PATH:~/.config/emacs/bin
 export NPM_CONFIG_PREFIX=~/.local/

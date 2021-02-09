@@ -1,0 +1,9 @@
+#!/bin/sh
+cmds="\
+📰qbittorrent|1	qbittorrent
+📧brave|2		brave
+📧qutebrower|3		qutebrowser
+📥firefox|4		firefox"
+choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -i)" || exit 1
+
+`echo "$cmds" | grep "^$choice	"  | cut -d '	' -f2-`

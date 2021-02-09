@@ -1,0 +1,12 @@
+#!/bin/sh
+cmds="\
+📓 Emacs|1		emacs
+🗃️Remnote|2	remnote
+📥 Notion|3	notion-app
+✏️ Vimwiki|4	$TERMINAL -e nvim $HOME/Dropbox/org/Braindump.md
+✏️ Obisidan|5	obsidian
+📥 Notion-Browser|6	$BROWSER https://www.notion.so"
+
+choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -i)" || exit 1
+
+`echo "$cmds" | grep "^$choice	"  | cut -d '	' -f2-`

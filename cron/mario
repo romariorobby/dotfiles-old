@@ -1,0 +1,4 @@
+*/1 * * * * /home/mario/.local/bin/cron/cronbat
+5 */3 * * * export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u $USER)/bus; export DISPLAY:0; .$HOME/.zprofile; /home/mario/.local/bin/cron/checkup
+30 * * * * export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u $USER)/bus; export DISPLAY:0; .$HOME/.zprofile; /home/mario/.local/bin/cron/newsup
+30 * * * * /usr/bin/mw -Y ; notify-send "Sync mail"; sigdwmblocks 6

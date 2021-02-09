@@ -11,14 +11,16 @@ A,ttf-amiri, arabic font
 A,qurancomplex-fonts, arabic font
 ,adobe-source-han-sans-cn-fonts,
 ,adobe-source-han-serif-cn-fonts,
-A,klavaro, Typing Tutor
-A,nerd-fonts-sf-mono, apple like font patched nerdfont
+A,klavaro, Typing Tutor (#keyboard)
+A,nerd-fonts-sf-mono, apple like font patched nerdfont 
 A,nerf-fonts-hack, Patched font nerdfont
 A,siji-git, Bitmap font
-A,dragon-drag-and-drop-git, simple drag and drop source/sink for X
+A,dragon-drag-and-drop-git, simple drag and drop source/sink for X - file
 ,cmake, vterm defendency packages
 ,arandr,is a UI for screen adjustment.
 ,bc,is used for a dropdown calculator.
+,kodi, Media Player Management
+A,tiny-media-manager-3, Media Management Tools
 ,calcurse, [app] is a lightweight terminal-based calendar.
 ,xcompmgr,is for transparency and removing screen-tearing.
 ,xorg-xprop,is a tool for detecting window properties.
@@ -27,8 +29,14 @@ A,dragon-drag-and-drop-git, simple drag and drop source/sink for X
 ,dunst,is a suckless notification system.
 ,exfat-utils,allows management of FAT drives.
 ,sxiv,is a minimalist image viewer.
+A,caffeine-ng-git, Temporarly inhibit screensave and sleep mode
+A,xdman, Extreme Download Manager
+,qbittorent,torrent download manager
+,tiny-media-manager-3,
+,pcmanfm-gtk3,
 X,imagemagic,
 X,gimp,
+,kdenlive, Video Editor 
 A,vidir,
 ,xwallpaper,sets the wallpaper.
 ,ffmpeg,can record and splice video and audio on the command line.

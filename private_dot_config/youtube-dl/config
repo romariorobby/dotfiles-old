@@ -1,0 +1,3 @@
+#Save all video on $XDG_VIDEOS_DIR/youtube/
+-o ~/videos/youtube/%(title)s.%(ext)s
+
