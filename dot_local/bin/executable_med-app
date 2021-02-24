@@ -1,0 +1,8 @@
+#!/bin/sh
+cmds="\
+📰newsboat|1	$TERMINAL -e newsboat
+📧neomutt|2		$TERMINAL -e neomutt ; sigdwmblocks 6
+📥rambox|3	rambox"
+choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -i)" || exit 1
+
+`echo "$cmds" | grep "^$choice	"  | cut -d '	' -f2-`

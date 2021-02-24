@@ -9,7 +9,7 @@ autocmd BufRead,BufNewFile *.tex set filetype=tex
 " Update binds when sxhkdrc is updated.
 	autocmd BufWritePost *sxhkdrc !pkill -USR1 sxhkd
 " Recompile dwmblocks on config edit
-	autocmd BufWritePost ~/.local/src/yadav-dwmblocks/blocks.h !cd ~/.local/src/yadav-dwmblocks/; sudo make install && { killall -q dwmblocks sigdwmblocks;setsid -f dwmblocks sigdwmblocks }
+	autocmd BufWritePost ~/.local/src/yadav-dwmblocks/config.h !cd ~/.local/src/yadav-dwmblocks/; sudo make install && { killall -q dwmblocks sigdwmblocks;setsid -f dwmblocks sigdwmblocks }
 " Enable Goyo by default for mutt writing
 	" autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=80
 	" autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo | set bg=light

@@ -1,0 +1,12 @@
+#!/bin/sh
+cmds="\
+🎵ncmpcpp|1	$TERMINAL -e ncmpcpp
+🎵Spotify|2	spotify
+🎥Kodi|3	kodi
+🗃️TinyMM4	tinymediamanager
+📚calibre|5	calibre
+🎥Otherapps|6	micsapp"
+
+choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -i)" || exit 1
+
+`echo "$cmds" | grep "^$choice	"  | cut -d '	' -f2-`

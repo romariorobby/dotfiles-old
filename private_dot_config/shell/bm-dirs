@@ -1,11 +1,16 @@
 #cd & ls -a
 h	  $HOME
-hd	  ${XDG_DOCUMENTS_DIR:-$HOME/documents}
+hmd	  ${XDG_DOCUMENTS_DIR:-$HOME/media/documents}
 hD	  ${XDG_DOWNLOAD_DIR:-$HOME/downloads}
-hp	  ${XDG_PICTURES_DIR:-$HOME/pictures}
-hps	  ${XDG_PICTURES_DIR:-$HOME/pictures}/screenshots/
-hm    ${XDG_MUSIC_DIR:-$HOME/music}
-hv	  ${XDG_VIDEOS_DIR:-$HOME/videos}
+hmi	  ${XDG_PICTURES_DIR:-$HOME/media/images}
+hm	  ~/media
+msf	  ~/media/software/fonts
+hms	  ~/media/software
+hml	  ~/media/literatures
+mlb   ~/media/literatures/books
+mis   ${XDG_PICTURES_DIR:-$HOME/media/images}/screenshots/
+hma   ${XDG_MUSIC_DIR:-$HOME/media/audio/music}
+hmv	  ${XDG_VIDEOS_DIR:-$HOME/media/videos}
 hcf	  ${XDG_CONFIG_HOME:-$HOME/.config}
 hca	  ${XDG_CACHE_HOME:-$HOME/.cache}
 hl	  ~/.local/

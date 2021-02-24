@@ -8,7 +8,6 @@
 # TODO:: Enable this on linux
 #import:
 #  - $HOME/.config/alacritty/alacritty.yml
-
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty itself.
@@ -109,10 +108,11 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: "Hack Nerd Font"
+    family: "Fira Code Nerd Font"
 
     # The `style` can be specified to pick a specific face.
-    style: Regular
+    # ===> hello world my name is benjamin agnlekkhekkk
+    style: Normal
 
   # Bold font face
   bold:
@@ -120,7 +120,7 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: "Hack Nerd Font"
+    family: "Fira Code Nerd Font"
 
     # The `style` can be specified to pick a specific face.
     style: Bold
@@ -131,7 +131,7 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: "Hack Nerd Font"
+    family: "Fira Code Nerd Font"
 
     # The `style` can be specified to pick a specific face.
     #style: Italic
@@ -142,7 +142,7 @@ font:
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: "Hack Nerd Font"
+    family: "Fira Code Nerd Font"
 
     # The `style` can be specified to pick a specific face.
     style: Bold Italic
@@ -729,13 +729,13 @@ key_bindings:
   #- { key: B,              mods: Control|Shift,             action: SearchBackward   }
   #- { key: C,              mods: Control|Shift, mode: Vi,   action: ClearSelection   }
   #- { key: Insert,         mods: Shift,                     action: PasteSelection   }
-  - { key: Key0,           mods: Control,                   action: ResetFontSize    }
-  - { key: Equals,         mods: Control,                   action: IncreaseFontSize }
-  - { key: Key0,           mods: alt,                       action: ResetFontSize    }
+  # - { key: Key0,           mods: Control,                   action: ResetFontSize    }
+  - { key: Key0,           mods: alt|Shift,                 action: ResetFontSize    }
   - { key: J,              mods: alt|Shift,                 action: IncreaseFontSize }
   - { key: K,              mods: alt|Shift,                 action: DecreaseFontSize }
     #- { key: Plus,           mods: Control,                 action: IncreaseFontSize }
   #- { key: NumpadAdd,      mods: Control,                 action: IncreaseFontSize }
+  - { key: Equals,         mods: Control,                   action: IncreaseFontSize }
   - { key: Minus,          mods: Control,                   action: DecreaseFontSize }
   #- { key: NumpadSubtract, mods: Control,                 action: DecreaseFontSize }
 

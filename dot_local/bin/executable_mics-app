@@ -1,0 +1,18 @@
+#!/bin/sh
+cmds="\
+klavaro		klavaro
+gimp		gimp
+kdenlive	kdenlive
+alacritty	alacritty
+calcurse	$TERMINAL -e calcurse
+sc-im	$TERMINAL sc-im
+screenkeys	screenkey
+pcmanfm		pcmanfm
+nautilus	nautilus
+qbittorent	qbittorrent
+Thunar	thunar
+tremc	$TERMINAL -e tremc
+libre	libreoffice"
+choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -i -l 20)" || exit 1
+
+`echo "$cmds" | grep "^$choice	"  | cut -d '	' -f2-`

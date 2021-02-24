@@ -5,12 +5,15 @@
 
 # nitrogen --restore &
 # deadd-notification-center &
+mopidy &
 nm-applet &
 dwmblocks &
+pulsedaemondwmb &
 setbg &
 xcompmgr &
 #volumeicon &
 #xrdb ${XDG_CONFIG_HOME:$HOME/.config}/x11/xresources & # Uncomment to user Xresources color/settings on startup 
+#/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 # blueman-applet &
 # udiskie -s &
 remaps &

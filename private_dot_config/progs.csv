@@ -5,12 +5,19 @@
 ,ttf-linux-libertine,provides the sans and serif fonts for LARBS.
 ,ttf-librebaskerville,for doom emacs font 
 ,noto-fonts-emoji,is an emoji font.
+,noto-fonts,
+,nerd-fonts-noto-sans-mono,
 ,noto-fonts-emoji-apple,is an apple emoji replace for noto .
 A,epy-git, epub reader CLI
 A,ttf-amiri, arabic font
 A,qurancomplex-fonts, arabic font
 ,adobe-source-han-sans-cn-fonts,
 ,adobe-source-han-serif-cn-fonts,
+,mopidy, MPD extention
+,mopidy-mpd, MPD extention
+,mopidy-spotify, MPD extention
+,ffmpeg-compat-57,
+,zenity,
 A,klavaro, Typing Tutor (#keyboard)
 A,nerd-fonts-sf-mono, apple like font patched nerdfont 
 A,nerf-fonts-hack, Patched font nerdfont
