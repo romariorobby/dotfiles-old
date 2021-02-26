@@ -1,10 +1,34 @@
+#+TITLE: My Emacs Configurations
+#+AUTHOR: Romario
+#+PROPERTY: header-args :tangle config.el
+
+* Table Of Content :toc:
+- [[#functions][Functions]]
+- [[#user-configuration][User Configuration]]
+- [[#org][Org]]
+- [[#basic-binding][Basic Binding]]
+- [[#deft][Deft]]
+- [[#org-roam][Org-Roam]]
+- [[#elcord][Elcord]]
+- [[#org-journal][Org-Journal]]
+
+* Functions
+:PROPERTIES:
+:ID:       76f82ba7-380d-45ee-8001-f18005c76776
+:END:
+#+begin_src haskell
 ;;(defun mario/org-mode-visual()
 ;;  (setq visual-fill-column-width 100
 ;;        visual-fill-column-center-text t
 ;;        display-fill-column-indicator nil
 ;;        display-line-numbers nil)
 ;;  (visual-fill-column-mode 1))
-
+#+end_src
+* User Configuration
+:PROPERTIES:
+:ID:       83c9656c-624b-47d6-b8e4-b76110cb3661
+:END:
+#+begin_src haskell
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 (setq doom-theme 'mario-gruvbox
@@ -28,10 +52,15 @@
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 ;; hide highlight line
 (remove-hook 'doom-first-buffer-hook #'global-hl-line-mode)
-(if (eq initial-window-system 'x) ;; if started by emacs command or desktop file
-    (toggle-frame-maximized)
-  (toggle-frame-fullscreen))
-
+;; (if (eq initial-window-system 'x) ;; if started by emacs command or desktop file
+;;     (toggle-frame-maximized)
+;;   (toggle-frame-fullscreen))
+#+end_src
+* Org
+:PROPERTIES:
+:ID:       d0dc96dc-ce10-465d-86c3-ee8feeb5c885
+:END:
+#+begin_src haskell
 (setq org-directory "~/Dropbox/org/"
       org-hide-emphasis-markers t
       org-ellipsis "  " ;; folding symbol
@@ -65,14 +94,6 @@
       :foreground "#fabd2f"
       :height 1.5
       :family "ETbb")
-    '(org-level-1
-      :inherit outline-1
-      :family "ETbb"
-      :foreground "#d79921"
-      :weight extra-bold
-      :height 1.35)
-    '(org-level-2
-      :inherit outline-2
       :family "ETbb"
       :foreground "#d79921"
       :weight extra-bold
@@ -125,7 +146,12 @@
     '(org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
     '(org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
     '(org-checkbox nil :inherit 'fixed-pitch)))
-
+#+end_src
+* Basic Binding
+:PROPERTIES:
+:ID:       1e3d7ac8-d5f8-4669-bf48-ccdb650f8a76
+:END:
+#+begin_src haskell
 (map! :leader
        "h h" #'evil-window-left
        "j j" #'evil-window-down
@@ -133,12 +159,22 @@
        "v" #'evil-window-vsplit
        "s s" #'evil-window-split
        "k k" #'evil-window-up)
-
+#+end_src
+* Deft
+:PROPERTIES:
+:ID:       468289f9-3a06-41f0-9fab-e06c60936af0
+:END:
+#+begin_src haskell
 (setq deft-directory "~/Dropbox/org/"
       deft-use-filter-string-for-filename t
       deft-default-extension "org"
       deft-recursive t)
-
+#+end_src
+* Org-Roam
+:PROPERTIES:
+:ID:       fabef71c-df1a-4bef-9482-1fef8f189565
+:END:
+#+begin_src haskell
 (use-package! org-roam
   ;; :commands (org-roam-insert ))
   :hook
@@ -167,14 +203,14 @@
            "%?"
            :file-name "${slug}"
            :head "#+TITLE: ${title}
-#+title: ${title}\n"
+,#+title: ${title}\n"
            :immediate-finish t
            :unnarrowed t)
           ("p" "private" plain (function org-roam-capture--get-point)
            "%?"
            :file-name "private/${slug}"
            :head "#+TITLE: ${title}
-#+title: ${title}\n"
+,#+title: ${title}\n"
            :immediate-finish t
            :unnarrowed t)))
   (setq org-roam-capture-ref-templates
@@ -182,9 +218,9 @@
            "%?"
            :file-name "resonance/${slug}"
            :head "#+TITLE:${title}
-#+title: ${title}
-#+roam_key: ${ref}
-#+roam_tags: bpmcinbox
+,#+title: ${title}
+,#+roam_key: ${ref}
+,#+roam_tags: bpmcinbox
 
 - source :: ${ref}
 - tags :: [[file:../../org/bpmc.org][BPMC]]"
@@ -202,10 +238,23 @@
 
 (use-package! org-roam-protocol
   :after org-protocol)
+#+end_src
 
+* Elcord
+:PROPERTIES:
+:ID:       ad03c092-ae65-4302-8951-1c8b78055228
+:END:
+Discord Presence for emacs
+#+begin_src haskell
 ;; (setq elcord-display-buffer-details nil)
 ;; (elcord-mode t)
-
+#+end_src
+* Org-Journal
+:PROPERTIES:
+:ID:       6bc84ab8-9967-49b9-a337-ace8ca8ce3f8
+:END:
+Journalling for emacs
+#+begin_src haskell
 (after! org-journal
   (setq org-journal-date-prefix "#+TITLE: "
         org-journal-file-format "%Y-%m-%d.org"
@@ -213,3 +262,4 @@
         org-journal-date-format "%A, %d %B %Y"
         org-journal-dir  "~/Dropbox/org/private/"
         org-journal-enable-agenda-integration t))
+#+end_src

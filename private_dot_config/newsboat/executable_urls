@@ -128,5 +128,6 @@ https://twitchrss.appspot.com/vod/planey "stream" "twitch" "~Planey"
 https://twitchrss.appspot.com/vod/tgltn "stream" "twitch" "~TGLTN"
 https://twitchrss.appspot.com/vod/kaymind "stream" "twitch" "~Kaymind"
 https://twitchrss.appspot.com/vod/georgehotz "stream" "twitch" "computer" "programming" "~Georgehotz"
+https://twitchrss.appspot.com/vod/danucd "stream" "twitch" "~DanuCD"
 	         PeerTube
 https://videos.lukesmith.xyz/feeds/videos.xml?sort=-publishedAt&filter=local

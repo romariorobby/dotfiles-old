@@ -27,7 +27,7 @@ background contrast. All other values default to \"medium\"."
   :type  'string)
 
 ;;
-(def-doom-theme my-doom-gruvbox
+(def-doom-theme mario-gruvbox
   "Dark theme with pastel 'retro groove' colors."
 
   ;; name        gui       256       16
@@ -39,12 +39,16 @@ background contrast. All other values default to \"medium\"."
     (cond ((equal doom-gruvbox-dark-variant "hard") '("#282828" "#282828" nil))
           ((equal doom-gruvbox-dark-variant "soft") '("#403d3d" "#404040" nil))
           (t                                        '("#202020" "#323232" nil))))
-   (bg-alt2    '("#504945" "#504945" "brown"      )) ; bg2 (for region, selection etc.)
+   ;; (bg-alt2    '("#504945" "#504945" "brown"      )) ; bg2 (for region, selection etc.)
+   ;; Highlighting
+   (bg-alt2    '("#3c3836" "#504945" "brown"      )) ; bg2 (for region, selection etc.)
 
    (base0      '("#0d1011" "black"   "black"      )) ; (self-defined)
    (base1      '("#1d2021" "#1d1d1d" "brightblack")) ; bg0_h
    (base2      '("#282828" "#282828" "brightblack")) ; bg0
-   (base3      '("#3c3836" "#383838" "brightblack")) ; bg1
+   ;; (base3      '("#3c3836" "#383838" "brightblack")) ; bg1
+   ;; Block Highlight
+   (base3      '("#202020" "#383838" "brightblack")) ; bg1
    (base4      '("#665c54" "#5c5c5c" "brightblack")) ; bg3
    (base5      '("#7c6f64" "#6f6f6f" "brightblack")) ; bg4
    (base6      '("#928374" "#909090" "brightblack")) ; gray

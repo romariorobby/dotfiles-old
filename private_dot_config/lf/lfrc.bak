@@ -1,0 +1,252 @@
+# interpreter for shell commands (needs to be POSIX compatible)
+set shell bash
+set icons
+set period 1
+set shellopts '-eu'
+set ifs "\n"
+set scrolloff 10
+map \ shell
+
+
+# Vars that depend on environmental variables
+$lf -remote "send $id set previewer ${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope"
+
+# CMDs/Functions
+cmd open ${{
+    case $(file --mime-type $f -b) in
+    image/vnd.djvu|application/pdf|application/octet-stream) setsid -f zathura $fx >/dev/null 2>&1 ;;
+        text/*) $EDITOR $fx;;
+        text/mobi) epy $fx;;
+    image/x-xcf) setsid -f gimp $f >/dev/null 2>&1 ;;
+    image/svg+xml) display -- $f ;;
+    image/*) rotdir $f | grep -i "\.\(png\|jpg\|jpeg\|gif\|webp\|tif\|ico\)\(_large\)*$" | sxiv -aio 2>/dev/null | lf-select ;;
+    audio/*) mpv --audio-display=no $f ;;
+    application/pdf|application/vnd*|application/epub*) setsid -f zathura $fx >/dev/null 2>&1 ;;
+    video/*) setsid -f mpv $f -quiet >/dev/null 2>&1 ;;
+        *) for f in $fx; do setsid $OPENER $f > /dev/null 2> /dev/null & done;;
+    esac
+
+}}
+cmd bulkrename $vidir
+cmd paste &{{
+    load=$(lf -remote 'load')
+    mode=$(echo "$load" | sed -n '1p')
+    list=$(echo "$load" | sed '1d')
+    if [ $mode = 'copy' ]; then
+        rsync -av --ignore-existing --progress $list . \
+        | stdbuf -i0 -o0 -e0 tr '\r' '\n' \
+        | while read line; do
+            lf -remote "send $id echo $line"
+        done
+    elif [ $mode = 'move' ]; then
+        mv -n $list .
+    fi
+    lf -remote 'send load'
+    lf -remote 'send clear'
+}}
+
+cmd paste2 %{{
+    load=$(lf -remote 'load')
+    mode=$(echo "$load" | sed -n '1p')
+    list=$(echo "$load" | sed '1d')
+    if [ $mode = 'copy' ]; then
+        cp -r --backup=numbered $list .
+    elif [ $mode = 'move' ]; then
+        mv --backup=numbered $list .
+    fi
+    lf -remote 'send load'
+    lf -remote 'send clear'
+}}
+# define a custom 'rename' command without prompt for overwrite
+# cmd rename %[ -e $1 ] && printf "file exists" || mv $f $1
+# map r push :rename<space>
+
+# make sure trash folder exists
+# %mkdir -p ~/.trash
+
+# move current file or selected files to trash folder
+# (also see 'man mv' for backup/overwrite options)
+cmd trash %set -f; mv $fx ~/.trash
+
+# define a custom 'delete' command
+# cmd delete ${{
+#     set -f
+#     printf "$fx\n"
+#     printf "delete?[y/n]"
+#     read ans
+#     [ $ans = "y" ] && rm -rf $fx
+# }}
+
+# use '<delete>' key for either 'trash' or 'delete' command
+# map <delete> trash
+# map <delete> delete
+
+# extract the current file with the right command
+# (xkcd link: https://xkcd.com/1168/)
+cmd extract ${{
+    set -f
+    case $f in
+        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
+        *.tar.gz|*.tgz) tar xzvf $f;;
+        *.tar.xz|*.txz) tar xJvf $f;;
+        *.zip) unzip $f;;
+        *.rar) unrar x $f;;
+        *.7z) 7z x $f;;
+		*) echo "Unsupported format";;
+    esac
+}}
+
+# Dragon
+cmd dragon %dragon-drag-and-drop -a -x $fx
+cmd dragon-stay %dragon-drag-and-drop -a $fx
+cmd dragon-individual %dragon-drag-and-drop $fx
+
+# compress current file or selected files with tar and gunzip
+#cmd tar ${{
+#    set -f
+#    mkdir $1
+#    cp -r $fx $1
+#    tar czf $1.tar.gz $1
+#    rm -rf $1
+#}}
+
+# compress current file or selected files with zip
+#cmd zip ${{
+#    set -f
+#    mkdir $1
+#    cp -r $fx $1
+#    zip -r $1.zip $1
+#    rm -rf $1
+#}}
+
+cmd zip %zip -r "$f" "$f"
+
+# join arg (don't need '') and autoselected 
+cmd mkdir ${{
+    mkdir -p "$(echo $* | tr ' ' '\ ')"
+    lf -remote "send $id load"$'\n'"send $id select \"$@\""
+}}
+
+cmd mkfile ${{
+#    touch "$(echo $* | tr ' ' '\ ')"
+#    lf -remote "send $id load"$'\n'"send $id select \"$@\""
+	printf "File Name: "
+	read ans
+	$EDITOR $ans
+}}
+cmd moveto ${{
+	clear; tput cup $(($(tput lines)/3)); tput bold
+	set -f
+	clear; echo "Move to where?"
+	dest="$(cut -d'	' -f2- ${XDG_CONFIG_HOME:-$HOME/.config}/directories | fzf | sed 's|~|$HOME|' )" &&
+	for x in $fx; do
+		eval mv -iv \"$x\" \"$dest\"
+	done &&
+	notify-send "🚚 File(s) moved." "File(s) moved to $dest."
+}}
+
+cmd trash ${{
+  files=$(printf "$fx" | tr '\n' ';')
+  while [ "$files" ]; do
+    # extract the substring from start of string up to delimiter.
+    # this is the first "element" of the string.
+    file=${files%%;*}
+
+    trash-put "$(basename "$file")"
+    # if there's only one element left, set `files` to an empty string.
+    # this causes us to exit this `while` loop.
+    # else, we delete the first "element" of the string from files, and move onto the next.
+    if [ "$files" = "$file" ]; then
+      files=''
+    else
+      files="${files#*;}"
+    fi
+  done
+}}
+
+cmd clear_trash %trash-empty
+
+cmd list_trash ${{
+	clear; trash-list
+}}
+cmd restore_trash ${{
+  trash-restore
+}}
+cmd copyto ${{
+	clear; tput cup $(($(tput lines)/3)); tput bold
+	set -f
+	clear; echo "Copy to where?"
+	dest="$(cut -d'	' -f2- ${XDG_CONFIG_HOME:-$HOME/.config}/directories | fzf | sed 's|~|$HOME|' )" &&
+	for x in $fx; do
+		eval cp -ivr \"$x\" \"$dest\"
+	done &&
+	notify-send "📋 File(s) copied." "File(s) copies to $dest."
+}}
+
+cmd setbg "$1"
+
+# Unmap
+map r
+map d
+# Basic Function
+map W $setbg $f
+map P paste
+map w paste2
+map R reload
+map x cut
+map X moveto
+map . set hidden!
+map y copy
+map Y copyto
+map <enter> open
+map U unselect
+map dd trash
+map DD delete
+map tc clear_trash
+map tp list_trash
+map tl push :!clear;trash-list<enter>
+map tr restore_trash
+map V push :!nvim<space>
+map C clear
+
+# dedicated keys for file opener actions
+map o &mimeopen $f
+map O $mimeopen --ask $f
+
+# execute current file (must be executable)
+map E $$f
+map e !$f
+
+#Create
+map <a-d> push :mkdir<space>
+map <a-n> mkfile
+#
+#Archvieve
+map az zip
+map at tar
+map ae extract
+# Dragon
+map dr dragon
+map ds dragon-stay
+map di dragon-individual
+# Rename 
+map rA rename # at very end
+map rb bulkrename
+map ra push rA<a-b> # after extension
+map rc push rA<c-u> # New Rename
+map rI push rA<c-a> # at very beginning
+map ri push rA<a-b><a-b><a-f> # before extentions
+# mouse wheel
+map <c-e> down
+map <c-y> up
+# Undirect Movement
+map <c-f> $lf -remote "send $id select '$(fzf)'"
+map J $lf -remote "send $id cd $(cut -d'	' -f2 ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf)"
+# Direct Movement
+map gdo cd ~/documents/
+map gcr cd ~/crossdisk/
+map gdr cd ~/Dropbox/
+map gdl cd ~/downloads/
+map gD cd ~/crossdisk/Root/Unorganize/Cross-Download/
+map gcf. cd ~/.config/
+map gch. cd ~/.local/share/chezmoi/
