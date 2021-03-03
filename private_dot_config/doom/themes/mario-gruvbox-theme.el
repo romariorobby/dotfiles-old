@@ -47,7 +47,7 @@ background contrast. All other values default to \"medium\"."
    (base1      '("#1d2021" "#1d1d1d" "brightblack")) ; bg0_h
    (base2      '("#282828" "#282828" "brightblack")) ; bg0
    ;; (base3      '("#3c3836" "#383838" "brightblack")) ; bg1
-   ;; Block Highlight
+   ;; Block Highlight (code)
    (base3      '("#202020" "#383838" "brightblack")) ; bg1
    (base4      '("#665c54" "#5c5c5c" "brightblack")) ; bg3
    (base5      '("#7c6f64" "#6f6f6f" "brightblack")) ; bg4
@@ -75,7 +75,8 @@ background contrast. All other values default to \"medium\"."
    ;; face categories
    (highlight      yellow)
    (vertical-bar   grey)
-   (selection      bg-alt2)
+   ;; nav-flash use this below
+   (selection      "#a37b1f")
    (builtin        orange)
    (comments       (if doom-gruvbox-brighter-comments magenta grey))
    (doc-comments   (if doom-gruvbox-brighter-comments (doom-lighten magenta 0.2) (doom-lighten fg-alt 0.25)))
@@ -109,7 +110,7 @@ background contrast. All other values default to \"medium\"."
   ;; --- extra faces ------------------------
   (
    ;;;;;;;; Editor ;;;;;;;;
-   (cursor :background "white")
+   (cursor :background "#fabd2f")
    (hl-line :background bg-alt)
    ((line-number &override) :foreground base5)
    ((line-number-current-line &override) :background bg-alt2 :foreground fg :bold t)
@@ -149,7 +150,7 @@ background contrast. All other values default to \"medium\"."
    (evil-ex-substitute-replacement :foreground cyan :inherit 'evil-ex-substitute-matches)
 
    ;; evil-snipe
-   (evil-snipe-first-match-face :foreground "white" :background yellow)
+   (evil-snipe-first-match-face :foreground "black" :background "#A37B1F")
    (evil-snipe-matches-face     :foreground yellow :bold t :underline t)
 
    ;;;;;;;; Mini-buffers ;;;;;;;;
