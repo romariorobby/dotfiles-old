@@ -1,0 +1,15 @@
+#!/bin/sh
+choosetheme(){ \
+	echo "Choose themes ?"
+	# choosetheme=`du --max-depth=1 "$(dirname "$(spicetify -c)")/Themes" | awk '{print $2}' | fzf --cycle | cut -d'/' -f7` || exit 1
+	selectedtheme=`find "$(dirname "$(spicetify -c)")/Themes/$selectedtheme" -name "install.sh" | fzf --cycle` || exit 1
+	echo -n "Do You want to install '$selectedtheme' theme [Y/N] ? "
+	read answer
+	[ "$answer" != "${answer#[Yy]}" ] && $SHELL $selectedtheme
+}
+choosetheme
+# if [ -z "$selectedtheme" ]; then
+# 	echo "No Theme Selected" && exit
+# else
+# 	choosetheme
+# fi

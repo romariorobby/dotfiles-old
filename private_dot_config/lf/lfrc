@@ -13,6 +13,8 @@ $lf -remote "send $id set previewer ${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope"
 
 cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
 
+# cmd chmod $
+
 cmd delete ${{
 	clear; tput cup $(($(tput lines)/3)); tput bold
 	set -f
@@ -20,6 +22,45 @@ cmd delete ${{
 	printf "delete?[y/N]"
 	read ans
 	[ $ans = "y" ] && rm -rf -- $fx
+}}
+
+cmd trash ${{
+  files=$(printf "$fx" | tr '\n' ';')
+  printf "Put to Trash?[y/N]"
+  read ans
+  [ $ans = "y" ] &&
+  while [ "$files" ]; do
+    # extract the substring from start of string up to delimiter.
+    # this is the first "element" of the string.
+    file=${files%%;*}
+
+	trash-put "$(basename "$file")"
+    # if there's only one element left, set `files` to an empty string.
+    # this causes us to exit this `while` loop.
+    # else, we delete the first "element" of the string from files, and move onto the next.
+    if [ "$files" = "$file" ]; then
+      files=''
+    else
+      files="${files#*;}"
+    fi
+  done
+}}
+
+cmd clear_trash %trash-empty
+
+cmd list_trash ${{
+	clear; trash-list
+}}
+
+cmd restore_trash ${{
+  trash-restore
+}}
+
+cmd restore_trash_all ${{
+	printf "are you sure?[y/N]"
+	read ans
+	[ $ans = "y" ] &&
+	while (echo '0' | trash-restore); do true; done;
 }}
 
 cmd paste &{{
@@ -72,6 +113,7 @@ cmd chwall ${{
 	read ans
 	[ $ans = "y" ] && setbg "$fx"
 }}
+
 cmd bulkrename $vidir
 cmd ext ${{
 	clear; tput cup $(($(tput lines)/3)); tput bold
@@ -81,12 +123,16 @@ cmd ext ${{
 	read ans
 	[ $ans = "y" ] && ext "$fx"
 }}
+
 # BINDING
 # - Basic
-map <c-n> push :mkdir<space>
+map <c-d> push :mkdir<space>
+map <c-n> push $touch<space>
 map M moveto
-map D delete
+map D trash
+map d delete
 map P paste
+map y copy
 map x cut
 map . set hidden!
 map u clear
@@ -94,6 +140,14 @@ map U unselect
 map <c-r> reload
 map R reload
 map <c-o> ext
+
+# Trash Things
+map tc clear_trash
+map tp list_trash
+map tl push :!clear;trash-list<enter>
+map tr restore_trash
+map ta restore_trash_all
+
 # dedicated keys for file opener actions. you need "perl-file-mimeinfo"
 map o &mimeopen $f
 map O $mimeopen --ask $f
@@ -102,15 +156,20 @@ map O $mimeopen --ask $f
 # mouse scroll
 map <c-e> down
 map <c-y> up
+
 # --
 map B chwall
+map <c-w> chwall
 map V push :!nvim<space>
 map <c-f> $lf -remote "send $id select '$(fzf)'"
 map J $lf -remote "send $id cd $(cut -d'	' -f2 ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf)"
 map o &mimeopen $f
 map O $mimeopen --ask $f
+
 # unmap
 map r
+map gh
+
 # Rename 
 map rA rename # at very end
 map rb bulkrename
@@ -118,21 +177,46 @@ map ra push rA<a-b> # after extension
 map rc push rA<c-u> # New Rename
 map rI push rA<c-a> # at very beginning
 map ri push rA<a-b><a-b><a-f> # before extentions
+
 # Directory
-#map gm cd ~/media/
-#map gmd cd ~/media/documents
-#map gd cd ~/downloads
-#map gma cd ~/media/audio
-#map gam cd ~/media/audio/music
-#map gap cd ~/media/audio/podcast
-#map gmi cd ~/media/images
-#map gmv cd ~/media/videos
-#map gvy cd ~/media/videos/youtube
-#map gml cd ~/media/literatures
-#map glb cd ~/media/literatures/books
-#map gms cd ~/media/software
-#map gmi cd ~/media/images
-#map gip cd ~/media/images/pictures
-#map giw cd ~/media/images/wallpaper
-#map gis cd ~/media/images/screenshots/
-#map gdc cd ~/.local/share/chezmoi
+map g? $lf -doc | less
+map gf $lf -remote "send $id select '$(fzf)'"
+map g/ cd /
+map g~ cd ~/
+map gH cd ~/
+map g. cd ~/.config/lf
+map ghc cd ~/.config
+map ghC cd ~/.cache
+map ghs cd ~/.ssh
+map ghd cd ~/downloads
+map gdt cd ~/downloads/torrent
+map ghe cd ~/exdrive
+map geh cd ~/exdrive/hdd
+map geu cd ~/exdrive/usb
+map gep cd ~/exdrive/phones
+map gec cd ~/exdrive/camera
+map ghm cd ~/media
+map gmi cd ~/media/images
+map giw cd ~/media/images/wallpaper
+map gip cd ~/media/images/pictures
+map gis cd ~/media/images/screenshots/
+map gmv cd ~/media/videos
+map gvm cd ~/media/videos/movies/
+map gvy cd ~/media/videos/youtube
+map gmd cd ~/media/documents
+map gam cd ~/media/audio/music
+map gap cd ~/media/audio/podcasts
+map gml cd ~/media/literatures
+map glbk cd ~/media/literatures/books
+map gms cd ~/media/software
+map ghl cd ~/.local
+map glbx cd ~/.local/bin/
+map gbc cd ~/.local/bin/cron
+map gbb cd ~/.local/bin/blocks
+map gls cd ~/.local/share/chezmoi
+map gsch cd ~/.local/share/chezmoi
+map glc cd ~/.local/src/
+map gcdw cd ~/.local/src/dwm/
+map gcdm cd ~/.local/src/dmenu/
+map gcdb cd ~/.local/src/st/
+map gcst cd ~/.local/src/st/

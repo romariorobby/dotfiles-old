@@ -5,17 +5,21 @@
 
 # nitrogen --restore &
 # deadd-notification-center &
-dwmblocks &
-mopidy &
+# mopidy &
+# dwmblocks &
+chdwmblocks &
+mpd &
 nm-applet &
 pulsedaemondwmb &
 transmission-daemon &
 setbg &
+sxhkd -c ~/.config/sxhkd/dwm.sxk &
 xcompmgr &
 remaps &
 dunst &
 caffeine &
 dropbox &
+emacs --daemon && emacsclient -c --eval "(org-roam-dailies-find-today)" &
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 #volumeicon &
 #xrdb ${XDG_CONFIG_HOME:$HOME/.config}/x11/xresources & # Uncomment to user Xresources color/settings on startup 

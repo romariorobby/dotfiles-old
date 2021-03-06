@@ -4,6 +4,7 @@ cfd		${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs
 cfb		${XDG_CONFIG_HOME:-$HOME/.config}/bookmarks
 cfa		${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc
 cfp	    ${XDG_CONFIG_HOME:-$HOME/.config}/shell/profile
+cfsk	${XDG_CONFIG_HOME:-$HOME/.config}/sxhkd/dwm.sxk
 cfzc	$ZDOTDIR/.zshrc
 cfbc	$BASHRCDOTDIR/.bashrc
 cfvc	${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim

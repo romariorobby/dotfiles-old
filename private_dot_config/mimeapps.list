@@ -18,7 +18,6 @@ x-scheme-handler/mailspring=mailspring.desktop
 x-scheme-handler/mailto=mailspring.desktop
 
 [Added Associations]
-text/html=nvim.desktop;
 image/jpeg=sxiv.desktop;
 application/xhtml+xml=firefox.desktop;brave-browser.desktop;
 application/geo+json=nvim.desktop;

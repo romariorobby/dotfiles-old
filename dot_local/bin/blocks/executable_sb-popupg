@@ -2,7 +2,11 @@
 
 printf "Beginning upgrade.\\n"
 
-paru -Syu
+if [ -f /usr/bin/yay ]; then
+	yay -Syu
+else [ -f /usr/bin/paru ]; 
+	paru -Syu
+fi
 # yay -Syu
 sigdwmblocks 9
 

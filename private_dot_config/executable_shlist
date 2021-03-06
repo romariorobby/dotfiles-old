@@ -1,0 +1,4 @@
+#!/bin/sh
+installable_packages=$(comm -12 <(pacman -Slq | sort) <(sort listls))
+pacman -S --needed $installable_packages
+

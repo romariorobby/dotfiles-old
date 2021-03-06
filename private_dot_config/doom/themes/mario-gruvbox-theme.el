@@ -32,11 +32,11 @@ background contrast. All other values default to \"medium\"."
 
   ;; name        gui       256       16
   ((bg
-    (cond ((equal doom-gruvbox-dark-variant "hard") '("#1d2021" "#1e1e1e" nil))   ; bg0_h
+    (cond ((equal doom-gruvbox-dark-variant "hard") '("#141414" "#000fff" nil))   ; bg0_h
           ((equal doom-gruvbox-dark-variant "soft") '("#32302f" "#323232" nil))   ; bg0_s
           (t                                        '("#202020" "#282828" nil)))) ; bg0
    (bg-alt
-    (cond ((equal doom-gruvbox-dark-variant "hard") '("#282828" "#282828" nil))
+    (cond ((equal doom-gruvbox-dark-variant "hard") '("#141414" "#141414" nil))
           ((equal doom-gruvbox-dark-variant "soft") '("#403d3d" "#404040" nil))
           (t                                        '("#202020" "#323232" nil))))
    ;; (bg-alt2    '("#504945" "#504945" "brown"      )) ; bg2 (for region, selection etc.)
@@ -48,7 +48,8 @@ background contrast. All other values default to \"medium\"."
    (base2      '("#282828" "#282828" "brightblack")) ; bg0
    ;; (base3      '("#3c3836" "#383838" "brightblack")) ; bg1
    ;; Block Highlight (code)
-   (base3      '("#202020" "#383838" "brightblack")) ; bg1
+   (base3      '("#141414" "#383838" "brightblack")) ; bg1
+
    (base4      '("#665c54" "#5c5c5c" "brightblack")) ; bg3
    (base5      '("#7c6f64" "#6f6f6f" "brightblack")) ; bg4
    (base6      '("#928374" "#909090" "brightblack")) ; gray
@@ -145,7 +146,7 @@ background contrast. All other values default to \"medium\"."
    ;;;;;;;; Search ;;;;;;;;
    ;; /find
    (isearch :foreground base0 :background orange)
-   (evil-search-highlight-persist-highlight-face :background yellow)
+   (evil-search-highlight-persist-highlight-face :background "#A37B1F")
    (lazy-highlight :background yellow :foreground base0 :distant-foreground base0 :bold bold)
    (evil-ex-substitute-replacement :foreground cyan :inherit 'evil-ex-substitute-matches)
 

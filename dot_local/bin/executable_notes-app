@@ -1,6 +1,6 @@
 #!/bin/sh
 cmds="\
-📓 Emacs|1		emacs
+📓 Emacs|1	emacs-app
 🗃️Remnote|2	remnote
 📥 Notion|3	notion-app
 ✏️ Vimwiki|4	$TERMINAL -e nvim $HOME/Dropbox/org/Braindump.md

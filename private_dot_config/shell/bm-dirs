@@ -1,7 +1,7 @@
 #cd & ls -a
 h	  $HOME
 hmd	  ${XDG_DOCUMENTS_DIR:-$HOME/media/documents}
-hD	  ${XDG_DOWNLOAD_DIR:-$HOME/downloads}
+hd	  ${XDG_DOWNLOAD_DIR:-$HOME/downloads}
 hmi	  ${XDG_PICTURES_DIR:-$HOME/media/images}
 hm	  ~/media
 msf	  ~/media/software/fonts
