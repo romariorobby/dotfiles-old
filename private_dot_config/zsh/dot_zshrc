@@ -21,8 +21,6 @@ HISTFILE=~/.cache/zsh/history
 #custom fzf
 [ -f $HOME/.local/bin/fzf/binding.zsh ] && source $HOME/.local/bin/fzf/binding.zsh
 
-# Bitwarden CLI Completion
-eval "$(bw completion --shell zsh); compdef _bw bw;"
 # Basic auto/tab complete:
 autoload -U compinit
 zstyle ':completion:*' menu select
@@ -84,3 +82,10 @@ autoload edit-command-line; zle -N edit-command-line
 bindkey '^n' edit-command-line
 
 source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null
+
+# Bitwarden CLI
+export BW_MASTER=$(cat ~/.local/share/bitwarden/key)
+export BW_CLIENTID=$(cat ~/.local/share/bitwarden/clientid)
+export BW_CLIENTSECRET=$(cat ~/.local/share/bitwarden/clientsecret)
+export BW_SESSION="$(bw unlock $BW_MASTER 2>/dev/null | grep 'export' | sed -E 's/.*export BW_SESSION="(.*==)"$/\1/')"
+
