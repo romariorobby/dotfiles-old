@@ -122,11 +122,10 @@ genfstab -U /mnt >> /mnt/etc/fstab
 cat tz.tmp > /mnt/tzfinal.tmp
 rm tz.tmp
 mv comp /mnt/etc/hostname
+cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 curl $chrootUrl > /mnt/chroot.sh && arch-chroot /mnt bash chroot.sh && rm /mnt/chroot.sh
 
 
 dialog --defaultno --title "final qs" --yesno "reboot computer?"  5 30 && reboot
 dialog --defaultno --title "final qs" --yesno "return to chroot environment?"  6 30 && arch-chroot /mnt
 clear
-# curl https://raw.githubusercontent.com/LukeSmithxyz/LARBS/master/testing/chroot.sh > /mnt/chroot.sh && arch-chroot /mnt bash chroot.sh && rm /mnt/chroot.sh
-# ls /sys/firmware/efi/efivars && curl $chrootUefiUrl > /mnt/chroot-uefi.sh || curl $chrootLegacyUrl > /mnt/chroot.sh
