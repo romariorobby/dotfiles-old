@@ -8,7 +8,7 @@ chrootUrl="https://raw.githubusercontent.com/romariorobby/dotfiles/main/dot_loca
 echo "Reflector Running..."
 reflector -c ID,SG -a 6 --sort rate --save /etc/pacman.d/mirrorlist >/dev/null 2>&1 && pacman -Syy 
 
-pacman -Sy --noconfirm dialog || { echo "Error at script start: Are you sure you're running this as the root user? Are you sure you have an internet connection?"; exit; }
+pacman -S --noconfirm dialog || { echo "Error at script start: Are you sure you're running this as the root user? Are you sure you have an internet connection?"; exit; }
 
 dialog --defaultno --title "NOTE" --yesno "This Scripts will create\n- Boot UEFI (+512MB)\n- Swap (*)\n-n Root (*)\n- Home (rest of you drive)"  15 60 || exit
 
@@ -116,17 +116,17 @@ mount $(cat drivepath)4 /mnt/home
 ls /sys/firmware/efi/efivars >/dev/null 2>&1 && uefiformat || legacyformat
 pacman -Sy --noconfirm archlinux-keyring
 whichproc=$(cat /proc/cpuinfo | grep Intel >/dev/null 2>&1 && echo "intel-ucode" > proc || echo "amd-ucode")
-pacstrap /mnt base base-devel linux linux-headers linux-firmware openssh git chezmoi $whichproc
+pacstrap /mnt base base-devel linux linux-headers linux-firmware openssh reflector git chezmoi $whichproc
 
 genfstab -U /mnt >> /mnt/etc/fstab
 cat tz.tmp > /mnt/tzfinal.tmp
 rm tz.tmp
 mv comp /mnt/etc/hostname
-# curl https://raw.githubusercontent.com/LukeSmithxyz/LARBS/master/testing/chroot.sh > /mnt/chroot.sh && arch-chroot /mnt bash chroot.sh && rm /mnt/chroot.sh
-# ls /sys/firmware/efi/efivars && curl $chrootUefiUrl > /mnt/chroot-uefi.sh || curl $chrootLegacyUrl > /mnt/chroot.sh
 curl $chrootUrl > /mnt/chroot.sh && arch-chroot /mnt bash chroot.sh && rm /mnt/chroot.sh
 
 
 dialog --defaultno --title "final qs" --yesno "reboot computer?"  5 30 && reboot
 dialog --defaultno --title "final qs" --yesno "return to chroot environment?"  6 30 && arch-chroot /mnt
 clear
+# curl https://raw.githubusercontent.com/LukeSmithxyz/LARBS/master/testing/chroot.sh > /mnt/chroot.sh && arch-chroot /mnt bash chroot.sh && rm /mnt/chroot.sh
+# ls /sys/firmware/efi/efivars && curl $chrootUefiUrl > /mnt/chroot-uefi.sh || curl $chrootLegacyUrl > /mnt/chroot.sh

@@ -1,0 +1,2 @@
+#!/bin/sh
+if [[ ! -d ~/.local/src ]] && git clone k

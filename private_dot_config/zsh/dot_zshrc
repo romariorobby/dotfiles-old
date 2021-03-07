@@ -21,6 +21,8 @@ HISTFILE=~/.cache/zsh/history
 #custom fzf
 [ -f $HOME/.local/bin/fzf/binding.zsh ] && source $HOME/.local/bin/fzf/binding.zsh
 
+# Bitwarden CLI Completion
+eval "$(bw completion --shell zsh); compdef _bw bw;"
 # Basic auto/tab complete:
 autoload -U compinit
 zstyle ':completion:*' menu select
