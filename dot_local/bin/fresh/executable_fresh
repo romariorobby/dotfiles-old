@@ -1,2 +1,10 @@
 #!/bin/sh
-if [[ ! -d ~/.local/src ]] && git clone k
+src="/home/$(whoami)/.local/src"
+[[ ! -d "$src" ]] && git clone "https://github.com/romariorobby/dotfiles.git" "$src"
+install(){
+	cd $src/dwm && sudo make clean install
+	cd $src/st && sudo make clean install
+	cd $src/dmenu && sudo make clean install
+	cd $src/yadav-dwmblocks && sudo make clean install
+}
+install
