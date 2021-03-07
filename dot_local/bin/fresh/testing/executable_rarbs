@@ -60,6 +60,7 @@ getbwuser() { \
 addbwuserandpass () {
 	dialog --infobox "Adding Bitwarden-cli user \"$bwname\" for $name..." 4 50
 	[ -x "$(command -v "bw")" ] || manualinstall bitwarden-cli-bin >/dev/null 2>&1
+	[ -f "$bwdir/email" -a -f "$bwdir/key"  ] && cp $bwdir/email $bwdir/email.bak && cp $bwdir/key $bwdir/email.bak
 	bwdir="/home/mario/.local/share/bitwarden"; mkdir -p "$bwdir"; chown -R "mario":wheel "$(dirname "$bwdir")"
 	sudo -u "mario" echo $bwname > $bwdir/email && sudo -u "mario" echo $bwpass1 > $bwdir/key
 	sudo -u "mario" bw login $(echo $bwname $bwpass1)
