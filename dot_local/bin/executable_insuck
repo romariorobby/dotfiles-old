@@ -1,11 +1,14 @@
 #!/bin/sh
 dest="/home/$(whoami)/.local/src"
-suckless="https://github.com/romariorobby/sucklessaqs.git"
-
+suckhttp="https://github.com/romariorobby/sucklessaqs.git"
+suckssh="git@github.com:romariorobby/sucklessaqs.git"
+gittype() {
+	[[ -f $HOME/.ssh/id_rsa.pub ]] && git clone "$suckssh" "$dest" || echo "========CLONING USING HTTP========" && git clone "$suckhttp" "$dest"
+}
 makesuck(){
 	[ ! -x "$(command -v "dwm")" ] && cd $dest/dwm && sudo make clean install
 	[ ! -x "$(command -v "st")" ] && cd $dest/st && sudo make clean install
 	[ ! -x "$(command -v "dwmblocks")" ] && cd $dest/yadav-dwmblocks && sudo make clean install
 	[ ! -x "$(command -v "dmenu")" ] && cd $dest/dmenu && sudo make clean install
 }
-[[ ! -d "$dest/dwm" ]] && mkdir -p "$dest" && git clone "$suckless" "$dest" && makesuck || makesuck && exit 0
+[[ ! -d "$dest/.git" ]] && mkdir -p "$dest" && gittype && makesuck || makesuck && exit 0
