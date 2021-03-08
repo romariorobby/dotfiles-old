@@ -1,9 +1,9 @@
 #!/bin/sh
 #dest="/home/$(whoami)/.local/src"
 chezhttp="https://github.com/romariorobby/dotfiles.git"
-chezssh="git@github:romariorobby/dotfiles.git"
+# chezssh="git@github:romariorobby/dotfiles.git"
 gittype() {
-	[ -f $HOME/.ssh/id_rsa.pub ] && chezmoi init --apply --verbose "$chezssh" || echo "========CLONING USING HTTP========" &&
+	[ -f $HOME/.ssh/id_rsa.pub ] && chezmoi init --apply --verbose git@github:romariorobby/dotfiles.git || echo "========CLONING USING HTTP========" &&
 	chezmoi init --apply --verbose "$chezhttp"
 }
-[[ ! -d $HOME/.local/share/chezmoi ]] && gittype
+[[ ! -d $HOME/.local/share/chezmoi/.git ]] && gittype
