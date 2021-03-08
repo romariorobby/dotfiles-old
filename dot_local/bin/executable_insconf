@@ -1,12 +1,9 @@
 #!/bin/sh
 LINUXOS="[ "$OSTYPE" == "linux-gnu" ]"
 WINOS="[ "$OSTYPE" == "msys" ]"
-MACOS="[ "$OSTYPE" == "darwin"* ]"
+MACOS="[ "$(uname)" == "Darwin" ] "
 ARCHDIST="[ -f "/etc/arch-release" ]"
 UBUNTUDIST="[ -n "$(uname -a | grep Ubuntu)" ]"
-# [ "$(uname)" == "Darwin" ] && basepkgmac
-# [ -f "/etc/arch-release" ] && basepkgarch
-# [ -n "$(uname -a | grep Ubuntu)" ] && basepkgubuntu
 prepneovim() { \
 	echo "prepare packages for neovim..."
 	sudo npm -i -g neovim
@@ -30,6 +27,7 @@ prepspotify() {
   sudo chmod a+wr /opt/spotify/Apps -R 2>/dev/null && echo "Change Permission /opt/spotify/Apps : [Done]"
 }
 brewin() {
+  echo "Installing Homebrew & Updates Dependencies..."
   xcode-select --install
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" 
   brew update
@@ -39,8 +37,8 @@ brewin() {
 ONLIN() {
   $LINUXOS && echo "hello linux"
   insuck
-  # prepneovim
-  # installcocext
+  prepneovim
+  incocex
 }
 
 ONMAC() {

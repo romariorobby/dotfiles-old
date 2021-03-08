@@ -62,10 +62,11 @@ addbwuserandpass () {
 	bwdir="/home/$name/.local/share/bitwarden"; mkdir -p "$bwdir"; chown -R "$name":wheel "$(dirname "$bwdir")"
 	[ -f "$bwdir/email" -a -f "$bwdir/key"  ] && cp $bwdir/email $bwdir/email.bak && cp $bwdir/key $bwdir/email.bak
 	sudo -u "$name" echo $bwname > $bwdir/email && sudo -u "$name" echo $bwpass1 > $bwdir/key
-	sudo -u "$name" bw login $(echo $bwname $bwpass1)
 	touch $bwdir/clientid && touch $bwdir/clientsecret
+	sudo -u "$name" bw login $(echo $bwname $bwpass1)
 	dialog --infobox "Adding Environment Variables Locally..." 4 50
-	export BW_MASTER=$(echo "$bwdir/key") && export BW_SESSION="$(bw unlock $BW_MASTER 2>/dev/null | grep 'export' | sed -E 's/.*export BW_SESSION="(.*==)"$/\1/')" || error "FAILED"
+	export BW_MASTER=$(echo "$bwdir/key") || error "FAILED ADDING BW_MASTER"
+	export BW_SESSION="$(bw unlock $BW_MASTER 2>/dev/null | grep 'export' | sed -E 's/.*export BW_SESSION="(.*==)"$/\1/')" || error "FAILED BW_SESSION"
 	}
 
 preinstallmsg() { \
@@ -259,7 +260,16 @@ if [ -s "${XDG_CONFIG_HOME:-$HOME/.config}/bash/.bashrc" ]; then
 	    . "${XDG_CONFIG_HOME:-$HOME/.config}/bash/.bashrc"
 fi
 ' >> /etc/bash.bashrc
-cd /home/"$name" && rm .bashrc .bash_hitory .bash_profile .bash_logout
+# Symlink profile shell if exist
+cd /home/$name && rm .bashrc .bash_history .bash_profile .bash_logout
+[ -d /home/$name/.local/share/chezmoi ] && sudo -u "$name" chezmoi -v apply
+
+[ -d /home/$name/.config/shell ] && ln -sf /home/$name/.config/shell/profile /home/$name/.profile &&
+ln -sf /home/$name/.config/shell/profile /home/$name/.zprofile
+
+# Symlink profile x11 if exist
+[ -d /home/$name/.config/x11 ] && ln -sf /home/$name/.config/x11/xinitrc /home/$name/.xinitrc &&
+ln -sf /home/$name/.config/x11/xprofile /home/$name/.xprofile
 # Last message! Install complete!
 finalize
 clear

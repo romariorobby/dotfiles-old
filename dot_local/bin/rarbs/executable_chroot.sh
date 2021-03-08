@@ -1,5 +1,5 @@
 #Potential variables: timezone, lang and local
-rarbsUrl="https://raw.githubusercontent.com/romariorobby/dotfiles/main/dot_local/bin/fresh/testing/executable_rarbs"
+rarbsUrl="https://raw.githubusercontent.com/romariorobby/dotfiles/main/dot_local/bin/rarbs/executable_rarbs.sh"
 passwd
 
 TZuser=$(cat tzfinal.tmp)

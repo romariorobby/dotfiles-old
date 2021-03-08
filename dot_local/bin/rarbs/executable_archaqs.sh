@@ -111,7 +111,7 @@ mount $(cat drivepath)4 /mnt/home
 ls /sys/firmware/efi/efivars >/dev/null 2>&1 && uefiformat || legacyformat
 pacman -Sy --noconfirm archlinux-keyring
 whichproc=$(cat /proc/cpuinfo | grep Intel >/dev/null 2>&1 && echo "intel-ucode" > proc || echo "amd-ucode" > proc)
-pacstrap /mnt base base-devel linux linux-headers linux-firmware openssh reflector git chezmoi $(cat $whichproc)
+pacstrap /mnt base base-devel linux linux-headers linux-firmware openssh reflector git chezmoi $(cat proc)
 
 genfstab -U /mnt >> /mnt/etc/fstab
 cat tz.tmp > /mnt/tzfinal.tmp
