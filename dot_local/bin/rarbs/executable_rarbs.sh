@@ -99,8 +99,7 @@ maininstall() { # Installs all needed programs from main repo.
 chezgitrepo() { # Clone and install dotfiles using chezmoi
 	dialog --infobox "Downloading and installing config files..." 4 60
 	[ -x "$(command -v "chezmoi")" ] || installpkg chezmoi >/dev/null 2>&1
-	sudo -u "$name" chezmoi init "$1" >/dev/null 2>&1
-	sudo -u "$name" chezmoi -v apply
+	sudo -u "$name" chezmoi init --apply "$1"
 	}
 
 gitmakeinstall() {

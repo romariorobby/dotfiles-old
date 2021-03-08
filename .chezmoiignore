@@ -5,14 +5,15 @@
 .config/mimeapps.list
 .config/Dharkael
 .local/share/applications/
-.config/gtk-3.0
+.config/gtk-2.0
+.config/sxhkd
 .config/gtk-3.0
 .config/bspwm
 .config/sxhkd
+.config/fontconfig
 .config/dunst
 .config/Xresources
 .local/bin/blocks
-.config/gtk-2.0
 .config/x11
 .xinitrc
 .xprofile
