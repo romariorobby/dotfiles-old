@@ -1,0 +1,65 @@
+#!/bin/sh
+LINUXOS="[ "$OSTYPE" == "linux-gnu" ]"
+WINOS="[ "$OSTYPE" == "msys" ]"
+MACOS="[ "$OSTYPE" == "darwin"* ]"
+ARCHDIST="[ -f "/etc/arch-release" ]"
+UBUNTUDIST="[ -n "$(uname -a | grep Ubuntu)" ]"
+# [ "$(uname)" == "Darwin" ] && basepkgmac
+# [ -f "/etc/arch-release" ] && basepkgarch
+# [ -n "$(uname -a | grep Ubuntu)" ] && basepkgubuntu
+prepneovim() { \
+	echo "prepare packages for neovim..."
+	sudo npm -i -g neovim
+	pip install neovim jedi
+	echo "Installing Plugins..."
+	nvim --headless +PlugInstall +qall > /dev/null 2>&1
+}
+
+incocex() { \
+  # Install extensions
+  mkdir -p ~/.config/coc/extensions
+  cd ~/.config/coc/extensions
+  [ ! -f package.json ] && echo '{"dependencies":{}}'> package.json
+  # Change extension names to the extensions you need
+  # sudo npm install coc-explorer coc-snippets coc-json coc-actions --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
+  sudo npm install coc-tsserver coc-snippets coc-html coc-css coc-explorer coc-snippets coc-python coc-json coc-actions coc-yaml --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
+}
+
+prepspotify() {
+  sudo chmod a+wr /opt/spotify 2>/dev/null && echo "Change Permission /opt/spotify: [Done]"
+  sudo chmod a+wr /opt/spotify/Apps -R 2>/dev/null && echo "Change Permission /opt/spotify/Apps : [Done]"
+}
+brewin() {
+  xcode-select --install
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" 
+  brew update
+}
+
+#########
+ONLIN() {
+  $LINUXOS && echo "hello linux"
+  insuck
+  # prepneovim
+  # installcocext
+}
+
+ONMAC() {
+  $MACOS && brewin
+}
+
+ONWIN() {
+  $WINOS && echo "Hello windows"
+}
+##########
+#########
+infresh() { 
+  $LINUXOS && ONLIN
+  $MACOS && ONMAC
+  $WINOS && ONWIN
+}
+infresh
+
+# Base Package
+# pacman -Qqe > ~/.config/listt
+# pkg_installed=$(comm -12 <(pacman -Slq | sort) <(sort ~/.config/listt))
+# sudo pacman -S --needed $pkg_installed

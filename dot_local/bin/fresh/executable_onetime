@@ -1,8 +1,0 @@
-#!/bin/bash
-# Spicetify
-sudo chmod a+wr /opt/spotify 2>/dev/null && echo "Change Permission /opt/spotify: [Done]"
-
-sudo chmod a+wr /opt/spotify/Apps -R 2>/dev/null && echo "Change Permission /opt/spotify/Apps : [Done]"
-# spicetify
-# spicetify backup apply enable-devtool
-

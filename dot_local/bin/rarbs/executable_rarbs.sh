@@ -3,7 +3,6 @@
 while getopts ":a:r:b:p:h" o; do case "${o}" in
 	h) printf "Optional arguments for custom use:\\n  -r: Dotfiles repository (local file or url)\\n  -p: Dependencies and programs csv (local file or url)\\n  -a: AUR helper (must have pacman-like syntax)\\n  -h: Show this message\\n" && exit 1 ;;
 	r) dotfilesrepo=${OPTARG} && chezmoi git ls-remote "$dotfilesrepo" || exit 1 ;;
-	# r) sshdotfilesrepo=${OPTARG} && chezmoi git ls-remote "$sshdotfilesrepo" || exit 1 ;;
 	b) repobranch=${OPTARG} ;;
 	p) progsfile=${OPTARG} ;;
 	a) aurhelper=${OPTARG} ;;
@@ -60,10 +59,11 @@ getbwuser() { \
 addbwuserandpass () {
 	dialog --infobox "Adding Bitwarden-cli user \"$bwname\" for $name..." 4 50
 	[ -x "$(command -v "bw")" ] || manualinstall bitwarden-cli-bin >/dev/null 2>&1
+	bwdir="/home/$name/.local/share/bitwarden"; mkdir -p "$bwdir"; chown -R "$name":wheel "$(dirname "$bwdir")"
 	[ -f "$bwdir/email" -a -f "$bwdir/key"  ] && cp $bwdir/email $bwdir/email.bak && cp $bwdir/key $bwdir/email.bak
-	bwdir="/home/mario/.local/share/bitwarden"; mkdir -p "$bwdir"; chown -R "mario":wheel "$(dirname "$bwdir")"
-	sudo -u "mario" echo $bwname > $bwdir/email && sudo -u "mario" echo $bwpass1 > $bwdir/key
-	sudo -u "mario" bw login $(echo $bwname $bwpass1)
+	sudo -u "$name" echo $bwname > $bwdir/email && sudo -u "$name" echo $bwpass1 > $bwdir/key
+	sudo -u "$name" bw login $(echo $bwname $bwpass1)
+	touch $bwdir/clientid && touch $bwdir/clientsecret
 	dialog --infobox "Adding Environment Variables Locally..." 4 50
 	export BW_MASTER=$(echo "$bwdir/key") && export BW_SESSION="$(bw unlock $BW_MASTER 2>/dev/null | grep 'export' | sed -E 's/.*export BW_SESSION="(.*==)"$/\1/')" || error "FAILED"
 	}
@@ -100,7 +100,7 @@ chezgitrepo() { # Clone and install dotfiles using chezmoi
 	dialog --infobox "Downloading and installing config files..." 4 60
 	[ -x "$(command -v "chezmoi")" ] || installpkg chezmoi >/dev/null 2>&1
 	sudo -u "$name" chezmoi init "$1" >/dev/null 2>&1
-	sudo -u "$name" chezmoi -v apply >/dev/null 2>&1
+	sudo -u "$name" chezmoi -v apply
 	}
 
 gitmakeinstall() {
@@ -118,8 +118,8 @@ manualinstall(){
 	dialog --infobox "Installing \"$1\", an AUR helper..." 4 50
 	cd /tmp || exit 1
 	rm -rf /tmp/"$1"*
-	git clone https://aur.archlinux.org/$1.git &&
-	cd $1 && sudo -u makepkg -si --noconfirm >/dev/null 2>&1
+	sudo -u "$name" git clone https://aur.archlinux.org/$1.git &&
+	cd $1 && sudo -u "$name" makepkg -si --noconfirm >/dev/null 2>&1
 	cd /tmp || return 1) ;}
 
 aurinstall() { \
@@ -137,7 +137,7 @@ pipinstall() { \
 npminstall() { \
 	dialog --title "RARBS Installation" --infobox "Installing the NPM package \`$1\` ($n of $total). $1 $2" 5 70
 	[ -x "$(command -v "npm")" ] || installpkg npm >/dev/null 2>&1
-	yes | npm install -g "$1"
+	npm install -g "$1"
 	}
 
 installationloop() { \
@@ -227,7 +227,7 @@ yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
 # Most important command! Get rid of the beep!
 systembeepoff
 
-chezgitrepo "$sshdotfilesrepo" || chezgitrepo "$dotfilesrepo"
+chezgitrepo "$dotfilesrepo"
 
 # Make zsh the default shell for the user.
 chsh -s /bin/zsh "$name" >/dev/null 2>&1

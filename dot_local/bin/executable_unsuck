@@ -1,0 +1,10 @@
+#!/bin/sh
+dest="/home/$(whoami)/.local/src"
+suckless="https://github.com/romariorobby/sucklessaqs.git"
+vanish(){
+	[ -x "$(command -v "dwm")" ] && cd $dest/dwm && sudo make clean uninstall
+	[ -x "$(command -v "st")" ] && cd $dest/st && sudo make clean uninstall
+	[ -x "$(command -v "dwmblocks")" ] && cd $dest/yadav-dwmblocks && sudo make clean uninstall
+	[ -x "$(command -v "dmenu")" ] && cd $dest/dmenu && sudo make clean uninstall
+}
+[[ -d "$dest" ]] && vanish
