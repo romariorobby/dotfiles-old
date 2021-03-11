@@ -9,8 +9,8 @@
 #
 ###############################################
 # MULTIMEDIA KEYS
-@XF86Display
-	displayselect
+# @XF86Display
+# 	displayselect
 super + Return
 	$TERMINAL
 
@@ -28,6 +28,7 @@ super + shift + r
 super + ctrl + space
 	dmenuunicode
 
+# LAUNCH APPS
 alt + w
 	netw-app	
 
@@ -43,11 +44,11 @@ alt + x
 alt + n
 	notes-app
 
-super + F1
-	groff -mom /usr/local/share/dwm/info2.mom -Tpdf | zathura -
+# super + F1
+# 	groff -mom /usr/local/share/dwm/info2.mom -Tpdf | zathura -
 
-super + F10
-	mpv --no-cache --no-osc --no-input-default-bindings --profile=low-latency --input-conf=/dev/null --title=webcam $(ls /dev/video[0,2,4,6,8] | tail -n 1)
+super + F11
+ 	mpv --no-cache --no-osc --no-input-default-bindings --profile=low-latency --input-conf=/dev/null --title=webcam $(ls /dev/video[0,2,4,6,8] | tail -n 1)
 
 super + shift + Print
 	maim ~/media/images/screenshots/pic-full-$(date '+%d%m%y-%H%M-%s').png; notify-send -t 10000 'screenshot(full) saved'
@@ -56,10 +57,27 @@ super + Print
 	maimpick
 # super + x
 # super + z
+super + Print
+@XF86MonBrightnessDown
+	xbacklight -dec 5
 
+@XF86MonBrightnessUp
+	xbacklight -inc 5
 
 # Mount and unmount 
 super + Home
 	dmenumount
 super + End
 	dmenuumount
+
+# F{1-12}
+# super + F1
+super + F2
+	$TERMINAL -e pulsemixer
+super + F3
+	$TERMINAL -e pulsemixer
+# super + F4
+# 	$TERMINAL -e ytfzf -Dd
+# super + F5
+# super + F6
+

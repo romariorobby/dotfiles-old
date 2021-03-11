@@ -124,8 +124,19 @@ cmd ext ${{
 	[ $ans = "y" ] && ext "$fx"
 }}
 
+cmd chezaadd ${{
+	chezmoi add "$fx" && echo "success"
+}}
+
+cmd chezedit ${{
+	chezmoi edit "$fx"
+}}
+
 # BINDING
 # - Basic
+map c
+map ca chezaadd
+map ce chezedit
 map <c-d> push :mkdir<space>
 map <c-n> push $touch<space>
 map M moveto

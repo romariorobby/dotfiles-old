@@ -4,8 +4,8 @@ let mapleader=" "
 let g:maplocalleader = 'm'
 
 " Map leader to which_key
-nnoremap <silent> <leader> :silent <c-u> :silent WhichKey '<Space>'<CR>
-vnoremap <silent> <leader> :silent <c-u> :silent WhichKeyVisual '<Space>'<CR>
+nnoremap <silent> <leader><Space> :silent <c-u> :silent WhichKey '<Space>'<CR>
+vnoremap <silent> <leader><Space> :silent <c-u> :silent WhichKeyVisual '<Space>'<CR>
 
 let g:which_key_display_names = {'<CR>': '↵', '<TAB>': '⇆'} 
 " Time out 
@@ -127,7 +127,6 @@ let g:which_key_map.t = {
       \ 'name' : '+Toggle' ,
       \ 'z' : [':call ToggleHiddenAll()<CR>'    , 'Zen Mode'],
       \ 'u' : [':UndotreeToggle'                , 'Undotree'],
-      \ 'n' : [':NERDTreeToggle'                , 'NerdTree'],
       \ 'C' : [':HexokinaseToggle'              , 'Hexokinase'],
       \ 'c' : [':ColorizerToggle'               , 'Colorizer aka Color Highlight'],
       \ 'L' : [':call g:ToggleLineMode()<CR>'   , 'Line Mode'],
@@ -138,6 +137,7 @@ let g:which_key_map.t = {
       \ 'k' : [':FloatermKill'                  , 'Kill Term '],
       \ '/' : [':AutoPairsShortcutJump'         , 'Pairs jump'],
       \ }
+    "\ 'n' : [':NERDTreeToggle'                , 'NerdTree'],
 " b is for buffer
 let g:which_key_map.b = {
       \ 'name' : '+buffer' ,

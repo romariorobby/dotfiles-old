@@ -1,0 +1,65 @@
+#                  ██      ██          ██
+#                 ░██     ░██         ░██
+#   ██████ ██   ██░██     ░██  ██     ░██
+#  ██░░░░ ░░██ ██ ░██████ ░██ ██   ██████
+# ░░█████  ░░███  ░██░░░██░████   ██░░░██
+#  ░░░░░██  ██░██ ░██  ░██░██░██ ░██  ░██
+#  ██████  ██ ░░██░██  ░██░██░░██░░██████
+# ░░░░░░  ░░   ░░ ░░   ░░ ░░  ░░  ░░░░░░ 
+#
+###############################################
+# MULTIMEDIA KEYS
+# @XF86Display
+# 	displayselect
+# super + Return
+# 	$TERMINAL
+
+# Run Dmenu
+# super + shift + ReturnReturn
+# 	dmenu_run 
+
+# super + shift + q
+# 	sysact
+
+# make sxhkd reload its configuration files:
+# super + shift + r
+# 	pkill -USR1 -x sxhkd ; notify-send "SXHKD Reload"
+
+# super + ctrl + space
+# 	dmenuunicode
+
+# alt + w
+# 	netw-app	
+
+# alt + shift + w
+# 	networkmanager_dmenu
+
+# alt + e
+# 	entert-app
+
+# alt + x
+# 	mics-app
+
+# alt + n
+# 	notes-app
+
+#super + F1
+#	groff -mom /usr/local/share/dwm/info2.mom -Tpdf | zathura -
+
+# super + F11
+# 	mpv --no-cache --no-osc --no-input-default-bindings --profile=low-latency --input-conf=/dev/null --title=webcam $(ls /dev/video[0,2,4,6,8] | tail -n 1)
+
+# super + shift + Print
+# 	maim ~/media/images/screenshots/pic-full-$(date '+%d%m%y-%H%M-%s').png; notify-send -t 10000 'screenshot(full) saved'
+
+# super + Print
+# 	maimpick
+# super + x
+# super + z
+
+
+# Mount and unmount 
+# super + Home
+# 	dmenumount
+# super + End
+# 	dmenuumount

@@ -3,11 +3,12 @@
 # This is bound to Shift+PrintScreen by default, requires maim. It lets you
 # choose the kind of screenshot to take, including copying the image or even
 # highlighting an area to copy. scrotcucks on suicidewatch right now.
-dest="$HOME/pictures/screenshots"
+dest="$HOME/media/images/screenshots"
 picdate=$(date '+%y%m%d-%H%M-%S')
 picfull="$dest/pic-full-"$(date '+%y%m%d-%H%M-%S').png""
 picselect="$dest/pic-selected-"$(date '+%y%m%d-%H%M-%S').png""
 picwindow="$dest/pic-window-"$(date '+%y%m%d-%H%M-%S').png""
+[ ! -d $dest ] && mkdir -p $dest
 case "$(printf "a selected area\\ncurrent window\\nfull screen\\na selected area (copy)\\ncurrent window (copy)\\nfull screen (copy)" | dmenu -l 6 -i -p "Screenshot which area?")" in
 	"a selected area") maim -s $picselect; notify-send -t 10000 "🖼️Screenshot(area) saved" "$picselect";;
 	"current window") maim -i "$(xdotool getactivewindow)" $picwindow; notify-send -t 10000 "🖼️ Screenshot(window) saved" "$picwindow" ;;

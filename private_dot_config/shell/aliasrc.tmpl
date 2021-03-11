@@ -72,6 +72,8 @@ alias \
 		fv='nvim "$(fzf)"' \
 		feb='epy "$(fzf)"'\
 		fmpv='mpv "$(fzf)"'\
+		fy="ytfzf -D"\
+		fyd="ytfzf -d"\
 		vimdiff="nvim -d" \
 		tabz='tabbed -c zathura -e' \
 		dragon="dragon-drag-and-drop" \
@@ -89,10 +91,12 @@ alias \
 		#abook="abook --config "XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DATA_HOME"/abook/addressbook" \
 # Tmux
 alias \
-		tks="tmux kill-session" \
+		tm="tmux" \
+		tmk="tmux kill-session" \
 		tn="tmux new -t " \
-		tls="tmux ls" \
-		ta="tmux attach -t " 
+		tms="tmux ls" \
+		tmd="tmux detach" \
+		tma="tmux attach -t " 
 alias \
 		yt="youtube-dl" \
 		yt-f="youtube-dl -f" \

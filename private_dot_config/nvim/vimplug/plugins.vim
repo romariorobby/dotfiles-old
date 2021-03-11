@@ -17,7 +17,7 @@ call plug#begin('~/.config/nvim/plugged')
     "Plug 'airblade/vim-rooter'
 
 " auto pair for '(' '[' '{'
-    Plug 'jiangmiao/auto-pairs'
+    " Plug 'jiangmiao/auto-pairs'
 
 " Change surround simply
     Plug 'tpope/vim-surround'
@@ -50,7 +50,7 @@ call plug#begin('~/.config/nvim/plugged')
 	Plug 'turbio/bracey.vim', {'do': 'npm install --prefix server'}
 
 " Motion 
-	Plug 'easymotion/vim-easymotion'
+	" Plug 'easymotion/vim-easymotion'
 	" Plug 'justinmk/vim-sneak'
 
 " Themes 
@@ -71,6 +71,7 @@ call plug#begin('~/.config/nvim/plugged')
 	" Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
  " lf syntax highlight	
 	Plug 'VebbNix/lf-vim'
+	Plug 'romariorobby/vim-sxhkdrc'
 
  " Note
 	Plug 'jceb/vim-orgmode'

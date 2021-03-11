@@ -1,5 +1,4 @@
 #!/bin/sh
-#dest="/home/$(whoami)/.local/src"
 chezhttp="https://github.com/romariorobby/dotfiles.git"
 # chezssh="git@github:romariorobby/dotfiles.git"
 gittype() {

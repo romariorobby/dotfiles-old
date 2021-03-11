@@ -1,10 +1,9 @@
 #$EDITOR and chezmoi
-cff		${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-files
-cfd		${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs
-cfb		${XDG_CONFIG_HOME:-$HOME/.config}/bookmarks
-cfa		${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc
-cfp	    ${XDG_CONFIG_HOME:-$HOME/.config}/shell/profile
-cfsk	${XDG_CONFIG_HOME:-$HOME/.config}/sxhkd/dwm.sxk
+cfshf	${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-files
+cfshd	${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs
+cfsha	${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc
+cfshp	${XDG_CONFIG_HOME:-$HOME/.config}/shell/profile
+cfskc	${XDG_CONFIG_HOME:-$HOME/.config}/sxhkd/dwm.sxk
 cfzc	$ZDOTDIR/.zshrc
 cfbc	$BASHRCDOTDIR/.bashrc
 cfvc	${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim
@@ -32,3 +31,5 @@ cfdc	${XDG_CONFIG_HOME:-$HOME/.config}/doom/config.el
 cfxmc	${XDG_CONFIG_HOME:-$HOME/.config}/xmonad/xmonad.hs
 cfkc	${XDG_CONFIG_HOME:-$HOME/.config}/sxhkd/sxhkdrc
 cfbsc	${XDG_CONFIG_HOME:-$HOME/.config}/bspwm/bspwmrc
+cfvsc	${XDG_CONFIG_HOME:-$HOME/.config}/VSCodium/user-data/User/settings.json
+cfvsk	${XDG_CONFIG_HOME:-$HOME/.config}/VSCodium/user-data/User/keybindings.json

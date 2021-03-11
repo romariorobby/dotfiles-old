@@ -4,6 +4,11 @@ WINOS="[ "$OSTYPE" == "msys" ]"
 MACOS="[ "$(uname)" == "Darwin" ] "
 ARCHDIST="[ -f "/etc/arch-release" ]"
 UBUNTUDIST="[ -n "$(uname -a | grep Ubuntu)" ]"
+
+[ -z "$progsfile" ] && progsfile="https://raw.githubusercontent.com/romariorobby/dotfiles/main/private_dot_config/progs.csv"
+[ -z "$machelper" ] && machelper="brew"
+[ -z "$aurhelper" ] && aurhelper="paru"
+####### NEOVIM ########
 prepneovim() { \
 	echo "prepare packages for neovim..."
 	sudo npm -i -g neovim
@@ -12,7 +17,7 @@ prepneovim() { \
 	nvim --headless +PlugInstall +qall > /dev/null 2>&1
 }
 
-incocex() { \
+cocexinstall() { \
   # Install extensions
   mkdir -p ~/.config/coc/extensions
   cd ~/.config/coc/extensions
@@ -21,28 +26,62 @@ incocex() { \
   # sudo npm install coc-explorer coc-snippets coc-json coc-actions --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
   sudo npm install coc-tsserver coc-snippets coc-html coc-css coc-explorer coc-snippets coc-python coc-json coc-actions coc-yaml --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 }
-
-prepspotify() {
+########### SPOTIFY #########
+prepspicetify() { \
+  [ -x $(command -v "spotify" "spicetify") ] &&
+  LINUXOS && $aurhelper -S --noconfirm spotify spictify-cli-git genius-spicetify-cli ||
+  MACOS && $machelper install --noconfirm spotify #khankhas/tap/spicetify-cli
+  spicetify 
+}
+prepspotify_linux() {
   sudo chmod a+wr /opt/spotify 2>/dev/null && echo "Change Permission /opt/spotify: [Done]"
   sudo chmod a+wr /opt/spotify/Apps -R 2>/dev/null && echo "Change Permission /opt/spotify/Apps : [Done]"
 }
-brewin() {
+prepbrew() {
   echo "Installing Homebrew & Updates Dependencies..."
   xcode-select --install
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" 
   brew update
 }
-
+######### INSTALL STUFF ############
+aurinstall() { \
+	dialog --title "RARBS Installation" --infobox "Installing \`$1\` ($n of $total) from the AUR. $1 $2" 5 70
+	echo "$aurinstalled" | grep -q "^$1$" && return 1
+	sudo -u "$name" $aurhelper -S --noconfirm "$1" >/dev/null 2>&1
+	}
+brewinstall() { \
+	dialog --title "RARBS Installation" --infobox "Installing \`$1\` ($n of $total) from the Homebrew. $1 $2" 5 70
+    echo "$brewinstalled" | grep -q "^$1$" && return 1 
+    $machelper install "$1" >/dev/null 2>&1
+}
+installationloop() { \
+	([ -f "$progsfile" ] && cp "$progsfile" /tmp/progs.csv) || curl -Ls "$progsfile" | sed '/^#/d' > /tmp/progs.csv
+	total=$(wc -l < /tmp/progs.csv)
+	# brewinstalled=$( --idk--)
+	aurinstalled=$(pacman -Qqm)
+	while IFS=, read -r tag program comment; do
+		n=$((n+1))
+		echo "$comment" | grep -q "^\".*\"$" && comment="$(echo "$comment" | sed "s/\(^\"\|\"$\)//g")"
+		case "$tag" in
+			"A") LINUXOS && ARCHDIST && aurinstall "$program" "$comment" ;;
+			"P") pipinstall "$program" "$comment" ;;
+			"N") npminstall "$program" "$comment" ;;
+			"H") MACOS && homebrewinstall "$program" "$comment" ;;
+			# "C") chezmoiinstall "$program" "$comment" ;;
+			# "G") gitmakeinstall "$program" "$comment" ;;
+			"M") LINUXOS && maininstall "$program" "$comment" ;;
+		esac
+	done < /tmp/progs.csv ;}
 #########
 ONLIN() {
   $LINUXOS && echo "hello linux"
   insuck
   prepneovim
-  incocex
+  cocexinstall
 }
 
 ONMAC() {
-  $MACOS && brewin
+  $MACOS && prepbrew
 }
 
 ONWIN() {
@@ -56,7 +95,7 @@ infresh() {
   $WINOS && ONWIN
 }
 infresh
-
+installationloop
 # Base Package
 # pacman -Qqe > ~/.config/listt
 # pkg_installed=$(comm -12 <(pacman -Slq | sort) <(sort ~/.config/listt))

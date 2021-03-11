@@ -10,6 +10,7 @@ endfunction
 " Esc key to kj or jk
 inoremap jk <Esc>
 inoremap kj <Esc>
+
 " <TAB> : Completion
 inoremap <silent> <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 
@@ -74,10 +75,10 @@ nnoremap <A-m> :!mv<Space>%<Space>
 " if !exists('g:vscode')
 	"imap <leader>k <C-w>k
 	"imap <leader>l <C-w>l
-	" nnoremap <leader>h <C-w>h
-	" nnoremap <leader>j <C-w>j
-	" nnoremap <leader>k <C-w>k
-	" nnoremap <leader>l <C-w>l
+	nnoremap <leader>h <C-w>h
+	nnoremap <leader>j <C-w>j
+	nnoremap <leader>k <C-w>k
+	nnoremap <leader>l <C-w>l
 " endif
 
 " nmap <silent> <
@@ -90,8 +91,8 @@ nnoremap <A-m> :!mv<Space>%<Space>
 " nnoremap <leader><S>j <C-w>R
 " nnoremap <leader>= <C-w>=
 " nnoremap <leader><Bar> <C-W><Bar>
-" nnoremap <leader>v :vsplit<CR>
-" nnoremap <leader>s :split<CR>
+nnoremap <leader>v :vsplit<CR>
+nnoremap <leader>s :split<CR>
 
 " nnoremap <silent> <M-j>    :resize -2<CR>
 " nnoremap <C-l> :vertical resize +1<CR>
@@ -108,7 +109,7 @@ nnoremap <A-m> :!mv<Space>%<Space>
 vnoremap < <gv
 vnoremap > >gv
 " Vert Center doc when entering insert mode
-autocmd InsertEnter * norm zz
+" autocmd InsertEnter * norm zz
 
 " Hexokinase
 " nnoremap <leader>` :HexokinaseToggle<CR>

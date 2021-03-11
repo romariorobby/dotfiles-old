@@ -23,7 +23,7 @@ welcomemsg() { \
 	dialog --title "Welcome!" --msgbox "Buggy Bootstrap\\n\\nThis script will automatically install a fully-featured Linux desktop.\\n\\n-Romario" 10 60
 
 	dialog --colors --title "Important Note!" --yes-label "All ready!" --no-label "Return..." --yesno "Be sure the computer you are using has current pacman updates and refreshed Arch keyrings.\\n\\nIf it does not, the installation of some programs might fail." 8 70
-	}
+	}	
 
 getuserandpass() { \
 	# Prompts user for new username an password.
@@ -112,7 +112,16 @@ gitmakeinstall() {
 	make >/dev/null 2>&1
 	make install >/dev/null 2>&1
 	cd /tmp || return 1 ;}
-
+gitmakeinstalltemp() {
+	# progname="$(basename "$1" .git)"
+	dest="$repodir"
+	# dest="$repodir/$progname"
+	git clone "$1" "$dest" >/dev/null 2>&1
+	cd "$dest/dwm" && make >/dev/null 2>&1 && make install >/dev/null 2>&1 || exit 1
+	cd "$dest/st" && make >/dev/null 2>&1 && make install >/dev/null 2>&1 || exit 1
+	cd "$dest/yadav-dwmblocks" && make >/dev/null 2>&1 && make install >/dev/null 2>&1 || exit 1
+	cd "$dest/dmenu" && make >/dev/null 2>&1 && make install >/dev/null 2>&1 || exit 1
+	cd /tmp || return 1 ;}
 manualinstall(){
 	[ -f "/usr/bin/$1" ] || (
 	dialog --infobox "Installing \"$1\", an AUR helper..." 4 50
@@ -152,7 +161,7 @@ installationloop() { \
 			"P") pipinstall "$program" "$comment" ;;
 			"N") npminstall "$program" "$comment" ;;
 			# "C") chezmoiinstall "$program" "$comment" ;;
-			# "G") gitmakeinstall "$program" "$comment" ;;
+			"G") gitmakeinstalltemp "$program" "$comment" ;;
 			"M") maininstall "$program" "$comment" ;;
 		esac
 	done < /tmp/progs.csv ;}
