@@ -1,6 +1,6 @@
 #+TITLE: My Emacs Configurations
 #+AUTHOR: Romario
-#+PROPERTY: header-args :tangle config.el
+#+PROPERTY: header-args:emacs-lisp :tangle yes :cache yes
 * Table Of Content :toc:
 - [[#functions][Functions]]
   - [[#generating-config][Generating Config]]
@@ -151,7 +151,7 @@ Version 2019-11-04 2021-02-16"
 :END:
 #+begin_src emacs-lisp
 (setq-default major-mode 'org-mode
-              window-combination-resize t         ; take new window space from all other windows (not just current)
+              window-combination-resize t)         ; take new window space from all other windows (not just current)
 (setq display-line-numbers-type nil
       undo-limit 80000000                         ; Raise undo-limit to 80Mb
       auto-save-default t                         ; Nobody likes to loose work, I certainly don't
@@ -173,7 +173,7 @@ Version 2019-11-04 2021-02-16"
 :PROPERTIES:
 :ID:       8b3c0d11-c8bb-4376-9903-30478b3139bd
 :END:
-#+begin_src emacs-lisp
+--#+begin_src emacs-lisp
 (defvar fancy-splash-image-template
   (expand-file-name "misc/splash-images/blackhole-lines-template.svg" doom-private-dir)
   "Default template svg used for the splash image, with substitutions from ")
@@ -444,11 +444,11 @@ Version 2019-11-04 2021-02-16"
         (:prefix-map ("S" . "search"))
          (:prefix ("x" . "org-capture")
           :desc "Popup scratch" "x" #'doom/open-scratch-buffer
-          :desc "fuck" "w" #'org-capture-finalize
-          :desc "fuck" "s" #'org-capture-finalize
-          :desc "fuck" "c" #'org-capture-kill
-          :desc "fuck" "d" #'org-capture-kill
-          :desc "fuck" "r" #'org-capture-refile))
+          :desc "Org Capture Finalize/Save" "w" #'org-capture-finalize
+          :desc "Org Capture Kill" "s" #'org-capture-finalize
+          :desc "Org Capture Kill" "c" #'org-capture-kill
+          :desc "Org Capture Kill" "d" #'org-capture-kill
+          :desc "Org Capture Refile" "r" #'org-capture-refile))
 #+end_src
   (:prefix-map ("H" . "search"))
 ** Custom Function
@@ -498,6 +498,7 @@ Version 2019-11-04 2021-02-16"
         :desc "org-roam" "R" #'org-roam-unlinked-references
         :desc "org-roam-find-file" "f" #'org-roam-find-file
         :desc "org-roam-insert" "i" #'org-roam-insert
+        :desc "org-roam-insert-immediate" "I" #'org-roam-insert-immediate
         :desc "org-roam-server-mode" "s" #'org-roam-server-mode
         :desc "org-roam-switch-to-buffer" "b" #'org-roam-switch-to-buffer
         :desc "org-roam-graph" "g" #'org-roam-graph
