@@ -159,9 +159,10 @@ EXPKG=""
 
 checkdaemon() {
     if [ $(cat archtype) = "X" ]; then
-        pidof runit && echo "Daemon Using Runit" && EXPKG="elogind-runit"
-        pidof openrc && echo "Daemon Using openrc" && EXPKG="elogind-openrc"
-        pidof s6 && echo "Daemon Using s6" && EXPKG="elogind-s6"
+        pidof runit && echo "Daemon Using Runit" && EXPKG="runit elogind-runit"
+        pidof openrc && echo "Daemon Using openrc" && EXPKG="openrc elogind-openrc"
+        pidof s6 && echo "Daemon Using s6" && EXPKG="s6-base elogind-s6"
+        pidof 66 && echo "Daemon Using 66" && EXPKG="66 elogind-66"
     else
         pidof systemd && echo "Daemon Using Systemd"
     fi
@@ -182,9 +183,7 @@ if [ $(cat archtype) = "A" ]; then
 else
     basestrap /mnt base base-devel linux linux-headers linux-firmware openssh reflector git chezmoi $(cat proc) $(echo $EXPKG)
 fi
-# Artix
-## Runit,openRC,s6,66
-#basetrap /mnt elogind-(runit,openrc,s6,66) 
+
 [ ! -d "/mnt/etc" ] && mkdir /mnt/etc
 [ -f "/mnt/etc/fstab" && "/mnt/etc/hostname" ] && rm /mnt/etc/hostname /mnt/etc/fstab
 if [ $(cat archtype) = "A" ]; then
