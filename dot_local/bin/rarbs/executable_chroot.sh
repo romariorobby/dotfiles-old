@@ -25,9 +25,9 @@ if [ $(cat archtype.tmp) = "A" ];then
     systemctl enable sshd
     systemctl start NetworkManager
 # TODO: make works for all DAEMON TYPE
-else
-    ln -s /etc/runit/sv/NetworkManager /run/runit/service
-    ln -s /etc/runit/sv/sshd /run/runit/service
+#else
+#    ln -s /etc/runit/sv/NetworkManager /run/runit/service
+#    ln -s /etc/runit/sv/sshd /run/runit/service
 fi
 
 if [ $(cat installtype.tmp) = "U" ];then

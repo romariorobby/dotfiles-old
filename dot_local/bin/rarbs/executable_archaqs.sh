@@ -1,6 +1,6 @@
 #!/bin/bash
 # [1] arch
-chrootUrl="https://raw.githubusercontent.com/romariorobby/dotfiles/main/dot_local/bin/fresh/testing/executable_chroot.sh"
+chrootUrl="https://raw.githubusercontent.com/romariorobby/dotfiles/main/dot_local/bin/rarbs/executable_chroot.sh"
 lsblk && echo "======================================[Refresh Mirrorlist with Reflector]==============================="
 reflector -c ID,SG -a 6 --sort rate --save /etc/pacman.d/mirrorlist >/dev/null 2>&1 && pacman -Syy 
 
@@ -180,7 +180,7 @@ checkdaemon
 if [ $(cat archtype) = "A" ]; then
     pacstrap /mnt base base-devel linux linux-headers linux-firmware openssh reflector git chezmoi $(cat proc)
 else
-    basetrap /mnt base base-devel linux linux-headers linux-firmware openssh reflector git chezmoi $(cat proc) $(echo $EXPKG)
+    basestrap /mnt base base-devel linux linux-headers linux-firmware openssh reflector git chezmoi $(cat proc) $(echo $EXPKG)
 fi
 # Artix
 ## Runit,openRC,s6,66
