@@ -1,2 +1,2 @@
 #!/bin/sh
-cat /tmp/recordingicon 2>/dev/null
+cat /tmp/recordingicon

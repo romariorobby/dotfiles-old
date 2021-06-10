@@ -1,0 +1,18 @@
+#!/bin/sh
+COLOR="xrdm color"
+PRESET="xrdm preset"
+PROG="xrdm program"
+FONT="xrdm font"
+
+presetpicker(){
+    choose="$(xrdm preset | dmenu -i -l 5 -p 'Choose Mode: ')"
+    if [ ! -z "$choose" ];then
+        xrdm preset $choose && redrawclient
+    else
+        redrawclient
+    fi
+}
+redrawclient(){
+    killall -USR1 st >/dev/null
+}
+presetpicker

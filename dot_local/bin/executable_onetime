@@ -1,8 +1,0 @@
-#!/bin/bash
-# Spicetify
-# TODO::aqs Still need to improve
-sudo chmod a+wr /opt/spotify
-sudo chmod a+wr /opt/spotify/Apps -R
-#spicetify
-#spicetify backup apply enable-devtool
-

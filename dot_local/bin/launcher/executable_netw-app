@@ -1,6 +1,7 @@
 #!/bin/sh
 cmds="\
 📧brave|1		brave
+📧ytaqs|0		ytaqs -x
 📰qbittorrent|2	qbittorrent
 📧qutebrower|3		qutebrowser
 📥firefox|4		firefox"

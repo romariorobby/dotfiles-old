@@ -1,0 +1,5 @@
+--vim.cmd('syntax on')
+vim.cmd('colorscheme ' .. O.colorscheme)
+-- require('colorbuddy').colorscheme('gruvaqs')
+vim.cmd('let g:coloraqs=256')
+-- vim.cmd('let g:gruvbox_material_background="dark"')

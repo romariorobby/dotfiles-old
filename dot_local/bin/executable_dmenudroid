@@ -1,0 +1,35 @@
+#!/bin/sh
+
+SCRARG="scrcpy --shortcut-mod=lalt+lctrl --window-title 'Device'"
+SIZE="-m500"
+# DEVICES="-s $(adb devices | awk '{print $1}' | sed '1d' | dmenu -i -l 20 -p 'Devices: ')"
+DEVICES=""
+BIT="-b2M"
+FPS="--max-fps 15"
+getSize(){
+    usersize="$(printf "%s" | dmenu -p 'Size (500):')"
+    userbit="$(printf "%s" | dmenu -p 'Bitrate (1M):')"
+    userfps="$(printf "%s" | dmenu -p 'PFS (>60):')"
+    [ -z "$usersize" ] && usersize="$SIZE" || SIZE="-m${usersize}"
+    [ -z "$userbit" ] && userbit="$BIT" || BIT="-b${userbit}M"
+    [ -z "$userfps" ] && userfps="$FPS" || FPS="--max-fps $userfps"
+}
+getDev(){
+    devices="$(adb devices | awk '{print $1}' | sed '1d')"
+    if [ "$devices" = "" ];then
+        notify-send "No Devices Connected" && exit 1
+    else
+        seldev="$(echo "$devices" | dmenu -i -l 20 -p 'Devices: ')"
+        if [ -z "$seldev" ];then
+            exit 1
+        fi
+    fi
+    # [ -z "$devices" ] && exit 1
+    DEVICES="-s $(echo $devices)"
+}
+
+case "$(printf "My Setting\\nSet Manual\\n" | dmenu -i -p "Presets: ")" in
+    "My Setting") getDev; $SCRARG $DEVICES $BIT $SIZE $FPS ;;       
+    "Set Manual") getDev; getSize; $SCRARG $DEVICES $BIT $SIZE $FPS;;
+esac
+

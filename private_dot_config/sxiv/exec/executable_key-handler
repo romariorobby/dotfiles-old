@@ -3,6 +3,14 @@ while read file
 do
         case "$1" in
         "w") setbg "$file" & ;;
+         # TODO: Make it aware if filename same with other files. don't replace it!
+        "a")
+            ext="$(echo -n "$file" | grep -oEi "\\.([A-z0-9])+$")"
+            name="$(printf "" | dmenu -i -p "Rename '$file' to")"
+            result="$name$ext"
+            [ -z $name ] && exit 2
+            mv "$file" "$result"
+            ;;
         "c")
 		[ -z "$destdir" ] && destdir="$(sed "s/\s.*#.*$//;/^\s*$/d" ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | awk '{print $2}' | dmenu -l 20 -i -p "Copy file(s) to where?" | sed "s|~|$HOME|g")"
 		[ ! -d "$destdir" ] && notify-send "$destdir is not a directory, cancelled." && exit

@@ -1,0 +1,32 @@
+#!/bin/sh
+if [ -z "$1" ]; then
+	clear
+	echo "Available devices:"
+	devices="$(adb devices | awk '{print $1}' | sed '1d')"
+	model="$(adb devices -l | awk 'OFS="," {print $3,$4,$5}' | sed '1d;$d')"
+	declare -a devicemap
+	i=a
+
+	for word in $devices; do
+		devicemap+=("$(echo $word)")
+		printf "\033[1m\033[31m[$i] --> $word \033[0m- ($model)\n"
+		i=$((i+1))
+	done
+	read -p "Choose devices: " choice
+	echo $choice $devicemap
+	selected=${devicemap[choice]}
+	devicemodel="$(adb devices -l | grep $selected | awk '{print $5}' | cut -d: -f2)"
+	devicename="$(adb devices -l | grep $selected | awk '{print $4}' | cut -d: -f2)"
+	printf "Connecting to device $selected ($devicename $devicemodel)...\n"
+	adb -s $selected tcpip 5555
+	# I thing theres a better way to do it
+	[ $? -eq 1 ] && printf "Erorr Restarting TCPIP" && exit 2 || printf "restarting TCPIP...\n"
+	sleep 5s
+	prompt "Root Access?" "adb -s $selected root"
+
+	ip="$(adb -s $selected shell ifconfig wlan0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}')"
+	echo "Connecting to $ip..."
+	# connecting to devices...
+	adb connect $ip:5555
+fi
+

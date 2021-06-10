@@ -1,0 +1,9 @@
+!! vim:ft=xdefaults
+! DWM
+dwm.normbgcolor: #141414
+dwm.normbordercolor: #e6e6e6
+dwm.normfgcolor: #458588
+dwm.selfgbordercolor: #458588
+dwm.selfgcolor: #008
+dwm.selbgcolor: #008
+dwm.selbordercolor: #008080

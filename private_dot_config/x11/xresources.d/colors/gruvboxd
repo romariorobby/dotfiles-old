@@ -1,0 +1,63 @@
+!! vim:ft=xdefaults
+! $XRDM_COLOR_DIR/gruvboxd
+! Gruvbox Xreseources dark 
+*.color0: #1d2021
+*.color1: #cc241d
+*.color2: #98971a
+*.color3: #d79921
+*.color4: #008080
+*.color5: #b16286
+*.color6: #689d6a
+*.color7: #a89984
+*.color8: #928374
+*.color9: #fb4934
+*.color10: #b8bb26
+*.color11: #fabd2f
+*.color12: #83a598
+*.color13: #d3869b
+*.color14: #8ec07c
+*.color15: #ebdbb2
+*.background: #141414
+*.foreground: #ebdbb2
+*.cursorColor: white 
+! *.color256: #1d2021
+
+!color1: #cc241d
+!color2: #98971a
+!color3: #d79921
+!color4: #458588
+!color5: #b16286
+!color6: #689d6a
+!color7: #a89984
+!color8: #928374
+!color9: #fb4934
+!color10: #b8bb26
+!color11: #fabd2f
+!color12: #83a598
+!color13: #d3869b
+!color14: #8ec07c
+!color15: #ebdbb2
+!backround: #008080
+!foreground: #ebdbb2
+! DWM
+dwm.normbgcolor: #141414
+dwm.normbordercolor: #141414
+dwm.normfgcolor: #458588
+dwm.selfgbordercolor: #458588
+dwm.selfgcolor: #fabd2f
+dwm.selbgcolor: #458588
+dwm.selbordercolor: #008080
+dwm.titlenormfgcolor: #458588
+
+dwm.col_blue4: #ebdbb2
+! XMENU
+xmenu.background: #008080
+xmenu.foreground: #ebdbb2
+xmenu.selbackground: #141414
+xmenu.selforeground: #458588
+xmenu.border: #458588
+xmenu.borderWidth: 2px
+xmenu.font: monospace:size=10,Siji:size=10
+
+! DMENU
+! ROFI

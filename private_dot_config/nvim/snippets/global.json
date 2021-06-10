@@ -1,0 +1,10 @@
+{
+	"aqsdo": {
+		"prefix": ["qdo"],
+		"body": [
+			"TODO::$1",
+			"TODO::$2"
+		],
+		"description": ["TODO::"]
+	}
+}

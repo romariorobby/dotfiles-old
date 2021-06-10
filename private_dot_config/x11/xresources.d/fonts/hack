@@ -1,0 +1,8 @@
+!! vim:ft=xdefaults
+! $XRDM_FONT_DIR/sfmono
+#define SIZE 12
+#define NAME Hack Nerd Font Mono
+! ST
+st.font: NAME:size=SIZE
+! Xmenu
+xmenu.font: NAME:size=SIZE

@@ -1,0 +1,25 @@
+vim.g.startfiy_custom_header = {
+    '        _   ___    ________          __   ', '       / | / / |  / / ____/___  ____/ /__ ',
+    '      /  |/ /| | / / /   / __ \\/ __  / _ \\', '     / /|  / | |/ / /___/ /_/ / /_/ /  __/',
+    '    /_/ |_/  |___/\\____/\\____/\\__,_/\\___/ '
+}
+
+vim.g.startify_session_delete_buffers = 1
+vim.g.startify_session_persistence = 1
+vim.g.startify_fortune_use_unicode = 1
+vim.g.webdevicons_enable_startify = 1
+vim.g.startify_session_dir = '~/.config/nvim/session'
+
+vim.api.nvim_exec(
+    'let startify_lists = [ { \'type\': \'files\',     \'header\': [\'   Files\'] }, { \'type\': \'sessions\',  \'header\': [\'   Sessions\'] },    { \'type\': \'bookmarks\', \'header\': [\'   Bookmarks\'] },                                                                   ]',
+    true)
+
+vim.api.nvim_exec(
+    'let startify_bookmarks = [ { \'c\': \'~/.config\' }, { \'v\': \'~/.config/nvim/\' }, { \'n\': \'~/Dropbox/media/documents/notes\' }]',
+    true)
+
+vim.cmd([[
+function! StartifyEntryFormat()
+        return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
+endfunction
+]])

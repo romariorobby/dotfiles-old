@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=GUI File Manager (pcmanfm)
+Exec=/usr/bin/pcmanfm %U

@@ -1,50 +1,36 @@
-#+TITLE: My Emacs Configurations
-#+AUTHOR: Romario
-#+PROPERTY: header-args:emacs-lisp :tangle yes :cache yes
-* Table Of Content :toc:
-- [[#functions][Functions]]
-  - [[#generating-config][Generating Config]]
-  - [[#copy-idlink-to-clipboard][Copy idlink to clipboard]]
-  - [[#find-dotfiles][Find dotfiles]]
-  - [[#open-with-xdg-open][Open with XDG OPEN]]
-- [[#basic-settings][Basic Settings]]
-  - [[#user][User]]
-  - [[#better-defaults][Better Defaults]]
-  - [[#splash][Splash]]
-- [[#org][Org]]
-- [[#key-binding][Key Binding]]
-  - [[#rebind][Rebind]]
-  - [[#custom-function][Custom Function]]
-- [[#deft][Deft]]
-- [[#org-roam][Org-Roam]]
-- [[#elcord][Elcord]]
-- [[#org-journal][Org-Journal]]
-
-* Functions
 :PROPERTIES:
-:ID:       102e1352-fa67-4856-8cbd-db00e88e1575
+:ID:       6502f8cb-9a89-43bb-81f8-9fd15bff8385
 :END:
+#+TITLE: My Emacs Configurations
+#+PROPERTY: header-args:emacs-lisp :tangle yes :cache yes
+#+AUTHOR: Romario
+
 #+begin_src emacs-lisp
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 #+end_src
--- #+begin_src emacs-lisp
-;;(defun mario/org-mode-visual()
-;;  (setq visual-fill-column-width 100
-;;        visual-fill-column-center-text t
-;;        display-fill-column-indicator nil
-;;        display-line-numbers nil)
-;;  (visual-fill-column-mode 1))
--- #+end_src
-** Generating Config
+* Variables Directory
 :PROPERTIES:
-:ID:       902d0e15-0024-4d9b-88aa-9fe0f0cc00d6
+:ID:       5fbac44f-22d3-4115-8e96-0c13a5ea36dd
 :END:
 #+begin_src emacs-lisp
+;; Variables Directory
+(setq mario/org-agenda-dir (file-truename "~/media/documents/notes/roam/gtd/")
+      mario/org-dir (file-truename "~/media/documents/notes/")
+      mario/org-journal-dir (file-truename "~/media/documents/notes/roam/private/daily/")
+      mario/org-roam-dir (file-truename "~/media/documents/notes/roam/"))
+#+end_src
+* Functions
+** Generating Config
+:PROPERTIES:
+:ID:       78332190-a8e4-43bc-9e82-edff929ff0d3
+:END:
+#+begin_src emacs-lisp
+;; GENERATING CONIFG
 (defun mario/generate-config()
  "Generate README.org"
         (interactive)
     (evil-split-buffer (generate-new-buffer "Untitled"))
-    (find-file "~/.config/doom/README.org")
+    (find-file "~/.config/doom/config.org")
     (save-buffer)
     (evil-goto-first-line)
     (re-search-forward "+PROPERTY:")
@@ -53,48 +39,12 @@
     (find-file "~/.config/doom/config.el"))
 
 #+end_src
-** Copy idlink to clipboard
+** XDG OPEN
 :PROPERTIES:
-:ID:       96a2e57a-7da1-45b8-a7e6-db6051bfca0d
+:ID:       9eebead9-1925-4f64-903e-e255e2466617
 :END:
 #+begin_src emacs-lisp
-(defun mario/copy-idlink-to-clipboard()
-       (interactive)
-       (when (eq major-mode 'org-agenda-mode) ;switch to orgmode
-     (org-agenda-show)
-     (org-agenda-goto))
-       (when (eq major-mode 'org-mode) ; do this only in org-mode buffers
-     (setq mytmphead (nth 4 (org-heading-components)))
-         (setq mytmpid (funcall 'org-id-get-create))
-     (setq mytmplink (format "[[id:%s][%s]]" mytmpid mytmphead))
-     (kill-new mytmplink)
-     (message "Copied %s to killring (clipboard)" mytmplink)))
-#+end_src
-** Find dotfiles
-:PROPERTIES:
-:ID:       17bdac50-9918-47cc-be7c-c803372525b1
-:END:
-#+begin_src emacs-lisp
-(defun mario/find-in-dotfiles ()
-  "Open a file somewhere in ~/.dotfiles via a fuzzy filename search."
-  (interactive)
-  (doom-project-find-file (expand-file-name "~/.config/")))
-
-(defun mario/browse-dotfiles ()
-  "Browse the files in ~/.dotfiles."
-  (interactive)
-  (doom-project-browse (expand-file-name "~/.config/")))
-
-(defun mario/open-doom-config ()
-  "Open doom config"
-  (interactive)
-  (find-file "~/.config/doom/README.org"))
-#+end_src
-** Open with XDG OPEN
-:PROPERTIES:
-:ID:       78620c40-c164-4861-8ba2-22de3453662d
-:END:
-#+begin_src emacs-lisp
+;; XDG OPEN
 (defun mario/open-in-external-app (&optional @fname)
   "Open the current file or dired marked files in external app.
 When called in emacs lisp, if @fname is given, open that.
@@ -128,297 +78,75 @@ Version 2019-11-04 2021-02-16"
          (lambda ($fpath) (let ((process-connection-type nil))
                             (start-process "" nil "xdg-open" $fpath))) $file-list))))))
 #+end_src
-* Basic Settings
-** User
+#+begin_src emacs-lisp
+(defun mario/open-with (arg)
+  "Open visited file in default external program.
+When in dired mode, open file under the cursor.
+With a prefix ARG always prompt for command to use."
+  (interactive "P")
+  (let* ((current-file-name
+          (if (eq major-mode 'dired-mode)
+              (dired-get-file-for-visit)
+            buffer-file-name))
+         (open (pcase system-type
+                 (`darwin "open")
+                 ((or `gnu `gnu/linux `gnu/kfreebsd) "xdg-open")))
+         (program (if (or arg (not open))
+                      (read-shell-command "Open current file with: ")
+                    open)))
+    (call-process program nil 0 nil current-file-name)))
+(map! "C-c o o" 'jethro/open-with)
+
+#+end_src
+** Browse-dotfiles
 :PROPERTIES:
-:ID:       83c9656c-624b-47d6-b8e4-b76110cb3661
+:ID:       7fbfb560-b11e-4f4b-a8c1-089d7a3da638
 :END:
 #+begin_src emacs-lisp
-
+(defun mario/browse-dotfiles ()
+  "Browse the files in ~/.dotfiles."
+  (interactive)
+  (doom-project-browse (expand-file-name "~/.config/")))
+#+end_src
+** Open Doom config
+(defun mario/open-doom-config ()
+  "Open doom config"
+  (interactive)
+  (find-file "~/.config/doom/config.org"))
+* Basic Setting
+:PROPERTIES:
+:ID:       292da58c-8773-4821-a18e-6ffd60bf5571
+:END:
+#+begin_src emacs-lisp
+;; User Setting
 (setq doom-theme 'mario-gruvbox
       doom-gruvbox-dark-variant "hard"
       doom-scratch-initial-major-mode 'org-mode
       doom-font (font-spec :family "SF Mono" :size 15)
       doom-variable-pitch-font (font-spec :family "ETbb" :size 24)
       doom-serif-font (font-spec :family "ETbb" :size 24)
-      fancy-splash-image (concat doom-private-dir "splash.png"))
+      fancy-splash-image (concat doom-private-dir "themes/splash.png"))
 (setq user-full-name "Romario"
       user-mail-address "romario@com")
-#+end_src
-** Better Defaults
-:PROPERTIES:
-:ID:       ef636d7c-1c31-407d-a2cc-45a45619358c
-:END:
-#+begin_src emacs-lisp
-(setq-default major-mode 'org-mode
-              window-combination-resize t)         ; take new window space from all other windows (not just current)
-(setq display-line-numbers-type nil
+(setq-ddefault major-mode 'org-mode)
+
+(setq display-line-numbers-type nil            ; turn off line number , you can toggle it with <leader>tl
       undo-limit 80000000                         ; Raise undo-limit to 80Mb
       auto-save-default t                         ; Nobody likes to loose work, I certainly don't
-      truncate-string-ellipsis "…"                ; Unicode ellispis are nicer than "...", and also save /precious/ space
+      truncate-string-ellipsis " …"                ; Unicode ellispis are nicer than "...", and also save /precious/ space
       evil-split-window-below t                   ; Switch to            after splitting
       evil-vsplit-window-right t)
-(map! "<backtab>" #'doom/toggle-line-numbers)
 ;; Show battery mode if on laptop
 (unless (equal "Battery Status not available"
                (battery))
   (display-battery-mode 1))
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu) ; hide dashboard shortmen
-(remove-hook 'doom-first-buffer-hook #'global-hl-line-mode) ; hide highlight line
-;; (if (eq initial-window-system 'x) ;; if started by emacs command or desktop file
-;;     (toggle-frame-maximized)
-;;   (toggle-frame-fullscreen))
+;;(remove-hook 'doom-first-buffer-hook #'global-hl-line-mode) ; hide highlight line
 #+end_src
-** Splash
+* KEYBINDING
+** ?
 :PROPERTIES:
-:ID:       8b3c0d11-c8bb-4376-9903-30478b3139bd
-:END:
---#+begin_src emacs-lisp
-(defvar fancy-splash-image-template
-  (expand-file-name "misc/splash-images/blackhole-lines-template.svg" doom-private-dir)
-  "Default template svg used for the splash image, with substitutions from ")
-(defvar fancy-splash-image-nil
-  (expand-file-name "misc/splash-images/transparent-pixel.png" doom-private-dir)
-  "An image to use at minimum size, usually a transparent pixel")
-
-(setq fancy-splash-sizes
-      `((:height 500 :min-height 50 :padding (0 . 4) :template ,(expand-file-name "misc/splash-images/blackhole-lines-0.svg" doom-private-dir))
-        (:height 440 :min-height 42 :padding (1 . 4) :template ,(expand-file-name "misc/splash-images/blackhole-lines-0.svg" doom-private-dir))
-        (:height 400 :min-height 38 :padding (1 . 4) :template ,(expand-file-name "misc/splash-images/blackhole-lines-1.svg" doom-private-dir))
-        (:height 350 :min-height 36 :padding (1 . 3) :template ,(expand-file-name "misc/splash-images/blackhole-lines-2.svg" doom-private-dir))
-        (:height 300 :min-height 34 :padding (1 . 3) :template ,(expand-file-name "misc/splash-images/blackhole-lines-3.svg" doom-private-dir))
-        (:height 250 :min-height 32 :padding (1 . 2) :template ,(expand-file-name "misc/splash-images/blackhole-lines-4.svg" doom-private-dir))
-        (:height 200 :min-height 30 :padding (1 . 2) :template ,(expand-file-name "misc/splash-images/blackhole-lines-5.svg" doom-private-dir))
-        (:height 100 :min-height 24 :padding (1 . 2) :template ,(expand-file-name "misc/splash-images/emacs-e-template.svg" doom-private-dir))
-        (:height 0   :min-height 0  :padding (0 . 0) :file ,fancy-splash-image-nil)))
-
-(defvar fancy-splash-sizes
-  `((:height 500 :min-height 50 :padding (0 . 2))
-    (:height 440 :min-height 42 :padding (1 . 4))
-    (:height 330 :min-height 35 :padding (1 . 3))
-    (:height 200 :min-height 30 :padding (1 . 2))
-    (:height 0   :min-height 0  :padding (0 . 0) :file ,fancy-splash-image-nil))
-  "list of plists with the following properties
-  :height the height of the image
-  :min-height minimum `frame-height' for image
-  :padding `+doom-dashboard-banner-padding' to apply
-  :template non-default template file
-  :file file to use instead of template")
-
-(defvar fancy-splash-template-colours
-  '(("$colour1" . keywords) ("$colour2" . type) ("$colour3" . base5) ("$colour4" . base8))
-  "list of colour-replacement alists of the form (\"$placeholder\" . 'theme-colour) which applied the template")
-
-(unless (file-exists-p (expand-file-name "theme-splashes" doom-cache-dir))
-  (make-directory (expand-file-name "theme-splashes" doom-cache-dir) t))
-
-(defun fancy-splash-filename (theme-name height)
-  (expand-file-name (concat (file-name-as-directory "theme-splashes")
-                            theme-name
-                            "-" (number-to-string height) ".svg")
-                    doom-cache-dir))
-
-(defun fancy-splash-clear-cache ()
-  "Delete all cached fancy splash images"
-  (interactive)
-  (delete-directory (expand-file-name "theme-splashes" doom-cache-dir) t)
-  (message "Cache cleared!"))
-
-(defun fancy-splash-generate-image (template height)
-  "Read TEMPLATE and create an image if HEIGHT with colour substitutions as
-   described by `fancy-splash-template-colours' for the current theme"
-  (with-temp-buffer
-    (insert-file-contents template)
-    (re-search-forward "$height" nil t)
-    (replace-match (number-to-string height) nil nil)
-    (dolist (substitution fancy-splash-template-colours)
-      (goto-char (point-min))
-      (while (re-search-forward (car substitution) nil t)
-        (replace-match (doom-color (cdr substitution)) nil nil)))
-    (write-region nil nil
-                  (fancy-splash-filename (symbol-name doom-theme) height) nil nil)))
-
-(defun fancy-splash-generate-images ()
-  "Perform `fancy-splash-generate-image' in bulk"
-  (dolist (size fancy-splash-sizes)
-    (unless (plist-get size :file)
-      (fancy-splash-generate-image (or (plist-get size :file)
-                                       (plist-get size :template)
-                                       fancy-splash-image-template)
-                                   (plist-get size :height)))))
-
-(defun ensure-theme-splash-images-exist (&optional height)
-  (unless (file-exists-p (fancy-splash-filename
-                          (symbol-name doom-theme)
-                          (or height
-                              (plist-get (car fancy-splash-sizes) :height))))
-    (fancy-splash-generate-images)))
-
-(defun get-appropriate-splash ()
-  (let ((height (frame-height)))
-    (cl-some (lambda (size) (when (>= height (plist-get size :min-height)) size))
-             fancy-splash-sizes)))
-
-(setq fancy-splash-last-size nil)
-(setq fancy-splash-last-theme nil)
-(defun set-appropriate-splash (&rest _)
-  (let ((appropriate-image (get-appropriate-splash)))
-    (unless (and (equal appropriate-image fancy-splash-last-size)
-                 (equal doom-theme fancy-splash-last-theme)))
-    (unless (plist-get appropriate-image :file)
-      (ensure-theme-splash-images-exist (plist-get appropriate-image :height)))
-    (setq fancy-splash-image
-          (or (plist-get appropriate-image :file)
-              (fancy-splash-filename (symbol-name doom-theme) (plist-get appropriate-image :height))))
-    (setq +doom-dashboard-banner-padding (plist-get appropriate-image :padding))
-    (setq fancy-splash-last-size appropriate-image)
-    (setq fancy-splash-last-theme doom-theme)
-    (+doom-dashboard-reload)))
-
-(add-hook 'window-size-change-functions #'set-appropriate-splash)
-(add-hook 'doom-load-theme-hook #'set-appropriate-splash)
-#+end_src
-
-* Org
-:PROPERTIES:
-:ID:       d0dc96dc-ce10-465d-86c3-ee8feeb5c885
-:END:
-#+begin_src emacs-lisp
-(setq org-directory "~/Dropbox/org/"
-      org-hide-emphasis-markers t
-      org-ellipsis "  " ;; folding symbol
-      ;; org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
-      org-archive-location (concat org-directory ".archive/%s::"))
-
-(after! org
-  (require 'org-habit)
-  (map! :leader
-        "c" #'org-capture)
-  (map! :map org-mode-map
-        "M-n" #'outline-next-visible-heading
-        "M-p" #'outline-previous-visible-heading)
-  (custom-set-faces!
-;; #+TITLE:
-    '(org-document-title
-      :weight extra-bold
-      :foreground "#fabd2f"
-      :height 1.7
-      :family "ETbb")
-;; URL
-    '(org-link
-      :weight normal
-      :foreground "#83a598"
-      :underline t
-      :height 1.0)
-;; Folding Symbol []
-    '(org-ellipsis
-      :weight extra-bold
-      :foreground "#8ec07c"
-      :height 1.0)
-;; #+TITLE / EMAIL / DATE
-    '(org-document-info
-      :weight normal
-      :slant italic
-      :foreground "#fabd2f"
-      :height 1.5
-      :family "ETbb"
-      :weight extra-bold
-      :height 1.3)
-;; H1
-    '(org-level-1
-      :inherit outline-1
-      :foreground "#fabd2f"
-      :family "ETbb"
-      :weight bold
-      :slant normal
-      :height 1.3)
-;; H2
-    '(org-level-2
-      :inherit outline-2
-      :foreground "#fabd2f"
-      :family "ETbb"
-      :weight semi-bold
-      :slant italic
-      :height 1.2)
-    '(org-level-3
-      :inherit outline-3
-      :foreground "#d79921"
-      :family "ETbb"
-      :weight semi-bold
-      :slant italic
-      :height 1.17)
-    '(org-level-4
-      :inherit outline-4
-      :family "ETbb"
-      :foreground "#d79921"
-      :weight semi-bold
-      :height 1.15)
-    '(org-level-5
-      :inherit outline-5
-      :family "ETbb"
-      :foreground "#d79921"
-      :weight bold
-      :height 1.13)
-    '(org-level-6
-      :inherit outline-6
-      :family "ETbb"
-      :foreground "#d79921"
-      :weight bold
-      :height 1.10)
-    '(org-level-7
-      :inherit outline-7
-      :family "ETbb"
-      :weight bold
-      :foreground "#d79919"
-      :height 1.07)
-;; H8
-    '(org-level-8
-      :inherit outline-8
-      :family "ETbb"
-      :weight bold
-      :foreground "#d79920"
-      :height 1.05)
-;; roam tag in minibuffer
-    '(org-roam-tag
-      :weight extra-bold
-      :foreground "#83a598"
-      :height 0.8)
-    '(org-headline-done
-      :strike-through t
-      :family "ETbb"
-      :height 1.05)
-    '(org-default
-      :weight normal
-      :family "ETbb"
-      :height 0.9
-      :foreground "#ebdbb2")
-    '(org-block-begin-line
-      :weight normal
-      :slant italic)
-    '(org-block-end-line
-      :weight normal
-      :slant italic)
-    ;; :PROPERTIES:
-    '(org-property-value
-      :foreground "#b8bb26")
-    ;; ensure that anything should be fixed-pitch in org buffers that way
-    '(org-block nil :foreground nil :inherit 'fixed-pitch)
-    ;; for meta line starting with #+
-    '(org-meta-line
-      :inherit font-lock-comment-face
-      :foreground "#b8bb26")
-    '(org-code nil :inherit :family "Hack Nerd Font" :height 0.8 '(shadow fixed-pitch))
-    '(org-table nil :inherit '(shadow fixed-pitch))
-    '(org-verbatim nil :inherit '(shadow fixed-pitch))
-    '(org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-    '(org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-    '(org-checkbox nil :inherit 'fixed-pitch)))
-(setq org-emphasis-alist
-  '(("*" (bold :foreground "deep sky blue" ))))
-#+end_src
-* Key Binding
-:PROPERTIES:
-:ID:       1e3d7ac8-d5f8-4669-bf48-ccdb650f8a76
+:ID:       73cea7b9-62be-4dbe-81d3-7c7229303c91
 :END:
 #+begin_src emacs-lisp
 (map! :nv
@@ -436,10 +164,11 @@ Version 2019-11-04 2021-02-16"
 #+end_src
 ** Rebind
 :PROPERTIES:
-:ID:       4df3d5ca-daaf-43b1-9b8c-311cd261b1c5
+:ID:       16c5b4c2-3f1f-467c-9d41-9e58ee0e264f
 :END:
 #+begin_src emacs-lisp
 (map! :leader
+      :nv "/" #'evilnc-comment-operator
       :desc "help" "H" help-map
         (:prefix-map ("S" . "search"))
          (:prefix ("x" . "org-capture")
@@ -450,10 +179,9 @@ Version 2019-11-04 2021-02-16"
           :desc "Org Capture Kill" "d" #'org-capture-kill
           :desc "Org Capture Refile" "r" #'org-capture-refile))
 #+end_src
-  (:prefix-map ("H" . "search"))
-** Custom Function
+** My function binding
 :PROPERTIES:
-:ID:       456a8f12-3472-436b-b483-eaf5c96cc835
+:ID:       08e91558-478f-4074-bdc9-4dd125ee72a5
 :END:
 #+begin_src emacs-lisp
 (map! :leader
@@ -468,35 +196,255 @@ Version 2019-11-04 2021-02-16"
         (:prefix-map ("b" . "buffer")
          :desc "Switch buffer"           "/" #'switch-to-buffer))
 (map! :leader
-      "o x" #'mario/open-in-external-app)
-#+end_src
+      "o x" #'mario/open-in-external-app
+      "n z" #'mario/switch-to-agenda)
 
-* Deft
+#+end_src
+* /ORG/
 :PROPERTIES:
-:ID:       468289f9-3a06-41f0-9fab-e06c60936af0
+:ID:       13d55dd2-5859-4268-b512-45bcd5e03430
 :END:
 #+begin_src emacs-lisp
-(setq deft-directory "~/Dropbox/org/"
-      deft-use-filter-string-for-filename t
-      deft-default-extension "org"
-      deft-recursive t)
+;; ORG
+(setq org-directory mario/org-dir
+      org-hide-emphasis-markers t ;; hide text like /italic/ slash
+      org-ellipsis "…" ;; folding symbol
+      ;; org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package (not work for me)
+      org-archive-location (concat org-directory ".archive/%s::"))
+
+(setq org-tag-alist '(("@errand" . ?e)
+                      ("@office" . ?o)
+                      ("@home" . ?h)
+                      (:newline)
+                      ("CANCELLED" . ?c)))
+(after! org
+  (require 'org-habit)
+  (map! :leader
+        "c" #'org-capture)
+  (setq org-todo-keywords
+      '((sequence "TODO(t)" "PROJ(p)" "NEXT(n)" "|" "DONE(d)")
+        (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
+  (setq org-todo-keyword-faces
+        '(("TODO" :foreground "#008080" :weight normal :italic t)
+          ("PROJ" :foreground "#fe8019" :weight normal :italic t)
+          ("NEXT" :foreground "#d79221" :weight normal :italic t)
+          ("WAITING" :foreground "#32302f" :weight normal :italic t)
+          ("DONE" :foreground "#98971a" :weight normal :strike-through t))))
 #+end_src
-* Org-Roam
+
+* ORG-JOURNAL
 :PROPERTIES:
-:ID:       fabef71c-df1a-4bef-9482-1fef8f189565
+:ID:       9c05f007-5ca0-47fc-a25e-00a9803d1a8b
+:END:
+#+begin_src emacs-lisp
+(after! org-journal
+  (setq org-journal-date-prefix "#+TITLE: "
+        org-journal-file-format "%Y-%m-%d.org"
+        org-journal-time-format "%I:%M%p"
+        org-journal-date-format "%A, %d %B %Y"
+        org-journal-dir mario/org-journal-dir
+        org-journal-enable-agenda-integration t))
+#+end_src
+* ORG-AGENDA
+** Functions
+:PROPERTIES:
+:ID:       fcbd3dd0-c6b0-4c15-9c3e-328e0d33aebe
+:END:
+#+begin_src emacs-lisp
+(defun jethro/org-inbox-capture ()
+  (interactive)
+  "Capture a task in agenda mode."
+  (org-capture nil "i"))
+#+end_src
+** Automatically copy id link to org-roam-dailies
+:PROPERTIES:
+:ID:       603adadc-68e0-4fb6-8454-c67af4cdd9d8
+:END:
+#+begin_src emacs-lisp
+
+(defun mario/org-roam-today-mk-agenda-link ()
+  (interactive)
+  (let* ((marker (or (org-get-at-bol 'org-marker)
+                     (org-agenda-error)))
+         (buffer (marker-buffer marker))
+         (pos (marker-position marker)))
+    (with-current-buffer buffer
+      (save-excursion
+        (goto-char pos)
+        (org-roam-dailies-capture-today)))))
+#+end_src
+** Get daily Agenda
+:PROPERTIES:
+:ID:       40d4cfbf-c794-4693-bb4e-88883678e1cd
+:END:
+#+begin_src emacs-lisp
+
+(defun mario/get-daily-agenda (&optional date)
+  "Return the agenda for the day as a string."
+  (interactive)
+  (let ((file (make-temp-file "daily-agenda" nil ".txt")))
+    (org-agenda nil "d" nil)
+    (when date (org-agenda-goto-date date))
+    (org-agenda-write file nil nil "*Org Agenda(d)*")
+    (kill-buffer)
+    (with-temp-buffer
+      (insert-file-contents file)
+      (goto-char (point-min))
+      (kill-line 2)
+      (while (re-search-forward "^  " nil t)
+        (replace-match "- " nil nil))
+      (buffer-string))))
+
+#+end_src
+** X
+:PROPERTIES:
+:ID:       53be5410-98ae-4038-b206-51613f4846e5
+:END:
+#+begin_src emacs-lisp
+;; org-agenda
+(require 'find-lisp)
+(setq org-agenda-files
+      (append (find-lisp-find-files mario/org-agenda-dir "\.org$")
+              (find-lisp-find-files mario/org-journal-dir "\.org$")))
+
+;; (setq org-agenda-sticky t)
+(use-package! org-agenda
+  :init
+  (map! "<f1>" #'mario/switch-to-agenda)
+  (setq org-agenda-block-seperator nil
+        org-agenda-start-with-log-mode t)
+  (defun mario/switch-to-agenda()
+    (interactive)
+    (org-agenda nil " "))
+  :config
+  (defun mario/is-project-p()
+    "Any Task with todo keyword subtask"
+    (save-restriction
+      (widen)
+      (let ((has-subtask)
+            (subtree-end (save-excursion (org-end-of-subtree t)))
+            (is-a-task (member (nth 2(org-heading-components)) org-todo-keywords-1)))
+          (save-excursion
+            (forward-line 1)
+            (while (and (not has-subtask)
+                        (< (point) subtree-end)
+                        (re-search-forward "^\*+ " subtree-end t))
+              (when (member (org-get-todo-state) org-todo-keywords-1)
+                (setq has-subtask t))))
+          (and is-a-task has-subtask))))
+
+  (defun mario/skip-projects ()
+  "Skip trees that are projects"
+  (save-restriction
+    (widen)
+    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+      (cond
+       ((org-is-habit-p)
+        next-headline)
+       ((mario/is-project-p)
+        next-headline)
+       (t
+        nil)))))
+;; idk what it is?
+(setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+(setq org-agenda-custom-commands `((" " "Agenda"
+                                    ((agenda ""
+                                             ((org-agenda-span 'week)
+                                              (org-deadline-warning-days 365)))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "Inbox")
+                                            (org-agenda-files '(,(expand-file-name "inbox.org" mario/org-agenda-dir)))))
+                                     (todo "NEXT"
+                                           ((org-agenda-overriding-header "In Progress")
+                                            (org-agenda-files '(,(expand-file-name "projects.org" mario/org-agenda-dir)))))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "Active Projects")
+                                            (org-agenda-skip-function #'mario/skip-projects)
+                                            (org-agenda-files '(,(expand-file-name "projects.org" mario/org-agenda-dir)))))
+                                     (todo "TODO"
+                                           ((org-agenda-overriding-header "One-off Tasks")
+                                            (org-agenda-files '(,(expand-file-name "next.org" mario/org-agenda-dir)))
+                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))))
+
+                                   ;; ("d" "Daily schedule"
+                                   ;;  ((agenda ""
+                                   ;;           ((org-agenda-span 'day)
+                                   ;;            (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+                                     ;; (todo "TODO"
+                                     ;;       ((org-agenda-overriding-header "Inbox")
+                                     ;;        (org-agenda-files '(,(expand-file-name "inbox.org" mario/org-agenda-dir)))
+                                     ;;        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
+                                   ("h" "Habits"
+                                     ((todo "TODO"
+                                           ((org-agenda-overriding-header "HABITS")
+                                            (org-agenda-files '(,(expand-file-name "habits.org" mario/org-agenda-dir)))))))
+                                   ("n" "North"
+                                     ((todo "PROJ"
+                                           ((org-agenda-overriding-header "ACTIVE PROJECT")
+                                            (org-agenda-files '(,(expand-file-name "projects.org" mario/org-agenda-dir)))))
+                                      (todo "NEXT"
+                                           ((org-agenda-overriding-header "PROJECT TODO INPROGRESS")
+                                            (org-agenda-files '(,(expand-file-name "projects.org" mario/org-agenda-dir)))))
+                                      (todo "TODO"
+                                           ((org-agenda-overriding-header "PROJECT TODO")
+                                            (org-agenda-files '(,(expand-file-name "projects.org" mario/org-agenda-dir)))))
+                                      (todo "WTM"
+                                           ((org-agenda-overriding-header "Weekly Term Goal")
+                                            (org-agenda-files '(,(expand-file-name "private/north.org" mario/org-roam-dir)))))
+                                      (todo "STM"
+                                           ((org-agenda-overriding-header "Short Term Goal")
+                                            (org-agenda-files '(,(expand-file-name "private/north.org" mario/org-roam-dir)))))
+                                      (todo "MTM"
+                                           ((org-agenda-overriding-header "Medium Term Goal")
+                                            (org-agenda-files '(,(expand-file-name "private/north.org" mario/org-roam-dir)))))
+                                      (todo "LTM"
+                                           ((org-agenda-overriding-header "Long Term Goal")
+                                            (org-agenda-files '(,(expand-file-name "private/north.org" mario/org-roam-dir))))))))))
+#+end_src
+#+begin_src emacs-lisp
+(map! :map evil-org-agenda-mode-map
+      "c i" #'org-agenda-clock-in
+      "c o" #'org-agenda-clock-out
+      "c I" #'jethro/clock-in-and-advance
+      "i" #'org-agenda-clock-in)
+;; See what this function works?
+(defun jethro/advance-todo ()
+  (org-todo 'right)
+  (remove-hook 'org-clock-in-hook #'jethro/advance-todo))
+
+(defun jethro/clock-in-and-advance ()
+  (interactive)
+  (add-hook 'org-clock-in-hook 'jethro/advance-todo)
+  (org-agenda-clock-in))
+#+end_src
+
+* ORG-Capture
+:PROPERTIES:
+:ID:       0a89ce01-6f0f-4d8d-9179-93ea14d78a0a
+:END:
+#+begin_src emacs-lisp
+(setq org-capture-templates
+        `(("i" "Inbox" entry (file ,(expand-file-name "inbox.org" mario/org-agenda-dir))
+           ,(concat "* TODO %?\n"
+                    "/Entered on/ %u"))))
+
+#+end_src
+* ORG-ROAM
+:PROPERTIES:
+:ID:       ec347dc4-677e-4fbe-838a-687561820873
 :END:
 #+begin_src emacs-lisp
 (use-package! org-roam
-  ;; :commands (org-roam-insert ))
-  :hook
-  (after-init . org-roam-mode)
   :init
   (map! :leader
         :prefix "n"
         :desc "Search Notes" "/" #'+default/org-notes-search
-        :desc "org-roam" "r" #'org-roam
-        :desc "org-roam" "R" #'org-roam-unlinked-references
+        :desc "org-roam linked ref" "r" #'org-roam
+        :desc "org-roam unlink ref" "R" #'org-roam-unlinked-references
         :desc "org-roam-find-file" "f" #'org-roam-find-file
+        :desc "Org Column" "|" #'org-columns
+        :desc "Org Column Toggle" "\\" #'org-columns-toggle-or-columns-quit
+        :desc "org-find-file" "F" #'+default/find-in-notes
         :desc "org-roam-insert" "i" #'org-roam-insert
         :desc "org-roam-insert-immediate" "I" #'org-roam-insert-immediate
         :desc "org-roam-server-mode" "s" #'org-roam-server-mode
@@ -511,20 +459,20 @@ Version 2019-11-04 2021-02-16"
          :desc "New Entry" "j" #'org-journal-new-entry
          :desc "Previous Entry" "h" #'org-journal-previous-entry
          :desc "Next Entry" "l" #'org-journal-next-entry))
-  (setq org-roam-directory (file-truename "~/Dropbox/org/")
+  (setq org-roam-directory mario/org-roam-dir
         org-roam-graph-viewer "/usr/bin/brave"
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-graph-exclude-matcher "private"
         org-roam-tag '(prop last-directory)
         org-id-link-to-org-use-id t)
   :config
-  (setq org-roam-dailies-directory "private/")
   (setq org-roam-capture-templates
         '(("d" "default" plain (function org-roam-capture--get-point)
            "%?"
            :file-name "${slug}"
            :head "#+TITLE: ${title}
-,#+title: ${title}\n"
+,#+title: ${title}
+,#+DATE: %<<%Y-%m-%d %a>>\n"
            :immediate-finish t
            :unnarrowed t)
           ("p" "private" plain (function org-roam-capture--get-point)
@@ -540,73 +488,62 @@ Version 2019-11-04 2021-02-16"
            :file-name "resonance/${slug}"
            :head "#+TITLE:${title}
 ,#+title: ${title}
+,#+DATE: %<%Y-%m-%d>
 ,#+roam_key: ${ref}
 ,#+roam_tags: bpmcinbox
 
 - source :: ${ref}
-- tags :: [[file:../../org/bpmc.org][BPMC]]"
+- tags :: "
            :unnarrowed t)))
+  (setq org-roam-dailies-directory "private/daily/")
   (setq org-roam-dailies-capture-templates
         '(("d" "daily" plain (function org-roam-capture--get-point)
            ""
-           :file-name "private/%<%Y-%m-%d>"
+           :file-name "private/daily/%<%Y-%m-%d>"
            :head "#+TITLE: %<%A, %d %B %Y>
-- [ ]
-- [ ]
-- [ ]\n* Time Tracking\n"
+- \n* Time Tracking\n"
            :immediate-finish t)))
+ ;; this use with mario/org-ram-mk-link
+    ;; (setq org-roam-dailies-capture-templates
+    ;;       (let ((head
+    ;;              (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n* Daily Overview\n"
+    ;;                      "#+begin_src emacs-lisp :results value raw\n"
+    ;;                      "(mario/get-daily-agenda \"%<%Y-%m-%d>\")\n"
+    ;;                      "#+end_src\n"
+;;                         "* [/] Do Today\n* [/] Maybe Do Today\n* Journal\n")))
+;;            `(("j" "journal" entry
+;;               #'org-roam-capture--get-point
+;;               "* %<%H:%M> %?"
+;;               :file-name "private/daily/%<%Y-%m-%d>"
+;;               :head ,head
+;;               :olp ("Journal"))
+;;              ("t" "do today" item
+;;               #'org-roam-capture--get-point
+;;               "[ ] %a"
+;;               :file-name "private/daily/%<%Y-%m-%d>"
+;;               :head ,head
+;;               :olp ("Do Today")
+;;               :immediate-finish t)
+;;              ("m" "maybe do today" item
+;;               #'org-roam-capture--get-point
+;;               "[ ] %a"
+;;               :file-name "private/daily/%<%Y-%m-%d>"
+;;               :head ,head
+;;               :olp ("Maybe Do Today")
+;;               :immediate-finish t))))
   (set-company-backend! 'org-mode '(company-capf)))
 
 (use-package! org-roam-protocol
   :after org-protocol)
 #+end_src
-
-* Elcord
+* DEFT
 :PROPERTIES:
-:ID:       ad03c092-ae65-4302-8951-1c8b78055228
+:ID:       a225257d-dc6e-4738-b48e-472333c4a1ba
 :END:
-Discord Presence for emacs
 #+begin_src emacs-lisp
-;; (setq elcord-display-buffer-details nil)
-;; (elcord-mode t)
-#+end_src
-* Org-Journal
-:PROPERTIES:
-:ID:       6bc84ab8-9967-49b9-a337-ace8ca8ce3f8
-:END:
-Journalling for emacs
-#+begin_src emacs-lisp
-(after! org-journal
-  (setq org-journal-date-prefix "#+TITLE: "
-        org-journal-file-format "%Y-%m-%d.org"
-        org-journal-time-format "%I:%M%p"
-        org-journal-date-format "%A, %d %B %Y"
-        org-journal-dir  "~/Dropbox/org/private/"
-        org-journal-enable-agenda-integration t))
-#+end_src
-
->start emacs-lisp
-(pcase system-type
-  ('gnu/linux' "It's Linux!")
-  ('windows-nt' "It's Windows!")
-  ('darwin' "It's MacOS!"))
->end
-
-
-(map! :leader
-       "f ." #'mario/browse-dotfiles
-       "f t" #'mario/find-in-dotfiles
-       "f g" #'mario/generate-config
-       "f G" #'mario/open-doom-config
-      (:prefix ("y" . "yank/copy")
-        :desc "org-store-link" "o" #'org-store-link
-        :desc "copy-id-from-agenda" "a" #'mario/copy-idlink-to-clipboard)
-        (:prefix ("x" . "org-capture")
-         :desc "Popup scratch" "x" #'doom/open-scratch-buffer
-         :desc "fuck" "w" #'org-capture-finalize
-         :desc "fuck" "s" #'org-capture-finalize
-         :desc "fuck" "c" #'org-capture-kill
-         :desc "fuck" "d" #'org-capture-kill
-         :desc "fuck" "r" #'org-capture-refile))
-#+begin_src emacs-lisp
+(setq deft-directory mario/org-roam-dir
+      deft-use-filename-as-title t
+      deft-use-filter-string-for-filename t
+      deft-default-extension "org"
+      deft-recursive t)
 #+end_src

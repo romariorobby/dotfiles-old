@@ -1,3 +1,4 @@
+#vim:ft=sh
 set shell bash
 set shellopts '-eu'
 set ifs "\n"
@@ -7,7 +8,12 @@ set icons
 set period 1
 set info size
 set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
-
+# Dual pane
+# set nopreview
+# set ratios 1
+# set previewer /usr/bin/stpv
+# set cleaner /usr/bin/stpvimgclr
+# &stpvimg --lsiten $id
 $lf -remote "send $id set previewer ${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope"
 # Basic
 
@@ -21,7 +27,19 @@ cmd delete ${{
 	printf "%s\n\t" "$fx"
 	printf "delete?[y/N]"
 	read ans
-	[ $ans = "y" ] && rm -rf -- $fx
+	[ $ans = "y" ] && rm -rf -- $fx || echo "Cancelled..."
+}}
+
+cmd rem ${{
+    if [ -z $fs ]; then
+        rm -fr $f
+    else
+        IFS=':'; echo $fs | tr " " "\n"
+        echo 'delete? [y/n]'
+        read ans
+
+        [ $ans = 'y' ] && (echo 'deleting files...' && rm -fr $fs) || (echo 'cancelled...')
+    fi
 }}
 
 cmd trash ${{
@@ -137,11 +155,12 @@ cmd chezedit ${{
 map c
 map ca chezaadd
 map ce chezedit
-map <c-d> push :mkdir<space>
-map <c-n> push $touch<space>
+map A push :mkdir<space>
+map a push $touch<space>
 map M moveto
 map D trash
 map d delete
+#map b $IFS=':'; rm -rf $fx
 map P paste
 map y copy
 map x cut
@@ -162,6 +181,8 @@ map ta restore_trash_all
 # dedicated keys for file opener actions. you need "perl-file-mimeinfo"
 map o &mimeopen $f
 map O $mimeopen --ask $f
+#map o &mimeopen $f
+#map O $mimeopen --ask $f
 
 # - Extras
 # mouse scroll
@@ -174,8 +195,6 @@ map <c-w> chwall
 map V push :!nvim<space>
 map <c-f> $lf -remote "send $id select '$(fzf)'"
 map J $lf -remote "send $id cd $(cut -d'	' -f2 ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf)"
-map o &mimeopen $f
-map O $mimeopen --ask $f
 
 # unmap
 map r
@@ -202,6 +221,7 @@ map ghs cd ~/.ssh
 map ghd cd ~/downloads
 map gdt cd ~/downloads/torrent
 map ghe cd ~/exdrive
+map gex cd /run/media/
 map geh cd ~/exdrive/hdd
 map geu cd ~/exdrive/usb
 map gep cd ~/exdrive/phones

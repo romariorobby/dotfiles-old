@@ -1,17 +1,17 @@
 #!/bin/sh
-
+source color.sh
 transmission-remote -l | grep % |
 	sed " # The letters are for sorting and will not appear.
-	s/.*Stopped.*/A 🛑/;
-	s/.*Seeding.*/Z 🌱/;
-	s/.*100%.*/N ✅/;
-	s/.*Idle.*/B 🕰️/;
-	s/.*Uploading.*/L ⬆️/;
-	s/.*%.*/M ⬇️/" |
+	s/.*Stopped.*/A ${fg_red}/;
+	s/.*Seeding.*/Z ${fg_purple}/;
+	s/.*100%.*/N ${fg_green}/;
+	s/.*Idle.*/B ${fg_orange}/;
+	s/.*Uploading.*/L${fg_purple}/;
+	s/.*%.*/M ${fg_aqua} /" |
 		sort -h | uniq -c | awk '{print $3 $1}' | paste -sd ' ' -
 
 case $1 in
-	1) setsid -f "$TERMINAL" -e tremc ;;
+	1) setsid -f "$TERMINAL" -e tremc; sigdwmblocks 12;;
 	2) td-toggle ;;
 	3) notify-send "🌱 Torrent module" "\- Left click to open tremc.
 - Middle click to toggle transmission.

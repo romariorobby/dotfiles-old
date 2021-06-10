@@ -1,0 +1,8 @@
+#!/bin/sh
+file="$HOME/dwm/patches.h"
+if pidof dwm >/dev/null ;
+then
+	[ "$(printf "No\\nYes" | dmenu -i -p "Turn off Night Mode?")" = "Yes" ] && notify-send "Night Mode disabled."
+else
+	[ "$(printf "No\\nYes" | dmenu -i -p "Turn on Night Mode?")" = "Yes" ] && notify-send "Night Mode enabled."
+fi

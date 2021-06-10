@@ -1,0 +1,19 @@
+#!/bin/sh
+DIR_PRIV="$HOME/media/software"
+DIR_WORK="$HOME/media/software/code"
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    items=`find $DIR_WORK -maxdepth 1 -mindepth 1 -type d`
+    items+=`find $DIR_PRIV -maxdepth 1 -mindepth 1 -type d`
+    selected=`echo "$items" | fzf`
+fi
+
+dirname=`basename $selected`
+
+tmux switch-client -t $dirname
+if [[ $? -eq 0 ]]; then
+    exit 0
+fi
+
+tmux new-session -c $selected -d -s $dirname && tmux switch-client -t $dirname || tmux new -c $selected -A -s $dirname

@@ -2,10 +2,10 @@
 
 # Displays number of unread news items and an loading icon if updating.
 # When clicked, brings up `newsboat`.
-
+source color.sh
 case $1 in
         1) setsid "$TERMINAL" -e newsboat ;;
-	2) setsid -f newsup >/dev/null exit ;;
+	    2) setsid -f newsup >/dev/null exit ;;
         3) notify-send "📰 News module" "\- Shows unread news items
 - Shows 🔃 if updating with \`newsup\`
 - Left click opens newsboat
@@ -14,4 +14,4 @@ case $1 in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
- cat /tmp/newsupdate 2>/dev/null || echo "$(newsboat -x print-unread | awk '{ if($1>0) print "📰" $1}')$(cat "${XDG_CONFIG_HOME:-$HOME/.config}"/newsboat/.update 2>/dev/null)"
+cat /tmp/newsupdate 2>/dev/null || echo -ne "${fg_orange} ${fg_norm}$(newsboat -x print-unread | awk '{ if($1>0) print $1}')$(cat "${XDG_CONFIG_HOME:-$HOME/.config}"/newsboat/.update 2>/dev/null)"

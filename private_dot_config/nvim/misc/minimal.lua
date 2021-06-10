@@ -1,0 +1,6 @@
+require('plugins')
+vim.cmd("syntax on")
+vim.api.nvim_set_keymap('n', 'Q', '<NOP>', {})
+vim.cmd('set rnu')
+vim.cmd("set nowrap")
+vim.cmd('colorscheme romario')

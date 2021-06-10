@@ -1,7 +1,0 @@
-#!/bin/sh
-if [ -x $(which dwm) ]; then
-	pidof dwmblocks >/dev/null && killall -q dwmblocks; setsid -f dwmblocks || dwmblocks
-fi
-[ -x "$(command -v "dwm")" ] && pidof dwmblocks >/dev/null && killall -q dwmblocks; setsid -f dwmblocks || dwmblocks
-
-# pidof dwm >/dev/null 2>&1 && pidof dwmblocks >/dev/null 2>&1 && killall -q dwmblocks && setsid -f dwmblocks || setsid -f dwmblocks

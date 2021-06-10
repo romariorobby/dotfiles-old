@@ -1,3 +1,4 @@
+# vim: set ft=sh:
 set sandbox none
 set selection-clipboard clipboard
 set statusbar-h-padding 0
@@ -8,7 +9,13 @@ map d scroll half-down
 map D toggle_page_mode
 map r reload
 map R rotate
+map = zoom in
+map - adjust-open best-fit
+map 0 zoom spesific
+# map 0 zoom original
 map K zoom in
 map J zoom out
 map i recolor
 map p print
+map ` mark_evaluate
+map <C-e> feedkeys ":exec libreoffice '$FILE'<Return>"

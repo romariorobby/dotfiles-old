@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # The clickable help menu. Middle click to restart wm.
-
+source color.sh
 # If dwm is running, use dwm's readme and restart.
 pidof dwm >/dev/null &&
-	READMEFILE=/usr/local/share/dwm/info.mom
+	READMEFILE=/usr/local/share/dwm/info2.mom
 	restartwm() { pkill -HUP dwm dwmblocks ;} ||
 		restartwm() { i3 restart ;}
 
@@ -14,4 +14,4 @@ case $1 in
 	3) notify-send "❓ Help module" "\- Left click to open LARBS guide.
 - Middle click to refresh window manager." ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
-esac; echo "❓"
+esac; echo -ne "${fg_red}"

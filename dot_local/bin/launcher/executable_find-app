@@ -1,0 +1,14 @@
+#!/bin/sh
+cmds="\
+Videos|1	findmed -xv 
+Audios|2	findmed -xa
+Images|3	findmed -xi
+Notes|4	  	findmed -xn
+Movies|5	findmed -xm
+Literatures|6	findmed -xl
+Documents|6	findmed -xd
+Copy Path|6	findmed -xp"
+
+choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -i)" || exit 1
+
+`echo "$cmds" | grep "^$choice	"  | cut -d '	' -f2-`

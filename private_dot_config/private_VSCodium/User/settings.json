@@ -1,0 +1,44 @@
+{
+    "workbench.colorTheme": "Gruvbox Material Dark",
+    "vscode-neovim.neovimExecutablePaths.darwin": "/usr/local/bin/nvim",
+    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+    "vscode-neovim.neovimInitVimPaths.linux": "$HOME/.config/nvim/init.vim",
+    "vscode-neovim.neovimInitVimPaths.darwin": "$HOME/.config/nvim/init.vim",
+    "whichkey.sortOrder": "alphabetically",
+    "whichkey.delay": 0,
+    "which.bindings": [
+        {
+            "key": ";",
+            "name": "commands",
+            "type": "command",
+            "command": "workbench.action.showCommands"
+        },
+        {
+            "key": "/",
+            "name": "comment",
+            "type": "command",
+            "command": "vscode-neovim.send",
+            "args": "<C-/>"
+        },
+        {
+            "key": "?",
+            "name": "View All References",
+            "type": "command",
+            "command": "refererence-view.find",
+            "when": "editorHasReferenceProvider"
+        },
+        {
+            "key": "b",
+            "name": "Buffers/Editors..",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "b",
+                    "name": "Show all buffers/editors",
+                    "type": "command",
+                    "command": "workbench.action.showAllEditors"
+                }
+            ]
+        }
+    ]
+}

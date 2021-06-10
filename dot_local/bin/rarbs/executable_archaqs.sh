@@ -6,9 +6,17 @@ reflector -c ID,SG -a 6 --sort rate --save /etc/pacman.d/mirrorlist >/dev/null 2
 
 pacman -S --noconfirm dialog || { echo "Error at script start: Are you sure you're running this as the root user? Are you sure you have an internet connection?"; exit; }
 
-dialog --defaultyes --title "NOTE" --yesno "This Scripts will create\n- Boot (+512M)\n- Swap ( you choose )\n- Root ( you choose )\n- Home (rest of you drive)\n  \nRemember you drive path you want to install!\nExample:\n/dev/xxx\n\n"  15 60 || exit
+dialog --defaultno --title "NOTE" --yesno "This Scripts will create\n- Boot (+512M)\n- Swap ( you choose )\n- Root ( you choose )\n- Home (rest of you drive)\n  \nRemember you drive path you want to install!\nExample:\n/dev/xxx\n\n"  15 60 || exit
 
 dialog --defaultno --title "DON'T BE A BRAINLET!" --yesno "This is an Arch install script that is very rough around the edges.\n\nOnly run this script if you're a big-brane who doesn't mind deleting your selected drive (edit script if you want change to other partitions).\n\nThis script is only really for me so I can autoinstall Arch.\n\nt. Romario"  15 60 || exit
+
+dialog --no-cancel --backtitle "Arch Type" --radiolist "Select Arch Type: " 10 60 3 \
+    A "Archlinux" on \
+    X "Artix" off 2> archtype
+
+dialog --no-cancel --backtitle "Installing Type" --radiolist "Select Type Installation: " 10 60 3 \
+    H "HDD/SSD" on \
+    U "USB" off 2> installtype
 
 dialog --defaultno --title "DON'T BE A BRAINLET!" --yesno "Make sure you check your drive with 'lsblk' you check your partition!!"  10 60 || exit
 
@@ -108,13 +116,77 @@ mkdir -p /mnt/home
 mount $(cat drivepath)4 /mnt/home
 }
 
-ls /sys/firmware/efi/efivars >/dev/null 2>&1 && uefiformat || legacyformat
+usbformat() {
+cat <<EOF | fdisk $(cat drivepath)
+o
+n
+p
+
+
++100M
+n
+p
+
++512M
+n
+p
+
++${SIZE[0]}G
+n
+p
+
+
++${SIZE[1]}G
+n
+p
+
+
+w
+EOF
+partprobe
+
+yes | mkfs.fat -F32 $(cat drivepath)2
+yes | mkfs.ext4 $(cat drivepath)3
+yes | mkfs.ext4 $(cat drivepath)4
+mount $(cat drivepath)3 /mnt
+mkdir -p /mnt/boot/efi
+mount $(cat drivepath)2 /mnt/boot/efi
+mkdir -p /mnt/home
+mount $(cat drivepath)4 /mnt/home
+}
+INSTRAP=""
+EXPKG=""
+checkdaemon() {
+    pidof systemd && echo "Daemon Using Systemd"
+    if [ $(cat archtype) = "X" ]; then
+        pidof runit && echo "Daemon Using Runit" && EXPKG="elogind-runit"
+        pidof openrc && echo "Daemon Using openrc" && EXPKG="elogind-openrc"
+        pidof s6 && echo "Daemon Using s6" && EXPKG="elogind-s6"
+}
+
+if [ $(cat installtype) = "U" ]; then
+    usbformat
+else
+    ls /sys/firmware/efi/efivars >/dev/null 2>&1 && uefiformat || legacyformat
+fi
+
 pacman -Sy --noconfirm archlinux-keyring
 whichproc=$(cat /proc/cpuinfo | grep Intel >/dev/null 2>&1 && echo "intel-ucode" > proc || echo "amd-ucode" > proc)
-pacstrap /mnt base base-devel linux linux-headers linux-firmware openssh reflector git chezmoi $(cat proc)
+
+checkdaemon
+if [ $(cat archtype) = "A" ]; then
+    pacstrap /mnt base base-devel linux linux-headers linux-firmware openssh reflector git chezmoi $(cat proc)
+else
+    basetrap /mnt base base-devel linux linux-headers linux-firmware openssh reflector git chezmoi $(cat proc) $(echo $EXPKG)
+fi
+# Artix
+## Runit,openRC,s6,66
+#basetrap /mnt elogind-(runit,openrc,s6,66) 
 
 genfstab -U /mnt >> /mnt/etc/fstab
 cat tz.tmp > /mnt/tzfinal.tmp
+cat installtype > /mnt/installtype.tmp
+cat archtype > /mnt/archtype.tmp
 rm tz.tmp
 mv comp /mnt/etc/hostname
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist

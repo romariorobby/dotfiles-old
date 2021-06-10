@@ -1,0 +1,6 @@
+#!/bin/sh
+
+devices="$(adb devices | awk '{print $1}' | sed '1d' | dmenu -l 10)"
+# model="$(adb devices -l | awk 'OFS="," {print $3,$4,$5}' | sed '1d;$d')"
+# echo $devices
+prompt "Are you sure?" "scrcpy -s $devices"

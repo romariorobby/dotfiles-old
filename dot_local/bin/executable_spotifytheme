@@ -6,11 +6,15 @@ linux_apps="$HOME/.config/spicetify/CustomApps/"
 
 clonethemearch() { \
 	git clone https://github.com/romariorobby/spicetify-themes.git ~/.config/spicetify/Themes
-	git clone https://github.com/khanhas/genius-spicetify ~/.config/spicetify/CustomApps/genius
+	# git clone https://github.com/khanhas/genius-spicetify ~/.config/spicetify/CustomApps/genius
 }
 clonethememac() { \
 	git clone https://github.com/romariorobby/spicetify-themes.git ~/.config/Spicetify/Themes
+	# git clone https://github.com/khanhas/genius-spicetify ~/.config/Spicetify/CustomApps/genius
+}
+insgen() { \
 	git clone https://github.com/khanhas/genius-spicetify ~/.config/Spicetify/CustomApps/genius
+
 }
 doclonethemes(){ \
 	echo "Cloning Spicetify-theme..."

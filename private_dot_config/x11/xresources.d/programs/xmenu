@@ -1,0 +1,10 @@
+!! vim:ft=xdefaults
+/* Xmenu */
+xmenu.background: #008080
+xmenu.foreground: #ebdbb2
+xmenu.selbackground: #141414
+xmenu.selforeground: #458588
+xmenu.border: #458588
+xmenu.borderWidth: 2px
+xmenu.font: monospace:size=10,Siji:size=10
+

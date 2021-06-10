@@ -1,0 +1,84 @@
+# Remap C-b to C-Space as Prefix (linux only) 
+set -g prefix C-Space
+bind-key C-Space last-window
+bind-key a send-prefix
+# Mac OS & Linux Prefix to `
+#set -g prefix `
+#bind-key ` last-window
+
+# Mouse Support
+set -g mouse on
+
+setw -g mode-keys vi
+
+set -sg escape-time 0
+# hjkl pane (with prefix)
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+#resize pane
+bind -n M-h resize-pane -L
+bind -n M-j resize-pane -D
+bind -n M-k resize-pane -U
+bind -n M-l resize-pane -R
+
+#hjkl pane (without prefix)
+bind -n C-h select-pane -L
+bind -n C-j select-pane -D 
+bind -n C-k select-pane -U
+bind -n C-l select-pane -R
+
+unbind S-Delete 
+
+# windows
+#bind -n M-p previous-window
+#bind -n M-n next-window
+bind n new-window
+bind d kill-pane
+bind q kill-window
+#bind m move-window
+#bind-key >  swap-window -t +1
+#bind-key <  swap-window -t -1
+
+# windows Movement 
+# still decide which one the best for me
+bind -n M-p select-window -t :-
+bind -n M-n select-window -t :+
+bind -n S-Left  previous-window
+bind -n S-Right next-window
+# Mac OS and
+bind h select-window -t :-
+bind l select-window -t :+
+
+bind-key r command-prompt -p "Rename to: " "rename-window '%%'"
+# bind-key c command-prompt -p "Name of new window: " "new-window -n '%%'"
+bind-key v split-window -h
+bind-key s split-window
+# reload config
+bind R source-file ~/.config/tmux/tmux.conf \; display-message "Config reloaded..."
+
+set -g base-index 1
+#  Theme
+set -g status-bg '#141414'
+set -g status-fg '#ebdbb2' 
+set -g status-interval 1
+
+#set -g status-left '#[fg=red][#[bg=black,fg=cyan]#S#[fg=blue]]'
+
+set-window-option -g window-status-current-style fg='#ebdbb2,bold'
+set -g window-status-current-format '#[bg=#141414]#[fg=#008080]#I #[fg=#008080]#W#[fg=#ff79c6]#F'
+set -g window-status-format "#[fg=#ebdbb2,bold]#I #[fg=#ebdbb2]#W"
+# Status Left
+set -g status-left-length 20
+set -g status-left '#[bg=#141414]#[fg=#282a36]#{?client_prefix,#[bg=#008080],} 💣 '
+# status right
+set -g status-right-length 50
+set -g status-right '#[fg=#ebdbb2,bg=#141414] #(tmux-mem-cpu-load -g 5 --interval 2) '
+set -ga status-right '#[fg=#008080,bg=#141414,bold]UP #(uptime | cut -f 4-5 -d " " | cut -f 1 -d ",") '
+set -ga status-right '#[fg=colour233,bg=#008080,bold] #[fg=#colour245]%d/%m/%Y '
+set -ga status-right '#[fg=colour233,bg=#ff79c6,bold] %H:%M:%S%P '
+# pane border
+set -g pane-border-style fg='#ebdbb2'
+set -g pane-active-border-style fg='#008080'
+set -g message-style bg='#008080',fg='#ebdbb2'

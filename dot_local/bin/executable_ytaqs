@@ -1,0 +1,529 @@
+#!/usr/bin/sh
+# ______
+# youtube-dl -ciw\
+# 		-o "~/media/videos/web/%(uploader)s/%(title)s/%(title)s-%(id)s.%(ext)s"
+#		--download-archive "~/media/videos/web/downloaded.txt"
+#       --add-metadata
+#       --write-info-json
+#       --write-description
+#       --write-thumbnail
+#       --write-annotations
+#       -f "bestvideo[height<=720]+bestaudio/best" "$1"
+# ____
+# PLAYER=0
+show_format=0
+is_ext_menu=0
+is_download=0
+user_search=0
+select_all=0
+# user_search=0
+show_thumbnails=${show_thumbnails-0}
+tmp_video_data_file="/tmp/ytfzf-subdata"
+ytdl_output="~/media/videos/web/"
+selected_urls=""
+scrape="${scrape-yt_search}"
+useragent=${useragent-'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.152 Safari/537.36'}
+[ -z "$YT_ENABLE_FZF_DEFAULT_OPTS" ] && YT_ENABLE_FZF_DEFAULT_OPTS=${enable_fzf_default_opts-0}
+[ -z "$YT_EXTMENU" ] && YT_EXTMENU="${external_menu-dmenu -i -l 30 -p Search/URL:}"
+#clear FZF_DEFAULT_OPTS
+[ "$YT_ENABLE_FZF_DEFAULT_OPTS" -eq 0 ] && FZF_DEFAULT_OPTS=""
+
+[ -z "$PLAYER" ] && PLAYER="${video_player-mpv}"
+# MPV ONLY
+[ -z "$PLAYER_FORMAT" ] && PLAYER_FORMAT="${video_player_format-mpv --ytdl-format=}"
+[ -z "$YTDL_PLAYER_FORMAT" ] && YTDL_PLAYER_FORMAT="${video_download-youtube-dl -ciw -f}"
+[ -z "$YTDL_ARGS" ] && YTDL_ARGS="${video_download-youtube-dl -ciw -f}"
+[ -z "$YTDL_OUTPUT" ] && YTDL_OUTPUT="${video_download--o $ytdl_output }"
+[ -z "$PLAYER_FORCE" ] && PLAYER_FORCE="${video_player---force-window=immediate --really-quiet}"
+# [ -z "$PLAYER_FORMAT" ] && PLAYER_FORMAT="${video_player_format-mpv --ytdl-format=}"
+#video type preference (mp4/1080p, mp4/720p, etc..)
+[ -z  "$YT_PREF" ] && YT_PREF="${video_pref-}"
+# [ -z  "$YT_PREF" ] && YT_PREF="${video_pref-bestvideo[height<=?720]+bestaudio/best}"
+[ -z "$YT_VERBOSE" ] && YT_VERBOSE=${mpv-verbose_>/dev/null 2>&1}
+[ -z "$YT_EXTMENU_LEN" ] && YT_EXTMENU_LEN=${external_menu_len-150}
+[ -z  "$YT_QUEUE" ] && YT_QUEUE="${queue-qndl}"
+# [ -z "$TTY_COLS" ] && export TTY_COLS="$(tput cols)"
+
+format_ext_menu () {
+	#base how much space everything takes up depending on the width of YTFZF_EXT_MENU
+	frac=$(((YT_EXTMENU_LEN - 5 - 12)/11))
+	#title space
+	title_len=$((frac * 6 - 1))
+	#channel space
+	channel_len=$((frac * 3/2))
+	#video duration space
+	dur_len=$((frac * 1))
+	#video view space
+	view_len=$((frac * 1))
+	#video upload date space
+	date_len=$((frac * 3/2 + 100 ))
+	#url space
+	url_len=12
+}
+
+# menu_command='tr -d "$(printf "\t")" | '"$YT_EXTMENU"
+# use flag -s for search
+get_search_query () {
+	if [ -z "$search_query" ];then #&& [ "$user_search" -eq 1 ]; then
+		if [ "$is_ext_menu" -eq 1 ];then
+			search_query="$(printf "" | eval "$YT_EXTMENU" )"
+			# if [ scrape = 1 ] then this
+			check_if_url "$search_query"
+		# else
+		# 	printf "Search: "
+		# 	read -r search_query
+		fi
+		[ -z "$search_query" ] && exit 0
+	fi
+}
+user_selection () {
+	#remove subscription separators
+	videos_data_clean="$(printf "%s" "$videos_data" | sed "/.*""$(printf "\t")""$/d" )"
+
+	#$selected_data is the video the user picked
+	#picks the first n videos
+	if [ "$select_all" -eq 1 ] ; then
+		selected_data="$videos_data_clean"
+	#show regular menu
+	else
+		selected_data="$( video_menu "$videos_data" )"
+	fi
+	unset videos_data_clean
+}
+format_user_selection () {
+	#gets a list of video ids/urls from the selected data
+	shorturls="$(printf "%s" "$selected_data" | sed -E -n -e "s_.*\|([^|]+) *\$_\1_p")"
+	[ -z "$shorturls" ] && exit;
+
+	#for each url append the full url to the $urls string
+	#through this loop, the selected data which was truncated by formatting is retrived.
+	selected_urls=""
+	selected_data=""
+	for surl in $shorturls; do
+		[ -z "$surl" ] && continue
+		selected_urls="$(printf '%s\n%s' "$selected_urls" "https://www.youtube.com/watch?v=$surl")"
+		selected_data="$(printf '%s\n%s' "$selected_data" "$(printf "%s" "$videos_data" | grep -m1 -e "$surl" )")"
+	done
+	selected_urls="$( printf "%s" "$selected_urls" | sed 1d )"
+	echo $selected_urls
+	#sometimes % shows up in selected data, could throw an error if it's an invalid directive
+	selected_data="$( printf "%s" "$selected_data" | sed 1d )"
+	unset shorturls
+}
+
+play_urlxxx () {
+	# LINUX ONLY
+	# TODO: Change TITLE to take from JSON FILE (scraping from youtube)
+	allcpus_enabled=$(cat /sys/devices/system/cpu/cpu1/online)
+	charging_state=$(cat /sys/class/power_supply/BAT0/status)
+	res_360="bestvideo[height<=?360]+bestaudio/best"
+	res_480="bestvideo[height<=?480]+bestaudio/best"
+	res_720="bestvideo[height<=?720]+bestaudio/best"
+	player_urls="\"$(printf "%s" "$selected_urls" | awk  'ORS="\" \"" { print }' | sed 's/"$//' | sed 's/ "" / /')"
+	[ -z "$selected_urls" ] && exit 2
+	if [ $show_format -eq 0 ]; then
+		if [ "$allcpus_enabled" -eq 0 ]; then
+			notify-send "$title [360p]" "$player_urls"
+			eval "$PLAYER_FORMAT_FORCE"\'"$res_360"\'  "$player_urls"
+		elif [ "$charging_state" = 'Charging' ]; then
+			notify-send "$title [720P]" "$player_urls"
+			eval "$PLAYER_FORMAT"\'"$res_720"\'  "$PLAYER_FORCE"  "$player_urls" 
+		else
+			notify-send "$title [480P]" "$player_urls"
+			eval "$PLAYER_FORMAT"\'"$res_480"\'  "$PLAYER_FORCE"  "$player_urls"
+		fi
+	else
+		notify-send "this is from here"
+		eval "$PLAYER_FORMAT"\'"$YT_PREF"\' "$PLAYER_FORCE"  "$player_urls"
+		# eval "$PLAYER_FORMAT" \'"$YT_PREF"\' "$PLAYER_FORCE  "$player_urls"
+	fi
+}
+
+play_url () {
+	# LINUX ONLY :)
+	# TODO: Change TITLE to take from JSON FILE (scraping from youtube)
+	allcpus_enabled=$(cat /sys/devices/system/cpu/cpu1/online)
+	charging_state=$(cat /sys/class/power_supply/BAT0/status)
+	res_360="bestvideo[height<=?360]+bestaudio/best"
+	res_480="bestvideo[height<=?480]+bestaudio/best"
+	res_720="bestvideo[height<=?720]+bestaudio/best"
+	player_urls="\"$(printf "%s" "$selected_urls" | awk  'ORS="\" \"" { print }' | sed 's/"$//' | sed 's/ "" / /')"
+	[ -z "$selected_urls" ] && [ "$is_download" -eq 1 ] && exit 2
+	if [ $show_format -eq 0 ]; then
+		if [ "$allcpus_enabled" -eq 0 ]; then
+			send_notify "$selected_data"
+			eval "$PLAYER_FORMAT_FORCE"\'"$res_360"\'  "$player_urls"
+		elif [ "$charging_state" = 'Charging' ]; then
+			send_notify "$selected_data"
+			eval "$PLAYER_FORMAT"\'"$res_720"\'  "$PLAYER_FORCE"  "$player_urls" 
+		else
+			send_notify "$selected_data"
+			eval "$PLAYER_FORMAT"\'"$res_480"\'  "$PLAYER_FORCE"  "$player_urls"
+		fi
+	else
+		send_notify "$selected_data"
+		eval "$PLAYER_FORMAT"\'"$YT_PREF"\' "$PLAYER_FORCE"  "$player_urls"
+	fi
+}
+	# else
+		# eval "$PLAYER_FORMAT" \'"$YT_PREF"\' "$PLAYER_FORCE  "$player_urls"
+download_url() {
+	out_format="%s(uploader)s/%(title)s/%(title)s-%(id)s.%(ext)s"
+	player_urls="\"$(printf "%s" "$selected_urls" | awk  'ORS="\" \"" { print }' | sed 's/"$//' | sed 's/ "" / /')"
+	if [ "$YT_QUEUE" = "qndl" ]; then
+		eval "$YT_QUEUE" "$player_urls" \""$YTDL_PLAYER_FORMAT" "$YT_PREF"\"
+	fi
+}
+
+get_video_format () {
+	# select format if flag given
+	# check_if_url "$selected_urls"
+	if [ $show_format -eq 1 ]; then
+	        max_quality=$(youtube-dl -F "$(printf "$selected_urls")" | awk '{print $3}' | cut -dx -f2 | sort -n | tail -n1)
+		quality=$(printf "Audio 144p 240p 360p 480p 720P 1080p 1440P 2160p" | awk -F"$max_quality""p" '{print $1 FS}' | sed "s/ /\n/g" | eval "$menu_command" | sed "s/p//g")
+		[ -z "$quality"  ] && exit;
+	        [ $quality = "Audio"  ] && YT_PREF="bestaudio/best" || YT_PREF="bestvideo[height=?$quality][fps<=?30][vcodec!=?vp9]+bestaudio/best"
+
+	fi
+	# unset max_quality quality
+}
+
+before_exit(){
+	# More to it later on...
+	# [ "$is_url" -eq 1 ] && exit
+	# Quit after search , can be improve!
+	[ "$scrape" = "yt_search" ] && exit
+}
+check_if_url () {
+	# to check if given input is a url
+	url_regex='^https\?://.*'
+
+	if { printf "%s" "$1" | grep -q "$url_regex"; } ; then
+		is_url=1
+		selected_urls="$(printf "%s" "$*" | tr ' ' '\n')"
+		if [ "$is_download" -eq 0 ]; then
+			scrape="url"
+		elif [ "$user_search" -eq 1 ]; then
+			scrape="yt_search"
+		else
+			scrape="dl"
+		fi
+		if [ "$show_format" -eq 1 ]; then
+			get_video_format
+		fi
+	else
+		is_url=0
+		scrape="yt_search"
+	fi
+	unset url_regex
+}
+
+send_notify(){
+	video_name="$(printf "%s" "$*" | cut -d'|' -f1 )"
+	video_channel="$(printf "%s" "$*" | cut -d'|' -f2)"
+	message="$(printf "$video_name\nChannel: $video_channel\nQuality: $quality")"
+	notify-send "$message" -i "$video_thumb"
+}
+check_internet(){
+	ping -q -c 1 example.org > /dev/null 2>&1
+	if [ $(echo $?) -ne 0 ];then
+		notify-send --urgency=critical "No Internet"
+		if [ $is_ext_menu -eq 1 ];then
+			# if [ dmenu then if rofi then]
+			prompt "List All Available Network?" "networkmanager_dmenu"
+			notify-send "Searching Local Library..." 
+			findmed -mX
+		fi
+		exit
+	fi
+
+	# [ "$num" -ne 0 ] && findmed -mX || exit
+		# exit
+	# [ $? -ne 0 ] && notify-send "Do you have internet access?" && printf "\033[0;31m \033[1mNo Internet Access! Check your internet \033[0m\n"; && exit 2
+}
+
+#> Formats the fields depending on which menu is needed. And assigns the menu command.
+
+############
+# SCRAPING #
+############
+# 
+get_sp_filter () {
+
+	#filter_id is a variable that keeps changing throught this function
+	filter_id=""
+
+	#sp is the final filter id that is used in the search query
+	sp=""
+
+	#the way youtube uses these has a pattern, for example
+	    #in the sort_by_filter the only difference is the 3rd character, I just don't know how to use this information efficiently
+	case "$sort_by_filter" in
+		upload-date) filter_id="CAISBAgAEAE" ;;
+		view-count) filter_id="CAMSBAgAEAE" ;;
+		rating) filter_id="CAESBAgAEAE" ;;
+	esac
+
+	#another example is sort by filter + upload date filter only changes one character as well
+	if [ -n "$filter_id" ]; then
+		#gets the character in the filter_id that needs to be replaced if upload_date_filter is also given
+		upload_date_character="$(printf "%s" "$filter_id" | awk '{print substr($1, 8, 1)}')"
+	fi
+
+	#For each of these, if upload_date_character is unset, the filter_id should be the normal filter
+	#Otherwise set the upload_date_character to the right upload_date_character
+	case "$upload_date_filter" in
+		last-hour) [ -z "$upload_date_character" ] && filter_id="EgQIARAB" || upload_date_character="B" ;;
+		today) [ -z "$upload_date_character" ] && filter_id="EgQIAhAB" || upload_date_character="C" ;;
+		this-week) [ -z "$upload_date_character" ] && filter_id="EgQIAxAB" || upload_date_character="D" ;;
+		this-month) [ -z "$upload_date_character" ] && filter_id="EgQIBBAB" || upload_date_character="E" ;;
+		this-year) [ -z "$upload_date_character" ] && filter_id="EgQIBRAB" || upload_date_character="F" ;;
+	esac
+
+	#if upload_date_character isn't empty, set sp to upload_date filter + sort_by filter
+	if [ -n "$upload_date_character" ]; then
+		#replaces the 8th character in the filter_id with the appropriate character
+		#the 8th character specifies the upload_date_filter
+		sp="$(printf "%s" "$filter_id" | sed "s/\\(.\\{7\\}\\)./\\1$upload_date_character/")"
+	#otherwise set it to the filter_id
+	else
+		sp="$filter_id"
+	fi
+	unset upload_date_character filter_id
+}
+
+get_yt_json () {
+	#youtube has a bunch of data relating to videos in a json format, this scrapes that
+	printf "%s" "$*" | sed -n '/var *ytInitialData/,$p' | tr -d '\n' |\
+        sed -E ' s_^.*var ytInitialData ?=__ ; s_;</script>.*__ ;'
+}
+get_yt_html () {
+    link="$1"
+    query="$2"
+    printf "%s" "$(
+	curl "$link" -s \
+	  -G --data-urlencode "search_query=$query" \
+	  -G --data-urlencode "sp=$sp" \
+	  -H 'authority: www.youtube.com' \
+	  -H "user-agent: $useragent" \
+	  -H 'accept-language: en-US,en;q=0.9' \
+	  -L \
+	  --compressed
+    )"
+    unset link query
+}
+
+get_video_data () {
+	#in that list this finds the title, channel, view count, video length, video upload date, and the video id/url
+	printf "%s" "$*" |\
+		jq -r '.[]| (
+			.title,
+			.channel,
+			.views,
+			.duration,
+			.date,
+			.videoID
+			)' | sed "N;N;N;N;N;s/\n/""$(printf '\t')""\|/g"
+}
+scrape_yt () {
+	yt_html="$(get_yt_html "https://www.youtube.com/results" "$*")"
+	if [ -z "$yt_html" ]; then
+		# TODO: make seperate own func #p1
+		print_error "\033[31mERROR[#01]: Couldn't curl website. Please check your network and try again.\033[0m\n"
+		exit 1
+	fi
+
+	yt_json="$(get_yt_json "$yt_html")"
+
+	#if the data couldn't be found
+	if [ -z "$yt_json" ]; then
+		print_error "\033[31mERROR[#02]: Couldn't find data on site.\033[0m\n"
+		exit 1
+	fi
+
+	#gets a list of videos
+	videos_json="$(printf "%s" "$yt_json" | jq '[ .contents|
+	..|.videoRenderer? |
+	select(. !=null) |
+		{
+			title: .title.runs[0].text,
+			channel: .longBylineText.runs[0].text,
+			duration:.lengthText.simpleText,
+			views: .shortViewCountText.simpleText,
+			date: .publishedTimeText.simpleText,
+			videoID: .videoId,
+			thumbs: .thumbnail.thumbnails[0].url
+		}
+	]')"
+
+	videos_data="$(get_video_data "$videos_json")"
+	#if there aren't videos
+	[ -z "$videos_data" ] &&  { printf "No results found. Try different keywords.\n"; exit 1;}
+	printf "%s\n" "$videos_data" >> "$tmp_video_data_file"
+
+	# [ $show_thumbnails -eq 1 ] && download_thumbnails "$videos_json"
+	# wait
+	unset videos_json yt_json yt_html
+	# needs search_query as $*
+	## Scrape data and store video information in videos_data ( and thumbnails )
+
+	#sp is the urlquery youtube uses for sorting videos
+	#only runs if --filter-id or --sp was unspecified
+	# if [ -z "$sp" ]; then
+	# 	get_sp_filter
+	# else
+	# 	#youtube puts in %253d one ore more times in the filter id, it doesn't seem useful, so we are removing it if it's in the filter
+	# 	sp="${sp%%%*}"
+	# fi
+
+	# [ "$show_link_only" -eq 0 ] && printf "Scraping Youtube...\n"
+
+}
+# TODO:: #p2 Skip when $URL as input (no data selected?)
+format_menu () {
+	# if [ "$is_ext_menu" -eq 0 ]; then
+	# 	menu_command='fzf -m --bind change:top --tabstop=1 --layout=reverse --delimiter="$(printf "\t")" --nth=1,2 $FZF_DEFAULT_OPTS'
+	# 	format_fzf
+	# else
+	menu_command='tr -d "$(printf "\t")" | '"$YT_EXTMENU"
+	format_ext_menu
+	# fi
+}
+
+function_exists () {
+	if type $1 > /dev/null 2>&1; then
+	    return 0
+	else
+	    return 1
+	fi
+}
+# Formatting scraping result :)
+if ! function_exists 'video_info_text'; then
+	video_info_text () {
+		printf "%-${title_len}.${title_len}s\t" "$title"
+		printf "%-${channel_len}.${channel_len}s\t" "$channel"
+		printf "%-${view_len}.${view_len}s\t" "$views"
+		printf "%-${dur_len}.${dur_len}s\t" "$duration"
+		printf "%-${date_len}.${date_len}s\t" "$date"
+		printf "%-${url_len}.${url_len}s\t" "$shorturl"
+		printf "\n"
+	}
+fi
+
+format_video_data () {
+	while IFS="$(printf "\t")" read -r title channel views duration date shorturl; do
+	    video_info_text
+	done << EOF
+$*
+EOF
+	unset title channel duration views date shorturl
+}
+
+video_menu () {
+	#take input format it to the appropriate format, then pipe it into the menu
+	format_video_data "$*" | eval "$menu_command"
+}
+##############
+# End Scraping #
+##############
+print_error () {
+    printf "$*"
+    printf "Check for new versions and report at: https://github.com/pystardust/ytfzf\n"
+}
+
+if [ ! -t 0 ] && [ -z "$*" ] && [ $is_ext_menu -eq 1 ]; then
+	print_error "\033[31mERROR[#04]: Use - when reading from stdin\033[0m\n"
+	exit 2
+#read stdin if given
+elif [ "$*" = "-" ]; then
+	printf "Reading from stdin\n"
+	while read -r line
+	do
+	    search_query="$search_query $line"
+	done
+fi
+
+
+parse_opt(){
+	opt="$1"
+	case ${opt} in
+
+		# Show Available Format
+		f)  show_format=1
+			# TODO: remove this insted fallback to fzf ?
+			is_ext_menu=1;;
+
+		# External Menu
+		x)  is_ext_menu=1 ;;
+
+		# For search except link
+		s)  user_search=1 ;;
+
+		q)  YT_QUEUE="qndl" ;;
+
+		# Verbosity
+		v)  PLAYER_FORCE="" ;;
+
+		# Download
+		d)  is_download=1
+			;;
+
+		*) exit 2 ;;
+
+	esac
+}
+
+# YTDL_PLAYER_FORMAT="youtube-dl -ciw -f"
+while getopts "QqLhDmdfxHaArltSsvNn:U:-:" OPT; do
+    parse_opt "$OPT" "$OPTARG"
+done
+
+#if stdin is given and no input (including -) is given, throw error
+#also make sure its not reading from ext_menu
+if [ ! -t 0 ] && [ -z "$*" ] && [ $is_ext_menu -eq 0 ]; then
+	print_error "\033[31mERROR[#04]: Use - when reading from stdin\033[0m\n"
+	exit 2
+#read stdin if given
+elif [ "$*" = "-" ]; then
+	printf "Reading from stdin\n"
+	while read -r line
+	do
+	    search_query="$search_query $line"
+	done
+fi
+
+shift $((OPTIND-1))
+# find-app
+check_internet
+check_if_url "${search_query:=$*}"
+format_menu
+# echo "$selected_urls"
+# play_url
+# get_video_format
+
+case "$scrape" in
+	"yt_search")
+		get_search_query
+		scrape_yt "$search_query"
+		;;
+	"url")
+	    play_url
+	    exit
+	    ;;
+	"dl")
+		download_url
+		exit
+		;;
+	*)
+	    printf "\033[31mError: \$scrape set to bad option, set to '$scrape'${c_reset}\n"
+	    exit 1 ;;
+
+esac
+while true;do
+	user_selection
+	format_user_selection
+	get_video_format
+	play_url
+	before_exit
+done
+

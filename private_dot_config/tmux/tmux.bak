@@ -1,0 +1,106 @@
+# Remap C-b to C-Space as Prefix (linux only) 
+set -g prefix C-Space
+bind-key C-Space last-window
+bind-key a send-prefix
+# Mac OS & Linux Prefix to `
+#set -g prefix `
+#bind-key ` last-window
+
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+
+# Mouse Support
+set -g mouse on
+
+setw -g mode-keys vi
+
+set -sg escape-time 0
+# hjkl pane (with prefix)
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+#####################
+#resize pane (Conflict with My Windows Manager) otherwise use if use mac
+# bind -n M-h resize-pane -L
+# bind -n M-j resize-pane -D
+# bind -n M-k resize-pane -U
+# bind -n M-l resize-pane -R
+bind-key + resize-pane -Z
+bind-key = resize-pane -Z
+bind -n M-Left resize-pane -L
+bind -n M-Down resize-pane -D
+bind -n M-Up resize-pane -U
+bind -n M-Right resize-pane -R
+
+bind -n C-, resize-pane -L
+bind -n C-Down resize-pane -D
+bind -n C-Up resize-pane -U
+bind -n C-. resize-pane -R
+# hjkl pan> (without prefix)
+# conflict with another C-{hjkl} in shell
+# bind -n C-h select-pane -L
+# bind -n C-j select-pane -D 
+# bind -n C-k select-pane -U
+# bind -n C-l select-pane -R
+
+# windows
+bind N new-window
+bind q confirm-before kill-window
+bind c confirm-before kill-pane
+bind Q confirm-before kill-session
+#bind -n M-p previous-window
+#bind -n M-n next-window
+#bind m move-window
+bind-key >  swap-window -t +1
+bind-key <  swap-window -t -1
+bind-key W  split-window -c '#{pane_current_path}' -h \; choose-window 'kill-pane ; join-pane -hs %%'
+# windows Movement 
+# Conflict with 
+bind -n M-p select-window -t :-
+bind -n M-n select-window -t :+
+
+# bind -r M-Tab select-window -t :+
+# bind -r M-S-Tab select-window -t :-
+bind -r 0 select-window -t :+
+bind -r 9 select-window -t :-
+bind -n C-S-h  previous-window
+bind -n C-S-l next-window
+# Mac OS and
+# bind h select-window -t :-
+# bind l select-window -t :+
+
+bind-key r command-prompt -p "Rename Window to: " "rename-window '%%'"
+bind-key R command-prompt -p "Rename Session: " "rename-session '%%'"
+bind M-r refresh-client
+bind C-R source-file ~/.config/tmux/tmux.conf \; display-message "Config reloaded..."
+bind-key v split-window -h
+bind-key s split-window
+# reload config
+
+# auto renumber when windows closed
+set-option -g renumber-windows on
+set -g base-index 1
+#  Theme
+set -g status-bg '#141414'
+set -g status-fg '#ebdbb2' 
+set -g status-interval 1
+
+#set -g status-left '#[fg=red][#[bg=black,fg=cyan]#S#[fg=blue]]'
+# TODO: Seperateme theme file and instead use source-file "theme.conf"
+set-window-option -g window-status-current-style fg='#ebdbb2,bold'
+set -g window-status-current-format '#[bg=#141414]#[fg=#458585]#I #[fg=#458585]#W#[fg=#d79921]#F'
+set -g window-status-format "#[fg=#32302f,bold]#I #[fg=#32302f]#W"
+# Status Left
+set -g status-left-length 20
+set -g status-left '#[bg=#141414]#[fg=#458585]#{?client_prefix,#[bg=#303030],}  '
+# status right
+set -g status-right-length 50
+set -g status-right '#[fg=#ebdbb2,bg=#141414] #(tmux-mem-cpu-load -g 5 --interval 2) '
+set -ga status-right '#[fg=#458588,bg=#141414,bold]UP #(uptime | cut -f 4-5 -d " " | cut -f 1 -d ",") '
+set -ga status-right '#[fg=colour233,bg=#458588,bold] #[fg=#colour245]%d/%m/%Y '
+set -ga status-right '#[fg=colour233,bg=#ff79c6,bold] %H:%M:%S%P '
+# pane border
+set -g pane-border-style fg='#ebdbb2'
+set -g pane-active-border-style fg='#458588'
+set -g message-style bg='#008080',fg='#ebdbb2'

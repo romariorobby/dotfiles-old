@@ -29,7 +29,7 @@ cocexinstall() { \
 ########### SPOTIFY #########
 prepspicetify() { \
   [ -x $(command -v "spotify" "spicetify") ] &&
-  LINUXOS && $aurhelper -S --noconfirm spotify spictify-cli-git genius-spicetify-cli ||
+  LINUXOS && $aurhelper -S --noconfirm spotify spictify-cli genius-spicetify-git
   MACOS && $machelper install --noconfirm spotify #khankhas/tap/spicetify-cli
   spicetify 
 }
@@ -37,6 +37,17 @@ prepspotify_linux() {
   sudo chmod a+wr /opt/spotify 2>/dev/null && echo "Change Permission /opt/spotify: [Done]"
   sudo chmod a+wr /opt/spotify/Apps -R 2>/dev/null && echo "Change Permission /opt/spotify/Apps : [Done]"
 }
+
+insspicetify() { \
+  spicetify
+  cd "$(dirname "$(spicetify -c)")/Themes/dribaqs"
+  cp dribaqs.js ../../Extensions/
+  spicetify config extensions dribaqs.js
+  spicetify config current_theme dribaqs color_scheme dark
+  spicetify config inject_css 1 replace_colors 1 overwrite_assets 1
+  spicetify apply
+}
+
 prepbrew() {
   echo "Installing Homebrew & Updates Dependencies..."
   xcode-select --install
@@ -95,7 +106,7 @@ infresh() {
   $WINOS && ONWIN
 }
 infresh
-installationloop
+# installationloop
 # Base Package
 # pacman -Qqe > ~/.config/listt
 # pkg_installed=$(comm -12 <(pacman -Slq | sort) <(sort ~/.config/listt))

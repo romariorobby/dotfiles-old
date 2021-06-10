@@ -1,0 +1,8 @@
+#!/bin/sh
+
+feed="${1:-$(rbw list | dmenu -l 10 -p 'List: ')}"
+case "$(printf "Copy Username\\nCopy Password\\n" | dmenu -i -p "Do: ")" in
+    "Copy Username") echo "$feed" | xclip -selection clipboard; notify-send "Username Copied" ;;
+    "Copy Password") rbw get "$feed" | xclip -selection clipboard; notify-send "Password Copied" ;;
+esac
+

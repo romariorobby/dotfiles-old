@@ -1,0 +1,61 @@
+#!/bin/sh
+source color.sh
+img="$(playerctl metadata mpris:artUrl)"
+dl_img="$(curl $img -o /tmp/imgncspot.png >/dev/null 2>&1)"
+img_loc="/tmp/imgncspot.png"
+dwm_spotify () {
+    if ps -C spotify > /dev/null; then
+        PLAYER="spotify"
+    elif ps -C ncspot > /dev/null; then
+        PLAYER="ncspot"
+    fi
+
+    if [ "$PLAYER" = "spotify" ] || [ "$PLAYER" = "ncspot" ]; then
+        ARTIST=$(playerctl metadata artist)
+        TRACK=$(playerctl metadata title)
+        POSITION=$(playerctl position | sed 's/..\{6\}$//')
+        DURATION=$(playerctl metadata mpris:length | sed 's/.\{6\}$//')
+        STATUS=$(playerctl status)
+        SHUFFLE=$(playerctl shuffle)
+
+        if [ "$IDENTIFIER" = "unicode" ]; then
+            if [ "$STATUS" = "Playing" ]; then
+                STATUS="${fg_green}"
+            else
+                STATUS=""
+            fi
+            
+            if [ "$SHUFFLE" = "On" ]; then
+                SHUFFLE=""
+            else
+                SHUFFLE=""
+            fi
+        else
+            if [ "$STATUS" = "Playing" ]; then
+                STATUS="${fg_green}"
+            else
+                STATUS=""
+            fi
+
+            if [ "$SHUFFLE" = "On" ]; then
+                SHUFFLE=""
+            else
+                SHUFFLE=""
+            fi
+        fi
+        
+        if [ "$PLAYER" = "ncspot" ]; then
+            printf "%s%s%s %s - %s " "$SEP1" "$STATUS" "$ARTIST" "$TRACK"
+            printf "%0d:%02d" $((DURATION%3600/60)) $((DURATION%60))
+            printf "%s\n" "$SEP2"
+        else
+            printf "%s%s %s - %s " "$SEP1" "$STATUS" "$ARTIST" "$TRACK"
+            printf "%0d:%02d/" $((POSITION%3600/60)) $((POSITION%60))
+            printf "%0d:%02d" $((DURATION%3600/60)) $((DURATION%60))
+            printf "%s%s\n" "$SHUFFLE" "$SEP2"
+        fi
+    fi
+	notify-send "Currently Playing" "$ARTIST - $TRACK" -i "$img_loc";
+	# sigdwmblocks 3;
+}
+dwm_spotify

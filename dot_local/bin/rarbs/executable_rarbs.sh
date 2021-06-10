@@ -151,6 +151,8 @@ npminstall() { \
 
 installationloop() { \
 	([ -f "$progsfile" ] && cp "$progsfile" /tmp/progs.csv) || curl -Ls "$progsfile" | sed '/^#/d' > /tmp/progs.csv
+	# TODO: Make Read from org file del/IFS="|"
+	# ([ -f "$progsfile" ] && cp "$progsfile" /tmp/progs.csv) || curl -Ls "$progsfile" | sed '/^-\|*\|#/d;/^|-/d' > /tmp/progs.csv
 	total=$(wc -l < /tmp/progs.csv)
 	aurinstalled=$(pacman -Qqm)
 	while IFS=, read -r tag program comment; do

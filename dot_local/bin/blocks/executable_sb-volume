@@ -1,9 +1,9 @@
 #!/bin/sh
-
 # Prints the current volume or 🔇 if muted.
-
+source color.sh
+# fg_norm="\x0d"
 case $1 in
-    1) setsid -f "$TERMINAL" -e pulsemixer ; sigdwmblocks 5;;
+    1) setsid -f "$TERMINAL" -e pulsemixer ;;
     2) pamixer -t ; sigdwmblocks 5;;
     4) pamixer --allow-boost -i 1; sigdwmblocks 5;; 
     5) pamixer --allow-boost -d 1; sigdwmblocks 5;;
@@ -13,16 +13,21 @@ case $1 in
     6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-[ $(pamixer --get-mute) = true ] && echo 🔇 && exit
+[ $(pamixer --get-mute) = true ] && echo -ne ${fg_red}ﱝ && exit
 
 vol="$(pamixer --get-volume)"
 
-if [ "$vol" -gt "70" ]; then
-	icon="🔊"
-elif [ "$vol" -lt "30" ]; then
-	icon="🔈"
+if [ "$vol" -ge "90" ]; then
+	icon="${fg_red} ${fg_red}$vol"
+elif [ "$vol" -ge "50" ]; then
+	icon="${fg_yellow} $vol"
+elif [ "$vol" -ge "25" ]; then
+	icon="${fg_green} $vol"
+elif [ "$vol" -le "25" ]; then
+	icon="${fg_red} $vol"
 else
-	icon="🔉"
+	icon="${fg_red}"
 fi
 
-echo "$icon$vol%"
+printf "%b" "$icon"
+# echo -ne "$icon"

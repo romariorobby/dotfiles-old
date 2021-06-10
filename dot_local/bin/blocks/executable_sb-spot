@@ -1,0 +1,6 @@
+#!/bin/sh
+source color.sh
+pid=$(xdotool search --class "spotify" | awk '/56/')
+song=$(xdotool getwindowname $pid)
+printf "%b" "${fg_green} $song"
+

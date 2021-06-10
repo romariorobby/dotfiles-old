@@ -3,17 +3,19 @@
 # this file runs when a DM logs into a graphical sessions.
 # If you use startx/xinit , this file will also be sourced.
 
-# nitrogen --restore &
 # deadd-notification-center &
 # mopidy &
 # dwmblocks &
-chdwmblocks &
+# xrdm preset dark
+# feh --bg-fill --randomize ~/media/images/wallpapers/favourites/* &
+#unclutter --timeout 5 &
+# pulsedaemondwmb &
+dwmutils &
 mpd &
 nm-applet &
-pulsedaemondwmb &
 transmission-daemon &
 setbg &
-sxhkd -c ~/.config/sxhkd/dwm.sxk &
+# sxhkd -c ~/.config/sxhkd/dwm.sxk &
 xcompmgr &
 remaps &
 dunst &

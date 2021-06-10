@@ -16,6 +16,8 @@ x-scheme-handler/obsidian=obsidian.desktop
 x-scheme-handler/org-protocol=org-protocol.desktop
 x-scheme-handler/mailspring=mailspring.desktop
 x-scheme-handler/mailto=mailspring.desktop
+inode/directory=file.desktop;
+inode/directory=filegui.desktop;
 
 [Added Associations]
 image/jpeg=sxiv.desktop;
@@ -26,5 +28,4 @@ application/apkg=anki.desktop;
 x-scheme-handler/trash=exo-file-manager.desktop;
 x-scheme-handler/http=exo-web-browser.desktop;
 x-scheme-handler/https=exo-web-browser.desktop;
-inode/directory=pcmanfm.desktop;
 # application/zip=org.gnome.Nautilus.desktop;

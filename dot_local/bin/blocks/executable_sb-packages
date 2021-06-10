@@ -17,6 +17,7 @@
 # When = PostTransaction
 # Exec = /usr/bin/pkill -RTMIN+8 dwmblocks # Or i3blocks if using i3. / [yadav-dwmblocks] - /usr/local/bin/sigdwmblocks {int} 
 
+source color.sh
 case $1 in
 	1) setsid -f "$TERMINAL" -e sb-popupg ;;
 	2) notify-send "$(/usr/bin/pacman -Qu)"; sigdwmblocks 9 ;;
@@ -26,4 +27,4 @@ case $1 in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-pacman -Qu | grep -Fcv "[ignored]" | sed "s/^/📦/;s/^📦0$//g"
+pacman -Qu | grep -Fcv "[ignored]" | sed "s/^/${fg_blue}${fg_norm} /;s/^ ${fg_norm}0$//g"

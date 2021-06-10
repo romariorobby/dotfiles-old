@@ -1,7 +1,12 @@
 #!/bin/sh
-
-# Prints all batteries, their percentage remaining and an emoji corresponding
-# to charge status (🔌 for plugged up, 🔋 for discharging on battery, etc.).
+source color.sh
+perc=$(acpi -b | awk '/Battery/ {print $4}' | cut -d% -f1)
+time=$(acpi -b | awk '/Battery/ {print " (" substr($5,1,5)")"}')
+is_charging=$(acpi -a | awk '/Adapter/ {print $3}')
+battery=""
+# Backlight
+percbl=$(xbacklight -get | cut -d "." -f1)
+bl=""
 
 case $1 in
 	3) notify-send "🔋 Battery module" "🔋: discharging
@@ -11,30 +16,61 @@ case $1 in
 ⚡: charged
 ❗: battery very low!
 - Scroll to change adjust xbacklight." ;;
-	4) xbacklight -inc 10 ;;
-	5) xbacklight -dec 10 ;;
+	4) xbacklight -inc 5 ;;
+	5) xbacklight -dec 5 ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
+if [ "${is_charging}" = "on-line" ]; then
+    if [ ${perc} -ge "0" ] && [ ${perc} -le "30" ]; then
+		battery="${fg_yellow} ${fg_red}${perc}%${time}"
+	elif [ ${perc} -ge "30" ] && [ ${perc} -le "70" ]; then
+        battery="${fg_yellow} ${fg_orange}${perc}%${time}"
+	elif [ ${perc} -ge "70" ] && [ ${perc} -le "100" ]; then
+        battery="${fg_yellow} ${fg_green}${perc}%${time}"
+	fi
+fi
+if [ ${percbl} -ge "0" ] && [ ${percbl} -le "30" ]; then
+	bl="${fg_green} ${percbl}%"
+elif [ ${percbl} -ge "30" ] && [ ${percbl} -le "70" ]; then
+	bl="${fg_orange}﫜 ${percbl}%"
+elif [ ${percbl} -ge "70" ] && [ ${percbl} -le "100" ]; then
+	bl="${fg_red} ${percbl}%"
+fi
 
-# Check if battery directories are detected
-[ ! -e /sys/class/power_supply/BAT?* ] && echo "No battery found" && exit 1
-
-# Loop through all attached batteries and format the info
-for battery in /sys/class/power_supply/BAT?*
-do
-	# Sets up the status and capacity
-	status=$(cat "$battery/status")
-    time_est=$(acpi -b | awk '/Battery/ {print " (" substr($5,1,5)")"}')
-	case "$status" in
-		"Full") status="⚡" ;;
-		"Discharging") status="🔋" ;;
-		"Charging") status="🔌" ;;
-		"Not charging") status="🛑" ;;
-		"Unknown") status="♻️" ;;
-	esac
-	capacity=$(cat "$battery/capacity")
-	# Will make a warn variable if discharging and low
-	[ "$status" = "🔋" ] && [ "$capacity" -le 25 ] && warn="❗"
-	# Prints the info
-	printf "%s%s%d%%\n%s" "$status" "$warn" "$capacity" "$time_est"; unset warn
-done && exit 0
+if [ "${is_charging}" != "on-line" ]; then
+        battery="${fg_red} ${perc}%${time}"
+    if [ ${perc} -ge "0" ] && [ ${perc} -le "10" ]; then
+        battery="${fg_red} ${perc}%${time}"
+	elif [ ${perc} -ge "10" ] && [ ${perc} -le "20" ]; then
+        battery="${fg_red} ${perc}%${time}"
+	elif [ ${perc} -ge "20" ] && [ ${perc} -le "30" ]; then
+        battery="${fg_red} ${perc}%${time}"
+	elif [ ${perc} -ge "30" ] && [ ${perc} -le "40" ]; then
+        battery="${fg_orange} ${perc}%${time}"
+	elif [ ${perc} -ge "40" ] && [ ${perc} -le "50" ]; then
+        battery="${fg_orange} ${perc}%${time}"
+	elif [ ${perc} -ge "50" ] && [ ${perc} -le "60" ]; then
+        battery="${fg_orange} ${perc}%${time}"
+	elif [ ${perc} -ge "60" ] && [ ${perc} -le "70" ]; then
+        battery="${fg_green} ${perc}%${time}"
+	elif [ ${perc} -ge "70" ] && [ ${perc} -le "80" ]; then
+		battery="${fg_green} ${perc}% ${time}"
+	elif [ ${perc} -ge "80" ] && [ ${perc} -le "90" ]; then
+        battery="${fg_green} ${perc}%${time}"
+	elif [ ${perc} -ge "90" ] && [ ${perc} -le "100" ]; then
+        battery="${fg_green} ${perc}%${time}"
+	fi
+fi
+# if [ "${is_charging}" != "on-line" ]; then
+#         battery="${fg_red} ${perc}%${time}"
+#     if [ ${perc} -le "30" ]; then
+#         battery="${fg_red} ${perc}%${time}"
+#     elif [ ${perc} -le "60" ]; then
+#         battery="${fg_yellow} ${perc}%${time}"
+#     elif [ ${perc} -le "80" ]; then
+#         battery="${fg_orange} ${perc}%${time}"
+#     elif [ ${perc} -le "100" ]; then
+#         battery="${fg_green} ${perc}%${time}"
+#     fi
+# fi
+printf "%b" "$battery""${bl}"

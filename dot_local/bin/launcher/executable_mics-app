@@ -8,6 +8,10 @@ alacritty	alacritty
 calcurse	$TERMINAL -e calcurse
 sc-im	$TERMINAL sc-im
 screenkeys	screenkey
+ferdi	ferdi
+calibre	calibre
+dmenurbw	dmenurbw
+dmenudroid	dmenudroid
 tremc	$TERMINAL -e tremc
 libre	libreoffice"
 choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -i -l 20)" || exit 1
