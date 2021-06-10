@@ -11,12 +11,23 @@ echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 echo "en_US ISO-8859-1" >> /etc/locale.gen
 locale-gen
+NETMD=""
+if [ $(cat archtype.tmp) = "X" ]; then
+    pidof runit && echo "Daemon Using Runit" && NETMD="networkmanager-runit"
+    pidof openrc && echo "Daemon Using openrc" && NETMD="networkmanager-openrc"
+    pidof s6 && echo "Daemon Using s6" && NETMD="networkmanager-s6"
+fi
 
-pacman --noconfirm --needed -S networkmanager openssh
-if [ $(cat installtype.tmp) = "A" ];then
+pacman --noconfirm --needed -S networkmanager $(echo $NETMD) openssh
+
+if [ $(cat archtype.tmp) = "A" ];then
     systemctl enable NetworkManager
     systemctl enable sshd
     systemctl start NetworkManager
+# TODO: make works for all DAEMON TYPE
+else
+    ln -s /etc/runit/sv/NetworkManager /run/runit/service
+    ln -s /etc/runit/sv/sshd /run/runit/service
 fi
 
 if [ $(cat installtype.tmp) = "U" ];then
@@ -34,7 +45,6 @@ usbuefigrub(){
     pacman --noconfirm --needed -S grub efibootmgr mtools dosfstools && grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable --recheck && grub-mkconfig -o /boot/grub/grub.cfg
 }
     
-}
 legacygrub(){
     pacman --noconfirm --needed -S grub && grub-install --target=i386-pc && grub-mkconfig -o /boot/grub/grub.cfg
 }
