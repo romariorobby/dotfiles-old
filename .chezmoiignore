@@ -4,10 +4,12 @@
 .config/pavucontrol.ini
 .config/mimeapps.list
 .config/Dharkael
-.local/share/applications/
-.config/gtk-2.0
 .config/sxhkd
+.config/gtk-2.0
 .config/gtk-3.0
+.config/calcurse
+.config/networkmanager-dmenu
+.config/rofi
 .config/bspwm
 .config/sxhkd
 .config/fontconfig
@@ -17,5 +19,14 @@
 .config/x11
 .xinitrc
 .xprofile
+.local/share/applications/
+.local/bin/blocks
+.local/bin/cron
+.local/bin/launcher
+.local/bin/dmenuumount
+.local/bin/dmenumount
 {{- end }}
 
+
+{{- if eq .chezmoi.os "linux" }}
+{{- end }}

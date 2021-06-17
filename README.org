@@ -1,0 +1,20 @@
+* Installing
+** 
+** App
+- neovim
+- emacs (doom)
+- kitty
+- alacritty
+- tmux 
+- zsh
+- zathura
+- sxiv
+- lf
+- newsboat
+- sxhkd
+- dunst
+- mpv
+- vscodium (VSCode)
+- ncmpcpp
+- tremc
+- mpd
