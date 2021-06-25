@@ -1,0 +1,18 @@
+# vim:ft=toml
+
+#
+# Used to customize configuration when doing a `chezmoi init $repos`.
+#
+
+{{- $name := promptString "Username for Chezmoi" }}
+{{- $git_name := promptString "Git Username for author/commiter" }}
+{{- $git_email := promptString "Git Email Adress for author/commiter" }}
+
+
+[data]
+	name = "{{ $name }}"
+
+	[data.git]
+		name = "{{ $git_name }}"
+		email = "{{ $git_email }}"
+

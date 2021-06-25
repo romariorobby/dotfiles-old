@@ -1,10 +1,10 @@
 [user]
-	email = {{ .email }}
-	name = romariorobby
+	name = {{ .git.name }}
+	email = {{ .git.email }}
 [core]
 	editor = nvim
 [github]
-	user = romariorobby
+	user = {{ .git.name }}
 [alias]
 	g = git
 	b = branch -v

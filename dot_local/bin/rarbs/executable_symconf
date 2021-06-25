@@ -1,5 +1,0 @@
-#!/bin/sh
-ln -sf $HOME/.config/shell/profile  $HOME/.zprofile
-ln -sf $HOME/.config/shell/profile  $HOME/.profile
-ln -sf $HOME/.config/x11/xinitrc  $HOME/.xinitrc
-ln -sf $HOME/.config/x11/xprofile  $HOME/.xprofile

@@ -1,5 +1,5 @@
-# not include if "macOS"
-{{- if eq .chezmoi.os "darwin" }}
+# Ignore non-linux files
+{{- if ne .chezmoi.os "linux" }}
 .config/user-dirs.dirs
 .config/pavucontrol.ini
 .config/mimeapps.list
@@ -27,6 +27,17 @@
 .local/bin/dmenumount
 {{- end }}
 
-
-{{- if eq .chezmoi.os "linux" }}
+# Ignore non-windows files
+{{- if ne .chezmoi.os "windows" }}
+AppData
+Documents
 {{- end }}
+
+#Ignore non-macOS files
+{{- if ne .chezmoi.os "darwin" }}
+.config/skhd
+{{- end }}
+
+# Linux only
+#{{- if eq .chezmoi.os "linux" }}
+#{{- end }}
