@@ -1,0 +1,14 @@
+*.log
+tmp/
+# Compiled Source
+*.o
+*.so
+*.pyc
+*.exe
+*.dll
+
+# OS Crap
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes

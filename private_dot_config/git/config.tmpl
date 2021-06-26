@@ -1,25 +1,62 @@
+# vim:ft=gitconfig
 [user]
 	name = {{ .git.name }}
 	email = {{ .git.email }}
+
+[http]
+	cookieFile = ~/.config/git/cookies
+
 [core]
-	editor = nvim
+	editor = nvim 
+	attributesfile = ~/.config/git/gitattributes
+	excludesile = ~/.config/git/gitignore
+
 [github]
 	user = {{ .git.name }}
-[alias]
-	g = git
-	b = branch -v
-	bd = branch -d
-	bD = branch -D
-	co = checkout
-	com = checkout -m
-	cone = checkout --no-edit
-	coa = checkout --amend
-	coane = checkout --amend --no-edit
-	ci = commit
-	m = merge
-	s = status
-	rh = reset --hard
-	lgr = log --graph --date=relative
-	lo = log --oneline
+
 [init]
-	defaultBranch = main
+#	defaultBranch = main
+
+[credential]
+	helper = cache --timeout=3600
+
+
+[grep]
+	lineNumber = true
+
+[color "grep"]
+	match = cyan bold
+	selected = blue
+	context = normal
+	filename = magenta
+	linenumber = green
+	separator = yellow
+	function = blue
+
+[diff]
+#	mnemonicPrefix = true
+#	wordRegex = "[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+"
+#	compactionHeuristic = true
+	tool = nvimdiff
+
+[color]
+	ui = true
+	
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+
+[include]
+	# Include Aliases
+	path = ~/.config/git/gitaliases
+

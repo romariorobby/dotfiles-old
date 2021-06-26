@@ -1,0 +1,24 @@
+[alias]
+	g = git
+	a = add
+	b = branch -v
+	bd = branch -d
+	bD = branch -D
+	co = checkout
+	com = checkout -m
+	cone = checkout --no-edit
+	coa = checkout --amend
+	coane = checkout --amend --no-edit
+	ci = commit
+	ca = commit --amend
+	cane = commit --amend --no-edit
+	d = diff
+	p = push
+	m = merge
+	s = status
+	rh = reset --hard
+	lgr = log --graph --date=relative
+	lo = log --oneline
+	su = submodule update
+	ra = rebase --abort
+	ri = rebase --interactive
