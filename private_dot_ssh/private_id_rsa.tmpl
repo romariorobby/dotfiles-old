@@ -1,1 +1,3 @@
+{{- if .secret -}}
 {{- (bitwarden "item" "sshpriv").notes -}}
+{{- end -}}

@@ -1,0 +1,60 @@
+{{- if .minimal -}}
+*
+!.config/tmux
+!.config/kitty
+!.config/zsh
+!.config/git
+!.config/shell
+{{- else }}
+
+# Ignore non-linux files
+{{- if ne .chezmoi.os "linux" }}
+.config/user-dirs.dirs
+.config/pavucontrol.ini
+.config/mimeapps.list
+.config/Dharkael
+.config/sxhkd
+.config/gtk-2.0
+.config/gtk-3.0
+.config/calcurse
+.config/networkmanager-dmenu
+.config/rofi
+.config/bspwm
+.config/sxhkd
+.config/fontconfig
+.config/dunst
+.config/Xresources
+.local/bin/blocks
+.config/x11
+.xinitrc
+.xprofile
+.local/share/applications/
+.local/bin/blocks
+.local/bin/cron
+.local/bin/launcher
+.local/bin/dmenuumount
+.local/bin/dmenumount
+media
+repos
+{{- end }}
+
+#Ignore non-macOS files
+{{- if ne .chezmoi.os "darwin" }}
+.config/skhd
+{{- end }}
+
+{{- if not .secret }}
+.ssh
+{{- end }}
+{{- end }}
+
+
+# Ignore non-windows files
+#{{- if ne .chezmoi.os "windows" }}
+#AppData
+#Documents
+#{{- end }}
+
+# Linux only
+#{{- if eq .chezmoi.os "linux" }}
+#{{- end }}
