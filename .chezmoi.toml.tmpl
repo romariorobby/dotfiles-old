@@ -3,16 +3,43 @@
 #
 # Used to customize configuration when doing a `chezmoi init $repos`.
 #
+{{/* Boolean */}}
+{{- $minimal := false -}}
+{{- $secret := true -}}
+{{- "" -}}
 
-{{- $name := promptString "Username for Chezmoi" }}
-{{- $git_name := promptString "Git Username for author/commiter" }}
-{{- $git_email := promptString "Git Email Adress for author/commiter" }}
+{{- $name := "Romario" -}}
+{{- $git_name := "romariorobby" -}}
+{{- $git_email := "romariorobby@yahoo.com" -}}
+
+{{- if (env "SECRETOFF") -}}
+{{- $secret = false -}}
+{{- end -}}
+
+{{- if (env "DOTMIN") -}}
+{{- $minimal = true -}}
+{{- $secret = false -}}
+{{- end }}
+
+{{- if (env "PROMPT") }}
+{{- $minimal = promptBool "minimal" -}}
+{{- if $minimal -}}
+{{- $secret = false -}}
+{{- else }}
+{{- $secret = promptBool "secret" -}}
+{{- end -}}
+
+{{- $name := promptString "Username for Chezmoi" -}}
+{{- $git_name := promptString "Git Username for author/commiter" -}}
+{{- $git_email := promptString "Git Email Adress for author/commiter" -}}
+{{- end -}}
 
 
 [data]
-	name = "{{ $name }}"
-
-	[data.git]
-		name = "{{ $git_name }}"
-		email = "{{ $git_email }}"
+  name = "{{ $name }}"
+  minimal = {{ $minimal }}
+  secret = {{ $secret }}
+    [data.git]
+	  name = "{{ $git_name }}"
+	  email = "{{ $git_email }}"
 

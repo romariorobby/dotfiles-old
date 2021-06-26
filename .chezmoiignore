@@ -1,4 +1,13 @@
-# Ignore non-linux files
+# vim:ft=gitignore
+{{- if .minimal -}}
+*
+!.config/nvim/
+!.config/kitty
+!.config/tmux
+!.config/zsh
+!.config/git
+!.config/shell
+{{- else }}
 {{- if ne .chezmoi.os "linux" }}
 .config/user-dirs.dirs
 .config/pavucontrol.ini
@@ -25,19 +34,11 @@
 .local/bin/launcher
 .local/bin/dmenuumount
 .local/bin/dmenumount
-{{- end }}
-
-# Ignore non-windows files
-{{- if ne .chezmoi.os "windows" }}
-AppData
-Documents
-{{- end }}
-
-#Ignore non-macOS files
-{{- if ne .chezmoi.os "darwin" }}
-.config/skhd
-{{- end }}
-
-# Linux only
-#{{- if eq .chezmoi.os "linux" }}
-#{{- end }}
+media
+exdrive
+repos
+{{- end -}}
+{{- if not .secret -}}
+.ssh
+{{- end -}}
+{{- end -}}
