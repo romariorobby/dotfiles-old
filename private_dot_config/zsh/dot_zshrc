@@ -1,4 +1,4 @@
-#
+# vim:ft=zsh
 #
 # Enable colors and change prompt:
 autoload -U colors && colors	# Load colors
@@ -18,8 +18,24 @@ HISTFILE=~/.cache/zsh/history
 # FZF
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
-#custom fzf
-[ -f $HOME/.local/bin/fzf/binding.zsh ] && source $HOME/.local/bin/fzf/binding.zsh
+
+#MACOS
+# TODO: make more simpler
+if [[ ! "$PATH" == */usr/local/opt/fzf/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}/usr/local/opt/fzf/bin"
+fi
+
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source "/usr/local/opt/fzf/shell/completion.zsh" 2> /dev/null
+
+# Key bindings
+# ------------
+source "/usr/local/opt/fzf/shell/key-bindings.zsh"
+##########
+
+# FIXME: custom fzf (deprecated)
+#[ -f $HOME/.local/bin/fzf/binding.zsh ] && source $HOME/.local/bin/fzf/binding.zsh
 
 # Basic auto/tab complete:
 autoload -U compinit
@@ -71,9 +87,13 @@ openvim() {
 }
 bindkey -s '^o' 'lfcd\n'
 
+# FIXME: NOT WORK ON MACOS 
 bindkey -s '\ef' 'openvim\n'
 
-bindkey -s '^a' 'bc -lq\n'
+#bindkey -s '^a' 'bc -lq\n'
+
+bindkey '^a' backward-word
+bindkey '^e' forward-word
 
 bindkey '^[[P' delete-char
 
@@ -82,6 +102,8 @@ autoload edit-command-line; zle -N edit-command-line
 bindkey '^n' edit-command-line
 
 source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null
+#macOS
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 
 #source /usr/share/zsh/plugins/rbw/rbw.zsh 2>/dev/null
 #source /usr/lib/zsh-git-prompt/zshrc.sh Bitwarden CLI

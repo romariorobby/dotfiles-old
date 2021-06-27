@@ -22,9 +22,27 @@
 - mpd
 ## Installing
 ### Full
-`SECRETOFF=1 chezmoi init https://github.com/romariorobby/dotfiles.git` 
+`SECRETOFF=1 chezmoi init --apply https://github.com/romariorobby/dotfiles.git` 
 ### Minimal
-
-`SECRETOFF=1 DOTMIN=1 chezmoi init https://github.com/romariorobby/dotfiles.git` 
+- shell
+  - zsh
+  - bash
+- tmux
+- kitty
+- neovim
+- git
+- lf
+- emacs
+- **Linux Only**
+- zathura
+- mpv
+- tremc
+- mpd
+- sxiv
+- sxhkd
+- X11
+- Optional:
+  - awesomeWM
+`SECRETOFF=1 DOTMIN=1 chezmoi init --apply https://github.com/romariorobby/dotfiles.git` 
 ### Option
 `SECRETOFF`, `DOTMIN`, `PROMPT`, ~~`WORK`~~
