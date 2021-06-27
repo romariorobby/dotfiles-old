@@ -14,7 +14,6 @@ alias \
 		la="ls -a -hN --color=auto --group-directories-first" \
 		ll="ls -l -hN --color=auto --group-directories-first" \
 		grep="grep --color=auto" \
-		grt="grep -r 'TODO\:\:'" \
 		rm="rm -vI" \
 		xevs='xev |	awk -F"[ )]+" "/^KeyPress/ { a[NR+2] } NR in a { printf \"%-3s %s\n\", \$5, \$8 } "' \
 		xevg="xev | grep -A6 KeyPress"\
@@ -144,8 +143,10 @@ alias \
 		chezdf="chezmoi diff" \
 		chezup="chezmoi -v update"
 #GIT
+# FIXME: REMOVE SOON (deprecated)
 alias \
 		g="git" \
+		lg="lazygit" \
 		gs="git status" \
 		gst="git status" \
 		glr="git log --graph --date=relative" \

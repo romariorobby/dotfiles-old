@@ -1,44 +1,84 @@
 # vim:ft=gitignore
-{{- if .minimal -}}
+
+# Minimal
+{{ if .minimal }}
+#ignore all
 *
-!.config/nvim/
+!.config
+.config/*
+# Except This
+!.config/git
 !.config/kitty
 !.config/tmux
 !.config/zsh
-!.config/git
 !.config/shell
+#!.config/nvim/
+
+{{ if .secret }}
+!.ssh
+{{ end }}
 {{- else }}
+# Full Version
+# Ignore this file if OS != LINUX
 {{- if ne .chezmoi.os "linux" }}
-.config/user-dirs.dirs
-.config/pavucontrol.ini
-.config/mimeapps.list
+.config/awesome
+.config/bspwm
+.config/calcurse
+.config/caffeine
+.config/deadd
+.config/dunst
 .config/Dharkael
-.config/sxhkd
+.config/epy
+.config/fontconfig
 .config/gtk-2.0
 .config/gtk-3.0
-.config/calcurse
+.config/pavucontrol.ini
+.config/mopidy
+.config/ncmpcpp
+.config/sxhkd
 .config/networkmanager-dmenu
 .config/rofi
-.config/bspwm
 .config/sxhkd
-.config/fontconfig
-.config/dunst
-.config/Xresources
-.local/bin/blocks
+.config/tremc
+.config/transmission
+.config/transmission-daemon
 .config/x11
-.xinitrc
-.xprofile
+.config/youtube-dl
+.config/ytfzf
+.config/zathura
+.config/mimeapps.list
+.config/user-dirs.dirs
+
 .local/share/applications/
-.local/bin/blocks
-.local/bin/cron
-.local/bin/launcher
-.local/bin/dmenuumount
-.local/bin/dmenumount
+.local/share/getkeys
+.local/share/
+.local/share/*.png
+.local/share/*.jpg
+# let's just ignore all bin for now for other OSes
+.local/bin
+#.local/bin/blocks
+# FIXME: Ignore cron for now, unknown if this work in other OSes
+#.local/bin/cron
+#.local/bin/launcher
 media
 exdrive
 repos
 {{- end -}}
+
+{{- if ne .chezmoi.os "darwin" }}
+# Ignore this file if OS != darwin
+.config/skhd
+.config/karabiner
+Library
+{{- end }}
 {{- if not .secret -}}
 .ssh
 {{- end -}}
+
+{{- if ne .chezmoi.os "windows" }}
+# Ignore this file if OS != windows
+AppData
+Documents
+{{- end }}
+
 {{- end -}}
