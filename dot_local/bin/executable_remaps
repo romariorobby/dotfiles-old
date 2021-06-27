@@ -3,18 +3,34 @@
 xset r rate 300 50
 
 # Maps capslok to delete key with repeated 
-setxkbmap -option caps:backspace
-setxkbmap -option shift:both_capslock
+setxkbmap -option caps:backspace -option shift:both_capslock
 xmodmap -e "clear Lock"
-# TODO and i want this to be change one only pressed caps to esc But not work
-#killall xcape 2>/dev/null ; xcape -e 'BackSpace=Escape'
-# Fn to Escape
-killall xcape 2>/dev/null ; xcape -e 'XF86WakeUp=Escape'
-# Map the menu button (on the righ) to right Super 
+
+# Alt-R as mod3 not work with sxhkd
+# xmodmap -e "remove mod1 = Alt_R" -e "add mod3 = Alt_R"
+
+# Add Control_L as mod3 and map Contorl_L -> Alt_L
+xmodmap -e "remove Control = Control_R" -e "remove mod1 = Alt_R" -e "keycode 105 = Alt_R" -e "keycode 108 = Control_R" -e "add mod3 = Control_R"
+
+# ctrl_r/alt_r+hjkl
+xmodmap -e "keycode 108 = Mode_switch"
+xmodmap -e "keycode 43 = h H Left Left Left"
+xmodmap -e "keycode 44 = j J Down Down Down"
+xmodmap -e "keycode 45 = k K Up Up Up"
+xmodmap -e "keycode 46 = l L Right Right Right"
+
+#########################################
+# Maps caps lock to super
+#keycode 135 = Super_R
+# Map the menu button to right super
 #xmodmap -e 'keycode 135 = Super_R'
+#xmodmap -e 'clear Mod1' -e 'add Mod1 = Alt_L'
+#xmodmap -e 'add Mod3 = Alt_R'
+#####################################
+# killall xcape 2>/dev/null ; xcape -e 'Control_L=Escape'
 # Turn off the caps lock if on since there is no longer a key for it.
 xset -q | grep "Caps Lock:\s*on" && xdotool key Caps_Lock
 # Quick switch between (Alt+Space) default Layout and Dvorak Programmer (Required Dvorak Programmer)
+# I added to aliases now. check shell alias
 # required: yay -S programmer-dvorak
-setxkbmap -layout us,us -variant ,dvp -option "lv3:rwin_switch,grp:alt_space_toggle"
-
+# setxkbmap -layout us,us -variant ,workman -option "lv3:rwin_switch,grp:alt_space_toggle"
