@@ -1,0 +1,202 @@
+" This file goes to:
+" - .config/vieb/viebrc
+" - Library/Application Support/Vieb/viebrc
+" Options
+set adblocker=static
+set cache=clearonquit
+set noclearcookiesonquit
+set nocleardownloadsoncompleted
+set nocleardownloadsonquit
+set noclearhistoryonquit
+set noclearlocalstorageonquit
+set noclosablepinnedtabs
+set containercolors=temp\d+~#ff0
+set containerkeeponreopen
+set containernewtab=s:usecurrent
+set containershowname=automatic
+set containersplitpage=s:usecurrent
+set containerstartuppage=main
+set countlimit=100
+set devtoolsposition=window
+set downloadmethod=ask
+{{ if ne .chezmoi.os "darwin" }}
+set downloadpath=~/downloads/
+{{ else }}
+set downloadpath=~/Downloads/
+{{ end }}
+set externalcommand=dmenuhandler
+set favicons=session
+set favoritepages=github.com,youtube.com,archlinux.org
+set firefoxmode=google
+set follownewtabswitch
+set fontsize=14
+set guifullscreennavbar=oninput
+set guifullscreentabbar=onupdate
+set guihidetimeout=10000
+set guinavbar=always
+set guitabbar=always
+set keeprecentlyclosed=true
+set ignorecase
+set incsearch
+set maxmapdepth=10
+set mintabwidth=28
+set mouse
+set nomousefocus
+set mousenewtabswitch
+set nonativenotification
+set notificationduration=6000
+set nonotificationforpermissions
+set notificationposition=bottomright
+set permissioncamera=block
+set permissionclipboardread=block
+set permissionclosepage=allow
+set permissiondisplaycapture=block
+set permissionfullscreen=allow
+set permissiongeolocation=block
+set permissionmediadevices=ask
+set permissionmicrophone=block
+set permissionmidi=block
+set permissionmidisysex=block
+set permissionnotifications=ask
+set permissionopenexternal=ask
+set permissionpersistentstorage=ask
+set permissionpointerlock=block
+set permissionsallowed+=youtube.com~mediadevices
+set permissionsasked=
+set permissionsblocked=
+set permissionunknown=block
+set redirects=https?://(www\.)?google\.com(\.\w+)?/amp/s/amp\.(.*)~https://$3
+set noredirecttohttp
+set requesttimeout=20000
+set respectsitecontextmenu
+set restoretabs=true
+set restorewindowmaximize
+set restorewindowposition
+set restorewindowsize
+set search=https://duckduckgo.com/?kae=d&kav=1&ko=1&q=%s&ia=web
+set searchwords=
+set showcmd
+set spell
+set spelllang=system
+set splitbelow
+set splitright
+set startuppages=
+set storenewvisits
+set suggestcommands=9000000000000000
+set suggestfiles=all
+set nosuggestfilesfirst
+set suggestexplore=20
+set suggesttopsites=0
+set suspendonrestore=none
+set suspendtimeout=0
+set notabclosefocusright
+set tabcycle
+set tabnexttocurrent
+set taboverflow=scroll
+set tabreopenposition=right
+set timeout
+set timeoutlen=1000
+set vimcommand="kitty -- nvim"
+set windowtitle=simple
+
+" Commands
+colorscheme gruvboxaqs
+" Navigation
+nmap <Space>h <C-w>h
+nmap <Space>j <C-w>j
+nmap <Space>k <C-w>k
+nmap <Space>l <C-w>l
+" Resizing
+nmap + <C-w>>
+nmap _ <C-w><lt>
+nmap = <C-w>+
+nmap - <C-w>-
+" Reset Zoom
+nmap <C-BS> <C-0>
+nmap <C-=> <action.zoomIn>
+nmap <C--> <action.zoomOut>
+" Keybinding
+nmap <Space>v <:vsplit>
+nmap <Space>s <:split>
+nmap ZX <:quitall>
+nmap <Space>q <:quitall>
+nmap <Space>/ <action.emptySearch>
+" Idk if this works
+" Unmmping
+" nmap <Tab> <Nop>
+fmap <Tab> <action.reorderFollowLinks>
+nmap <Tab> <action.nextTab>
+nmap <S-Tab> <action.previousTab>
+"
+" Action
+nmap <Space>ad <:downloads>
+nmap <Space>ax <:devtools>
+nmap <Space>ac <:cookies>
+nmap <Space>ae <:extensions>
+nmap <Space>an <:notifications>
+nmap <Space>ah <:history>
+nmap <Space>aR <:reload>
+nmap <Space>ar <:restart>
+nmap <Space>aq <:quitall>
+" Menu map action
+mmap <CR> <action.menuSelect>
+mmap <Esc> <action.menuClose>
+mmap <C-[> <action.menuClose>
+mmap <C-n> <action.menuDown>
+mmap <C-p> <action.menuUp>
+mmap <C-j> <action.menuDown>
+mmap <C-k> <action.menuUp>
+" External app
+imap <C-o> <action.editWithVim>
+" pmap B <action.openNewTab>
+" pmap N <action.openNewTab>
+pmap B <action.startFollowNewTab>
+pmap F <action.startFollowNewTab>
+pmap N <action.startFollowNewTab>
+pmap <Space>oo <:set externalcommand=dmenuhandler><action.openLinkExternal>
+pmap <Space>od <:set externalcommand=ytd><action.openLinkExternal>
+pmap <Space>om <:set externalcommand=ytaqs><action.openLinkExternal>
+nmap <Space>oo <:set externalcommand=dmenuhandler><action.openLinkExternal>
+nmap <Space>om <:set externalcommand=ytaqs><action.openLinkExternal>
+vmap <Space>om <:set externalcommand=ytaqs><action.openLinkExternal>
+
+" TOggle
+nmap <Space>tb <:set guitabbar=never>
+nmap <Space>tB <:set guitabbar=always>
+" Buffer 
+nmap t <Nop>
+nmap T <Nop> 
+nmap <Space>bn <action.openNewTab>
+nmap <Space>bN <action.openNewTabWithCurrentUrl>
+nmap <Space>bP <action.openFromClipboard>
+nmap <Space>bp <:pin>
+nmap <Space>bl <action.nextTab>
+nmap <Space>bh <action.previousTab>
+nmap <Space>bc <action.closeTab>
+nmap <Space>bd <action.closeTab>
+nmap <Space>bs <:set guitabbar=never>
+nmap <Space>bS <:set guitabbar=always>
+nmap <Space>by <action.pageToClipboard>
+nmap <Space>bm <:mute> 
+nmap <Space>bg <:buffer 0>
+nmap <Space>b<1> <:buffer 0>
+nmap <Space>b<2> <:buffer 1>
+nmap <Space>b3 <:buffer 2>
+nmap <Space>b4 <:buffer 3>
+nmap <Space>b5 <:buffer 4>
+" Pointer
+pmap <CR> <pointer.leftClick>
+pmap m <pointer.rightClick>
+" d for Download
+nmap <Space>dd <:downloads>
+pmap <Space>di <pointer.downloadImage>
+pmap <Space>dl <pointer.downloadLink>
+pmap x <pointer.inspectElement>
+pmap y <pointer.copyAndStop>
+pmap 0 <action.scrollPageLeft>
+"
+vmap m <pointer.rightClick>
+vmap c <pointer.copyAndStop>
+vmap y <pointer.copyAndStop>
+" Viebrc generated by Vieb
+" vim: ft=vim
