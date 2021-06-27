@@ -1,3 +1,6 @@
+" This file goes to:
+" - .config/vieb/viebrc
+" - Library/Application Support/Vieb/viebrc
 " Options
 set adblocker=static
 set cache=clearonquit
@@ -16,7 +19,11 @@ set containerstartuppage=main
 set countlimit=100
 set devtoolsposition=window
 set downloadmethod=ask
-set downloadpath=~/downloads/
+{{- if ne .chezmoi.os "darwin" }}
+"set downloadpath=~/downloads/
+{{ else }}
+"set downloadpath=~/Downloads/
+{{ end }}
 set externalcommand=dmenuhandler
 set favicons=session
 set favoritepages=github.com,youtube.com,archlinux.org
@@ -114,13 +121,13 @@ nmap <Space>s <:split>
 nmap ZX <:quitall>
 nmap <Space>q <:quitall>
 nmap <Space>/ <action.emptySearch>
-" Idk if this works {{
+" Idk if this works
 " Unmmping
 " nmap <Tab> <Nop>
 fmap <Tab> <action.reorderFollowLinks>
 nmap <Tab> <action.nextTab>
 nmap <S-Tab> <action.previousTab>
-" }}
+"
 " Action
 nmap <Space>ad <:downloads>
 nmap <Space>ax <:devtools>

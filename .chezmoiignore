@@ -42,6 +42,9 @@
 .config/tremc
 .config/transmission
 .config/transmission-daemon
+# Shared Template
+.config/Vieb
+
 .config/x11
 .config/youtube-dl
 .config/ytfzf
@@ -67,6 +70,7 @@ repos
 
 {{- if ne .chezmoi.os "darwin" }}
 # Ignore this file if OS != darwin
+Library/Application Support/Vieb
 .config/skhd
 .config/karabiner
 Library
