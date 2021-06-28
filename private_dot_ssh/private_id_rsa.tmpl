@@ -1,7 +1,7 @@
 {{- if .secret -}}
 {{-   if (eq .chezmoi.os "linux") }}
-{{-     (bitwarden "item" "sshpriv").notes -}}
+{{-     (bitwarden "item" "archlaptop-sshpriv").notes -}}
 {{-   else if (eq .chezmoi.os "darwin") }}
-{{-     (bitwarden "item" "sshprivmac").notes -}}
+{{-     (bitwarden "item" "macbook-sshpriv").notes -}}
 {{-   end -}}
 {{- end -}}
