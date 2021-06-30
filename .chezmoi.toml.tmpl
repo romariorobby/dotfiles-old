@@ -33,6 +33,10 @@
 {{- $git_email := promptString "Git Email Adress for author/commiter" -}}
 {{- end -}}
 
+# GPG
+encryption = "gpg"
+[gpg]
+  symmetric = "true"
 
 [data]
   name = "{{ $name }}"

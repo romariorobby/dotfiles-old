@@ -46,3 +46,5 @@
 `SECRETOFF=1 DOTMIN=1 chezmoi init --apply https://github.com/romariorobby/dotfiles.git` 
 ### Option
 `SECRETOFF`, `DOTMIN`, `PROMPT`, ~~`WORK`~~
+### TODO
+- [ ] Add Pass to ssh,chezmoi template.

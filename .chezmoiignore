@@ -2,17 +2,53 @@
 
 # Minimal
 {{ if .minimal }}
-#ignore all
+# Ignore All
 *
+# re-including and re-excluding
 !.config
 .config/*
-# Except This
-!.config/git
+
+# adding on all OSes
 !.config/kitty
 !.config/tmux
 !.config/zsh
 !.config/shell
+!.config/lf
 #!.config/nvim/
+
+# re-including and re-excluding
+!.local
+!.local/share
+.local/share/*
+!.local/bin
+.local/bin/*
+
+# adding on all OSes
+!.local/bin/compiler
+!.local/bin/opout
+!.local/bin/texclear
+!.local/share/vault/
+
+{{ if eq .chezmoi.os "linux" -}}
+# adding only linux
+!.config/x11
+!.local/bin/cron
+!.local/bin/remaps
+!.local/bin/xrdm
+!.local/bin/shortcut
+!.local/bin/wig
+!.local/bin/camtoggle
+!.local/bin/dwmutils
+!.local/bin/ext
+{{ end }}
+
+{{- if eq .chezmoi.os "darwin" -}}
+# adding only linux
+{{ end }}
+
+{{- if eq .chezmoi.os "windows" -}}
+# adding only windows
+{{ end }}
 
 {{ if .secret }}
 !.ssh
