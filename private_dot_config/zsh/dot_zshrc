@@ -111,6 +111,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/d
 [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/bitwarden/email" ] && export BW_EMAIL=$(cat ~/.local/share/bitwarden/email)
 [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/bitwarden/clientid" ] && export BW_CLIENTID=$(cat ~/.local/share/bitwarden/clientid)
 [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/bitwarden/clientsecret" ] && export BW_CLIENTSECRET=$(cat ~/.local/share/bitwarden/clientsecret)
+# export BW_SESSION="$(bw login BW_EMAIL $BW_MASTER --raw)"
 # export BW_SESSION="$(bw unlock $BW_MASTER 2>/dev/null | grep 'export' | sed -E 's/.*export BW_SESSION="(.*==)"$/\1/')"
 #
 kitty + complete setup zsh | source /dev/stdin

@@ -14,6 +14,7 @@
 !.config/zsh
 !.config/shell
 !.config/lf
+!.config/Vieb
 #!.config/nvim/
 
 # re-including and re-excluding
@@ -43,7 +44,10 @@
 {{ end }}
 
 {{- if eq .chezmoi.os "darwin" -}}
-# adding only linux
+# adding only OSX
+!Library/*
+!Library/Application Support/*
+!Library/Application Support/Vieb/*
 {{ end }}
 
 {{- if eq .chezmoi.os "windows" -}}
@@ -53,6 +57,7 @@
 {{ if .secret }}
 !.ssh
 {{ end }}
+
 {{- else }}
 # Full Version
 # Ignore this file if OS != LINUX
