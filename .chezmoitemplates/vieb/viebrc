@@ -20,11 +20,11 @@ set countlimit=100
 set devtoolsposition=window
 set downloadmethod=ask
 {{- if ne .chezmoi.os "darwin" }}
-"set downloadpath=~/downloads/
+set downloadpath=~/Downloads/
 {{ else }}
-"set downloadpath=~/Downloads/
-{{ end }}
+set downloadpath=~/downloads/
 set externalcommand=dmenuhandler
+{{ end }}
 set favicons=session
 set favoritepages=github.com,youtube.com,archlinux.org
 set firefoxmode=google
@@ -119,7 +119,7 @@ nmap <C--> <action.zoomOut>
 nmap <Space>v <:vsplit>
 nmap <Space>s <:split>
 nmap ZX <:quitall>
-nmap <Space>q <:quitall>
+nmap <Space>Q <:quitall>
 nmap <Space>/ <action.emptySearch>
 " Idk if this works
 " Unmmping
