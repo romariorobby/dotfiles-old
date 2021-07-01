@@ -3,8 +3,9 @@
 
 [[ $(which "dwmblocks") && $(pgrep "dwmblocks") ]] && killall -q dwmblocks && setsid -f dwmblocks || dwmblocks &
 
-[[ $(which "deadd-notification-center") && $(pgrep "deadd-notification-center") ]] && killall -q deadd-notification-center && setsid -f deadd-notification-center || deadd-notification-center >/dev/null 2>&1 &
+#[[ $(which "deadd-notification-center") && $(pgrep "deadd-notification-center") ]] && killall -q deadd-notification-center && setsid -f deadd-notification-center || deadd-notification-center >/dev/null 2>&1 &
 
-[ $(pgrep "sxhkd") ] && killall -q sxhkd && setsid -f sxhkd -c ~/.config/sxhkd/dwm.sxk || sxhkd -c ~/.config/sxhkd/dwm.sxk &
+#[ $(pgrep "sxhkd") ] && killall -q sxhkd && setsid -f sxhkd -c ~/.config/sxhkd/dwm.sxk || sxhkd -c ~/.config/sxhkd/dwm.sxk &
 
+[ ! -d "~/.cache/dwm" ] && mkdir ~/.cache/dwm
 dwm 2> ~/.cache/dwm/dwm-log

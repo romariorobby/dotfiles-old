@@ -13,6 +13,7 @@
 !.config/tmux
 !.config/zsh
 !.config/shell
+!.config/git
 !.config/lf
 !.config/Vieb
 #!.config/nvim/
@@ -33,7 +34,9 @@
 {{ if eq .chezmoi.os "linux" -}}
 # adding only linux
 !.config/x11
+!.config/sxhkd
 !.local/bin/cron
+!.local/bin/blocks
 !.local/bin/remaps
 !.local/bin/xrdm
 !.local/bin/shortcut
