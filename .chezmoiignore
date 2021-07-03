@@ -33,6 +33,10 @@
 {{ if eq .chezmoi.os "linux" -}}
 # adding only linux
 !.config/Vieb
+!.config/newsboat
+!.config/mpv
+!.config/zathura
+!.config/dunst
 !.config/x11
 !.config/sxhkd
 !.local/bin/cron
