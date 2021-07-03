@@ -3,14 +3,9 @@
 # this file runs when a DM logs into a graphical sessions.
 # If you use startx/xinit , this file will also be sourced.
 
-# deadd-notification-center &
-# mopidy &
-# dwmblocks &
 # xrdm preset dark
 # feh --bg-fill --randomize ~/media/images/wallpapers/favourites/* &
 #unclutter --timeout 5 &
-# pulsedaemondwmb &
-dwmutils &
 mpd &
 nm-applet &
 transmission-daemon &
@@ -23,7 +18,6 @@ caffeine &
 dropbox &
 emacs --daemon && emacsclient -c --eval "(org-roam-dailies-find-today)" &
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
-#volumeicon &
 #xrdb ${XDG_CONFIG_HOME:$HOME/.config}/x11/xresources & # Uncomment to user Xresources color/settings on startup 
 # blueman-applet &
 # udiskie -s &

@@ -1,0 +1,38 @@
+#!/bin/sh
+# Color Based on my DWM Color array.
+# Statuscolor
+dir="$HOME/media/software/suckless/scratch/patch.h"
+check="$(grep DWMBLOCKS_PATCH $dir | awk '{print $3}')"
+if [ $check == 1 ];then
+    notify-send "DWMBLOCKS_PATCH ACTIVATE"
+    # statuscolor="$()" && echo "Activated "|| echo "Off"
+    fg_norm="\x15"
+    # fg_norm="\x0f"
+    ##
+    fg_red="\x19"
+    bg_red="\x2a"
+    ##
+    fg_green="\x1a"
+    bg_green="\x18"
+    ##
+    fg_yellow="\x1c"
+    bg_yellow="\x19"
+    ##
+    fg_orange="\x1d"
+    bg_orange="\x1a"
+    ##
+    fg_aqua="\x1e"
+    bg_aqua="\x1b"
+    ##
+    fg_purple="\x1e"
+    bg_purple="\x15"
+    ##
+    fb_gray=""
+    bg_gray=""
+    ##
+    fg_blue="\x1b"
+    bg_blue="\x16"
+else
+    echo "status2d not configured yet"
+fi
+# Status2D
