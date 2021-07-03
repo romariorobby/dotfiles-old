@@ -2,10 +2,13 @@
 
 #
 # Used to customize configuration when doing a `chezmoi init $repos`.
+# by default password manager using `pass` alternatively using `bitwarden`
 #
 {{/* Boolean */}}
 {{- $minimal := false -}}
 {{- $secret := true -}}
+
+{{- $bw := false -}}
 {{- "" -}}
 
 {{- $name := "Romario" -}}
@@ -14,6 +17,10 @@
 
 {{- if (env "SECRETOFF") -}}
 {{- $secret = false -}}
+{{- end -}}
+
+{{- if (env "BW") -}}
+{{- $bw = true -}}
 {{- end -}}
 
 {{- if (env "DOTMIN") -}}
@@ -42,6 +49,7 @@ encryption = "gpg"
   name = "{{ $name }}"
   minimal = {{ $minimal }}
   secret = {{ $secret }}
+  bw = {{ $bw }}
     [data.git]
 	    name = "{{ $git_name }}"
 	    email = "{{ $git_email }}"
