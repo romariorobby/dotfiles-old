@@ -2,7 +2,6 @@
 
 #
 # Used to customize configuration when doing a `chezmoi init $repos`.
-# by default password manager using `pass` alternatively using `bitwarden`
 #
 {{/* Boolean */}}
 {{- $minimal := false -}}
@@ -19,6 +18,7 @@
 {{- $secret = false -}}
 {{- end -}}
 
+# FIXME: There no reason to use this, if theres no alternative password manager
 {{- if (env "BW") -}}
 {{- $bw = true -}}
 {{- end -}}

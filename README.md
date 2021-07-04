@@ -47,4 +47,4 @@
 ### Option
 `SECRETOFF`, `DOTMIN`, `PROMPT`, ~~`WORK`~~
 ### TODO
-- [ ] Add Pass to ssh,chezmoi template.
+- [ ] Fix pass 
