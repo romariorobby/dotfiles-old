@@ -49,6 +49,10 @@
 !.local/bin/camtoggle
 !.local/bin/dwmutils
 !.local/bin/ext
+!.local/share/applications
+!.local/share/applications/*
+!.local/bin/adbwifi
+!.local/bin/prompt
 {{ end }}
 
 {{- if eq .chezmoi.os "darwin" -}}
