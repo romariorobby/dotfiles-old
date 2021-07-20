@@ -13,6 +13,7 @@
 	ca = commit --amend
 	cane = commit --amend --no-edit
 	d = diff
+	dt = difftool
 	p = push
 	m = merge
 	s = status

@@ -91,12 +91,11 @@ alias \
 		#abook="abook --config "XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DATA_HOME"/abook/addressbook" \
 # Tmux
 alias \
-		tm="tmux" \
-		tmk="tmux kill-session" \
-		tn="tmux new -t " \
-		tms="tmux ls" \
-		tmd="tmux detach" \
-		tma="tmux attach -t " 
+		tm="tmux new-session -A -s" \
+		tmks="tmux kill-session -t" \
+		tmns="tmux new -t " \
+		tmls="tmux ls" \
+		tmas="tmux attach -t" 
 alias \
 		yt="youtube-dl" \
 		yt-f="youtube-dl -f" \
