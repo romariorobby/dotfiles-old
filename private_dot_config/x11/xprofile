@@ -16,9 +16,12 @@ remaps &
 dunst &
 caffeine &
 dropbox &
-emacs --daemon && emacsclient -c --eval "(org-roam-dailies-find-today)" &
+# emacs --daemon && emacsclient -c --eval "(org-roam-dailies-find-today)" &
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 #xrdb ${XDG_CONFIG_HOME:$HOME/.config}/x11/xresources & # Uncomment to user Xresources color/settings on startup 
 # blueman-applet &
 # udiskie -s &
 # xdman &
+pidof -s runit &&
+	! pidof -s pulseaudio >/dev/null 2>&1 &&
+	setsid -f pulseaudio --start --exit-idle-time=-1 >/dev/null 2>&1
