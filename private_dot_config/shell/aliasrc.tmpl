@@ -58,6 +58,7 @@ alias \
 		v="nvim" \
 		vim="nvim" \
 		vimm="vim"\
+		mirror="scrcpy --shortcut-mod=lalt+lctrl" \
 		bwin='bw login $(echo $BW_EMAIL $BW_MASTER)'\
 		bwout="bw logout"\
 		bwg="bw get"\
@@ -198,3 +199,20 @@ pkgins() {
 		pacman -S "$"
 	fi
 }
+
+dvorak(){
+	if [ "$(uname -s)" == "Darwin" ];then
+		echo "Mac goes here.." 
+	else
+		setxkbmap -layout us,us -varian ,dvorak -option "lv3:rwin_switch,grp:alt_space_toggle
+	fi
+}
+
+workman(){
+	if [ "$(uname -s)" == "Darwin" ];then
+		echo "Mac goes here.." 
+	else
+		setxkbmap -layout us,us -varian ,workman -option "lv3:rwin_switch,grp:alt_space_toggle
+	fi
+}
+
