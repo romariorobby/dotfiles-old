@@ -1,3 +1,6 @@
 [submodule "private_dot_config/private_mpv/scripts/mpvSockets"]
 	path = private_dot_config/private_mpv/scripts/mpvSockets
 	url = https://github.com/wis/mpvSockets.git
+[submodule ".emacs.d"]
+	path = .emacs.d
+	url = https://github.com/plexus/chemacs2

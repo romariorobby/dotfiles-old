@@ -14,10 +14,10 @@
 :END:
 #+begin_src emacs-lisp
 ;; Variables Directory
-(setq mario/org-agenda-dir (file-truename "~/media/documents/notes/roam/gtd/")
-      mario/org-dir (file-truename "~/media/documents/notes/")
-      mario/org-journal-dir (file-truename "~/media/documents/notes/roam/private/daily/")
-      mario/org-roam-dir (file-truename "~/media/documents/notes/roam/"))
+(setq mario/org-agenda-dir (file-truename "~/documents")
+      mario/org-dir (file-truename "~/documents")
+      mario/org-journal-dir (file-truename "~/documents")
+      mario/org-roam-dir (file-truename "~/documents"))
 #+end_src
 * Functions
 ** Generating Config
@@ -122,13 +122,13 @@ With a prefix ARG always prompt for command to use."
 (setq doom-theme 'mario-gruvbox
       doom-gruvbox-dark-variant "hard"
       doom-scratch-initial-major-mode 'org-mode
-      doom-font (font-spec :family "SF Mono" :size 15)
-      doom-variable-pitch-font (font-spec :family "ETbb" :size 24)
-      doom-serif-font (font-spec :family "ETbb" :size 24)
+      doom-font (font-spec :family "monospace" :size 15)
+      doom-variable-pitch-font (font-spec :family "monospace" :size 24)
+      doom-serif-font (font-spec :family "monospace" :size 24)
       fancy-splash-image (concat doom-private-dir "themes/splash.png"))
 (setq user-full-name "Romario"
       user-mail-address "romario@com")
-(setq-ddefault major-mode 'org-mode)
+(setq-default major-mode 'org-mode)
 
 (setq display-line-numbers-type nil            ; turn off line number , you can toggle it with <leader>tl
       undo-limit 80000000                         ; Raise undo-limit to 80Mb
@@ -464,6 +464,7 @@ With a prefix ARG always prompt for command to use."
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-graph-exclude-matcher "private"
         org-roam-tag '(prop last-directory)
+        org-roam-v2-ack t
         org-id-link-to-org-use-id t)
   :config
   (setq org-roam-capture-templates
