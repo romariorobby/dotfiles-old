@@ -30,21 +30,10 @@ alias \
 		...="cd ../.." \
 		ka="killall"
 {{ if (eq .chezmoi.os "linux") }}
-# Arch-Pacman-yay
+# Arch-Pacman-AUR
 alias \
-		sup="sudo pacman" \
 		pgbl="sudo pacman -Sgg | grep blackarch | cut -d ' ' -f2 | sort -u" \
 		pbl="sudo pacman -Sg | grep blackarch" \
-		pqq="pacman -Qq" \
-		pqq="pacman -Qq" \
-		pqqc="pacman -Qq | wc -l" \
-		ps="sup -S" \
-		pqs="sup -Qs" \
-		ys="yay -S " \
-		yqu="yay -Qu " \
-		yqs="yay -Qs " \
-		ysy="yay -Syy " \
-		ysyu="yay -Syyu " \
 		fsups="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S" \
 		fys="yay -Slq | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
 {{ end }}
@@ -166,7 +155,8 @@ alias \
 		grm="git remote" \
 		gin="git init" \
 		ginB="git init --bare"
-
+alias \
+		emacsd="emacs --with-profile doom" \
 #GIT BARE
 #alias \
 #		rdf="/usr/bin/git --git-dir=$HOME/repos/mario/bare/dotfiles/ --work-tree=$HOME" \
