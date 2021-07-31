@@ -1,0 +1,51 @@
+#!/bin/bash
+#pomodoro
+recSound="$HOME/Downloads/sounds/"
+startSound="$HOME/Downloads/sounds/"
+breakSound="$HOME/Downloads/sounds/"
+exitSound="$HOME/Downloads/sounds/"
+musicUrl="$HOME/Downloads/sounds/link"
+mpvarg="mpv --really-quiet --no-resume-playback --volume=100"
+
+eval "$mpvarg $startSound"
+
+recordTomato () {
+notify-send -u critical "pomodoro" "break"
+exec 3>&1
+exec 3>&-;
+runBreak
+}
+
+runTomato () {
+notify-send -u critical "pomodoro" "Start tomato"
+randomizeUrl=$(cat $musicUrl | shuf -n1)
+  seconds=1500;
+  date1=$((`date +%s` + seconds));
+while [ "$date1" -ge "$(date +%s)" ];
+do
+  dialog --infobox "Work for $(date -u --date @$(($date1 - `date +%s` )) +%H:%M:%S)" 10 30 ; sleep 1
+done
+eval "$mpvarg $recSound"
+recordTomato
+}
+
+runBreak () {
+#setsid -f mpv --title="vid-pomodoro" --really-quiet --no-resume-playback --volume=100\
+#	--ytdl-format="bestvideo[height<=?360]+bestaudio/best"\
+#	"$randomizeUrl" &
+seconds=300;
+date1=$((`date +%s` + seconds));
+while [ "$date1" -ge "$(date +%s)" ];
+do
+  dialog --infobox "Nice work
+  Now you're on break!
+  rest for $(date -u --date @$(($date1 - "$(date +%s)" )) +%H:%M:%S)" 0 0
+  sleep 1
+done
+kill $(xprop -name "vid-pomodoro" _NET_WM_PID) > /dev/null
+eval "$mpvarg $recSound"
+# TODO: Prompt to continue?
+dialog --title "Continue" --timeout 600 --msgbox "Continue?"  6 30 && eval "$mpvarg $breakSound" && runTomato && killall mpv || eval "$mpvarg $exitSound" && clear; exit 0
+}
+
+runTomato

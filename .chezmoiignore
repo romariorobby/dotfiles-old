@@ -33,9 +33,11 @@
 {{ if eq .chezmoi.os "linux" -}}
 # adding only linux
 !.config/Vieb
+!.config/mimeapps.list
 !.config/newsboat
 !.config/fontconfig
 !.config/mpv
+!.config/sxiv
 !.config/zathura
 !.config/dunst
 !.config/x11
