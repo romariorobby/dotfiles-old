@@ -1,58 +1,64 @@
-#+TITLE: Emacs Config
+#+TITLE: Vanilla Emacs Configuration
+#+AUTHOR: Romario
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el
-* UI 
-  #+begin_src emacs-lisp
-    (setq-default major-mode 'org-mode) ;; default major mode org-mode
-    (setq inhibit-startup-message t)
-    (scroll-bar-mode -1) ;; Disable Visual Scrolbar
-    (tool-bar-mode -1) ;; Disable toolbar
-    (tooltip-mode -1) ;; Disable tooltips
-    (menu-bar-mode -1) ;; Disable Menubar
-    (column-number-mode)
-    (global-display-line-numbers-mode t) ;; Line number
-  (dolist (mode '(org-mode-hook
-		  term-mode-hook
-		  eshell-mode-hook))
-    (add-hook-mode (lambda () (display-line-numbers-mode 0))))
-    (setq scroll-conservatively 101) ;; value greater than 100 gets rid of half page jumping
-    (setq mouse-wheel-scroll-amount '(3 ((shift) . 3))) ;; how many lines at a time
-    (setq mouse-wheel-progressive-speed t) ;; accelerate scrolling
-    (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-  #+end_src
-* Init
-  #+begin_src emacs-lisp
-  (require 'package)
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			   ("org" . "https://orgmode.org/elpa/")
-			   ("elpa" . "https://elpa.gnu.org/packages/")))
-  (package-initialize)
-  (unless package-archive-contents
-    (package-refresh-contents))
+* Use Packages
+#+begin_src emacs-lisp
+(require 'package)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
 
-  (unless (package-installed-p 'use-package)
-     (package-install 'use-package))
-  (require 'use-package)
-  (setq use-package-always-ensure t)
-  #+end_src
-* Var Dir
-  #+begin_src emacs-lisp
-;; Variables Directory
-(setq mario/org-agenda-dir (file-truename "~/documents")
-      mario/org-dir (file-truename "~/documents")
-      mario/org-journal-dir (file-truename "~/documents")
-      mario/org-roam-dir (file-truename "~/documents"))
-  #+end_src
-* Themes
-  #+begin_src emacs-lisp
+(unless (package-installed-p 'use-package)
+   (package-install 'use-package))
+(require 'use-package)
+(setq use-package-always-ensure t) ;; to make sure package installed
+#+end_src
+* Org Tangle configuration
+#+begin_src emacs-lisp
+
+(defun mario/tangle-config()
+  (when (string-equal (buffer-file-name)
+		      (expand-file-name "~/.config/emacs/config.org"))
+   (let ((org-confirm-babel-evaluate nil))
+     (org-babel-tangle))))
+
+(add-hook 'org-mode-hook (lambda() (add-hook 'after-save-hook #'mario/tangle-config)))
+#+end_src
+* Basic
+** UI 
+#+begin_src emacs-lisp
+(setq-default major-mode 'org-mode) ;; default major mode org-mode
+(setq inhibit-startup-message t)
+(scroll-bar-mode -1) ;; Disable Visual Scrolbar
+(tool-bar-mode -1) ;; Disable toolbar
+(tooltip-mode -1) ;; Disable tooltips
+(menu-bar-mode -1) ;; Disable Menubar
+(column-number-mode)
+(global-display-line-numbers-mode t) ;; Line number
+(dolist (mode '(org-mode-hook
+		 term-mode-hook
+		 dired-mode-hook
+		 eshell-mode-hook))
+  (add-hook mode (lambda() (display-line-numbers-mode 0))))
+(setq scroll-conservatively 101) ;; value greater than 100 gets rid of half page jumping
+(setq mouse-wheel-scroll-amount '(3 ((shift) . 3))) ;; how many lines at a time
+(setq mouse-wheel-progressive-speed t) ;; accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+
+#+end_src
+* Theming
+** Color Scheme
+#+begin_src emacs-lisp
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes")
 (use-package doom-themes
-  :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'mario-gruvbox t)
+  :init (load-theme 'mario-gruvbox t)
   ;;(load-theme 'doom-one t)
  ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -63,120 +69,666 @@
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
-  #+end_src
-* Font Faces
-  #+begin_src emacs-lisp
-(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font Mono" :height 100)
-  #+end_src
-  
-* Evil Mode
-  #+begin_src emacs-lisp
-  (use-package undo-tree)
-  (use-package general
-   :ensure t 
-   :config
-   (general-evil-setup t))
-  (nvmap :prefix "SPC"
-;;    "." '(find-file :which-key "Find-file")
-    "SPC" '(counsel-M-x :which-key "M-x")
-    "h" '(evil-window-left :which-key "Window Left")
-    "j" '(evil-window-down :which-key "Window down")
-    "k" '(evil-window-up :which-key "Window up")
-    "l" '(evil-window-right :which-key "Window right")
-    "s" '(evil-window-split :which-key "Split")
-    "v" '(evil-window-vsplit :which-key "Vertical Split")
-    "H r" '((lambda() (interactive) (load-file "~/.config/emacs/init.el")) :whichkey "Reload Config")
-    "b b" '(ivy-switch-buffer :which-key "Ivy Buffer")
-    "b B" '(ibuffer :which-key "Ibuffer")
-    "b d" '(kill-current-buffer :which-key "Kill current Buffer")
-    "b h" '(previous-buffer :which-key "Previous Buffer")
-    "b l" '(next-buffer :which-key "Next Buffer")
-    "b c" '(kill-current-buffer :which-key "Kill current Buffer")
-    "B l" '(bookmark-jump :which-key "Jump to bookmark")
-    "B RET" '(bookmark-jump :which-key "Jump to bookmark")
-    "B d" '(bookmark-delete :which-key "Delete Bookmark")
-    "t k" '(clm/toggle-command-log-buffer :which-key "Toggle Key log")
-    "B a" '(bookmark-set :which-key "Set Bookmark"))
-(nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-       "."     '(find-file :which-key "Find file")
-       "f e"   '(find-file "~/.config/doom/config.org" :whichkey "Edit emacs config")
-       "f f"   '(find-file :which-key "Find file")
-       "f r"   '(counsel-recentf :which-key "Recent files")
-       "f s"   '(save-buffer :which-key "Save file")
-       "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
-       "f y"   '(dt/show-and-copy-buffer-path :which-key "Yank file path")
-       "f C"   '(copy-file :which-key "Copy file")
-       "f D"   '(delete-file :which-key "Delete file")
-       "f R"   '(rename-file :which-key "Rename file")
-       "f S"   '(write-file :which-key "Save file as...")
-       "f U"   '(sudo-edit :which-key "Sudo edit file"))
-  (use-package evil
-   :ensure t 
-   :init
-   (setq evil-want-integration t)
-   (setq evil-want-keybinding nil)
-   (setq evil-vsplit-window-right t)
-   (setq evil-split-window-below t)
-   (evil-mode))
-  (use-package evil-collection
-   :after evil
-   :ensure t
-   :config
-   (evil-collection-init))
-  #+end_src
-* Log key
-  #+begin_src emacs-lisp
-(use-package command-log-mode)
-  #+end_src
-* ivy 
-** ivy
-  #+begin_src emacs-lisp
-  (use-package ivy
-    :diminish
-    :init
-    (setq ivy-initial-inputs-alist nil) ;; Remove ^ when pressed SPC-SPC
-    :bind (("C-/" . swiper)
-	   :map ivy-minibuffer-map
-	   ("C-k" . ivy-previous-line)
-	   ("C-j" . ivy-next-line)
-	   ("TAB" . ivy-alt-done)
-	   ("C-l" . ivy-alt-done)
-	   :map ivy-switch-buffer-map
-	   ("C-k" . ivy-previous-line)
-	   ("C-l" . ivy-done)
-	   ("C-d" . ivy-switch-buffer-kill)
-	   :map ivy-reverse-i-search-map
-	   ("C-k" . ivy-previous-line)
-	   ("C-d" . ivy-reverse-i-search-kill))
-    :config
-    (ivy-mode 1))
-  #+end_src
-** Ivy Rich
-  #+begin_src emacs-lisp
-  (use-package ivy-rich
-    :init
-    (ivy-rich-mode 1))
-  #+end_src
-* Modeline
-  #+begin_src emacs-lisp
-(use-package all-the-icons) ;; requirement
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)))
-  #+end_src
-* Which Key
-  #+begin_src emacs-lisp
-  (use-package counsel)
-  (use-package which-key
-  :ensure t
-  :init (which-key-mode)
-  :config
-  (setq which-key-idle-delay 0.3))
-  #+end_src
-* Func  
+
+
+#+end_src
+** Font
 #+begin_src emacs-lisp
-;; GENERATING CONIFG
+(defvar mario/default-font-size 130)
+(defvar mario/default-varp-font-size 130)
+(set-face-attribute 'default nil
+                     :font "JetBrainsMono Nerd Font Mono"
+                     :height mario/default-font-size)
+(set-face-attribute 'fixed-pitch nil
+                     :font "JetBrainsMono Nerd Font Mono"
+                     :height mario/default-font-size)
+(set-face-attribute 'variable-pitch nil
+                    :family "ETbb"
+                    :height mario/default-varp-font-size)
+;; if MacOS
+;;(set-face-attribute 'variable-pitch nil
+;;                     :family "Source Sans Pro"
+;;                     :family "EtBembo"
+;;                     :height mario/default-varp-font-size)
+#+end_src
+** Modeline
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom
+  (doom-modeline-bar-width 5)
+  (doom-modeline-height 10))
+#+end_src
+** Icons
+#+begin_src emacs-lisp
+(use-package all-the-icons) ;; requirement
+(use-package emojify) ;; requirement
+;; TODO: Always remapping everytime emacs loaded kinda annoy
+;;(use-package unicode-fonts
+;;  :custom
+;;  (unicode-fonts-skip-font-groups '(low-quality))
+;;  :config
+;;  (unicode-fonts-setup))
+
+#+end_src
+* Keybinding
+** General
+#+begin_src emacs-lisp
+  (use-package general
+    :config
+    (general-evil-setup t)
+    (general-create-definer leader
+      ;; operator,motion,replace,global
+;;      :keymaps '(normal visual emacs)
+      :prefix "SPC")
+    (general-create-definer localleader
+;;      :keymaps '(normal insert visual emacs)
+      :prefix "C-SPC"))
+
+  (leader
+    :keymaps '(normal visual emacs)
+    ";"     '(eval-expression :which-key "Eval Expression")
+    "C-u"   '(universal-argument :which-key "C-u (Universal Arg)")
+    "SPC"   '(counsel-M-x :which-key "M-x")
+    "h"     '(evil-window-left :which-key "Window Left")
+    "j"     '(evil-window-down :which-key "Window down")
+    "k"     '(evil-window-up :which-key "Window up")
+    "l"     '(evil-window-right :which-key "Window right")
+    "s"     '(evil-window-split :which-key "Split")
+    "v"     '(evil-window-vsplit :which-key "Vertical Split")
+    "H r"   '((lambda() (interactive) (load-file "~/.config/emacs/init.el")) :which-key "Reload Config")
+    "a"     '(:ignore t :which-key "Action")
+    "a o"   '(mario/open-with :which-key "Open with System")
+    "b"     '(:ignore t :which-key "Buffer")
+    "b b"   '(ivy-switch-buffer :which-key "Ivy Buffer")
+    "b B"   '(ibuffer :which-key "Ibuffer")
+    "b d"   '(kill-current-buffer :which-key "Kill current Buffer")
+    "b h"   '(previous-buffer :which-key "Previous Buffer")
+    "b l"   '(next-buffer :which-key "Next Buffer")
+    "b c"   '(kill-current-buffer :which-key "Kill current Buffer")
+    "B"     '(:ignore t :which-key "Bookmark")
+    "B l"   '(bookmark-jump :which-key "Jump to bookmark")
+    "B RET" '(bookmark-jump :which-key "Jump to bookmark")
+    "B d"   '(bookmark-delete :which-key "Delete Bookmark")
+    "B a"   '(bookmark-set :which-key "Set Bookmark")
+    ;; Code 
+    "c"     '(:ignore t :which-key "Code")
+    "c e"   '(eval-last-sexp :which-key "evaluate lisp") ;; TODO: Move to Spesific Lisp mode
+    "t k"   '(clm/toggle-command-log-buffer :which-key "Toggle Key log")
+  ;; (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
+    "//"    '(evilnc-comment-or-uncomment-lines :which-key "Toggle Comment")
+    "."     '(find-file :which-key "Find file")
+    ;;
+    "f"     '(:ignore t :which-key "Files")
+    "f f"   '(find-file :which-key "Find file")
+    "f d"   '(dired-jump :which-key "Open Dired")
+    "f r"   '(counsel-recentf :which-key "Recent files")
+    "f s"   '(save-buffer :which-key "Save file")
+    "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
+    "f y"   '(dt/show-and-copy-buffer-path :which-key "Yank file path")
+    "f C"   '(copy-file :which-key "Copy file")
+    "f D"   '(delete-file :which-key "Delete file")
+    "f R"   '(rename-file :which-key "Rename file")
+    "f S"   '(write-file :which-key "Save file as...")
+    "f U"   '(sudo-edit :which-key "Sudo edit file")
+    "f e"   '((lambda() (interactive) (find-file "~/.config/emacs/config.org")) :which-key "Edit emacs config"))
+    ;; TODO: Load only orgmode
+  (leader
+    :keymaps '(normal)
+    "n"     '(:ignore t :which-key "Notes")
+    "n a"   '(org-agenda :which-key "Org Agenda")
+    "n f"   '(org-roam-node-find :which-key "Roam Find")
+    "n i"   '(org-roam-node-insert :which-key "Roam Insert")
+    "n l"   '(org-roam-buffer-toggle :which-key "Roam Buffer")
+    "n c"   '(org-roam-capture :which-key "Roam Capture")
+    "n t"   '(:ignore t :which-key "Toggle")
+    "n t p" '(mario/org-toggle-properties :which-key "Toggle Properties")
+    "n j"   '(org-roam-dailies-capture-today :which-key "Roam Capture")
+    "p"    '(:ignore t :which-key "Project")
+    "p a"    '(projectile-add-known-project :which-key "Add Proj")
+    "p s"    '(projectile-switch-project :which-key "Switch Proj")
+    "p c"    '(projectile-kill-buffers :which-key "Kill Proj Buf")
+    "p f"    '(projectile-find-file :which-key "Proj Find File"))
+
+#+end_src
+** Evil Mode
+#+begin_src emacs-lisp
+(use-package evil
+ :init
+ (setq evil-want-integration t)
+ (setq evil-want-C-u-scroll t) ;; default C-u is Universal Argument change to scroll
+ (setq evil-want-keybinding nil)
+ (setq evil-vsplit-window-right t)
+ (setq evil-split-window-below t)
+ :config
+ (evil-mode))
+(use-package evil-collection
+ :after evil
+ :config
+ (evil-collection-init))
+
+#+end_src
+*** Evil Nerd Commenter
+   #+begin_src emacs-lisp
+(use-package evil-nerd-commenter)
+(evilnc-default-hotkeys)
+   #+end_src
+** Which-key
+#+begin_src emacs-lisp
+(use-package which-key
+ :init (which-key-mode)
+ :config
+ (which-key-setup-side-window-bottom)
+ (setq which-key-idle-delay 0.2
+;;       which-key-sort-order #'which-key-key-order-alpha ;; sort alphabetically
+       which-key-add-column-padding 2
+       which-key-max-display-columns nil
+       which-key-min-display-lines 6))
+
+#+end_src
+* Packages
+** Undo Tree
+#+begin_src emacs-lisp
+
+#+end_src
+** Dashboard
+#+begin_src emacs-lisp
+(use-package dashboard
+  :init      ;; tweak dashboard config before loading it
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
+  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  (setq dashboard-center-content nil) ;; set to 't' for centered content
+  (setq dashboard-items '((recents . 5)
+			  (agenda . 5 )
+			  (bookmarks . 3)
+			  (projects . 3)
+			  (registers . 3)))
+  :config
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+			      (bookmarks . "book"))))
+
+#+end_src
+** Command log mode
+#+begin_src emacs-lisp
+(use-package command-log-mode)
+#+end_src
+** Undo-tree
+#+begin_src emacs-lisp
+(use-package undo-tree)
+#+end_src
+** Ivy
+*** Ivy
+#+begin_src emacs-lisp
+(use-package ivy
+  :diminish
+  :init
+  (setq ivy-initial-inputs-alist nil) ;; Remove ^ when pressed SPC-SPC
+  :bind (("C-/" . swiper)
+         :map ivy-minibuffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-j" . ivy-next-line)
+         ("TAB" . ivy-alt-done)
+         ("C-l" . ivy-alt-done)
+         :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
+  :config
+  (ivy-mode 1))
+
+#+end_src
+*** Ivy Rich
+#+begin_src emacs-lisp
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1))
+#+end_src
+** Counsel
+#+begin_src emacs-lisp
+(use-package counsel)
+#+end_src
+** Org Mode
+*** Org Bullets
+#+begin_src emacs-lisp
+(use-package org-bullets
+  :after org)
+(use-package org-superstar
+  :after org
+  :hook (org-mode . org-superstar-mode)
+  :custom
+  (set-face-attribute 'org-superstar-header-bullet nil :inherit 'fixed-pith)
+  (org-superstar-remove-leading-stars t)
+  (org-superstar-item-bullet-alist '((?* . ?⋆)
+                                     (?+ . ?‣)
+                                     (?- . ?•)))
+  (org-superstar-headline-bullets-list '("› "))) ;; TODO: I want this to looks like Bear ^H1 Title
+#+end_src
+*** Org
+#+begin_src emacs-lisp
+;; Variables Directory
+(setq mario/org-agenda-dir (file-truename "~/documents")
+      mario/org-dir (file-truename "~/documents")
+      mario/org-journal-dir (file-truename "~/documents")
+      mario/org-roam-dir (file-truename "~/documents"))
+(defun mario/org-mode-setup()
+  (org-indent-mode)
+  (mario/org-hide-properties)
+  (variable-pitch-mode 1)
+  (visual-line-mode 1))
+
+ (defun mario/org-font-setup()
+   (dolist (face '((org-level-1 . 1.4)
+                   (org-level-2 . 1.3)
+                   (org-level-3 . 1.2)
+                   (org-level-4 . 1.1)
+                   (org-level-5 . 1.05)
+                   (org-level-6 . 1.05)
+                   (org-level-7 . 1.05)
+                   (org-level-8 . 1.05)
+                   (org-document-info . 1.3)
+                   (org-document-title . 1.6)))
+     (set-face-attribute (car face) nil :font "ETbb" :height (cdr face)))
+     ;;(set-face-attribute (car face) nil
+     ;;                    :font "EtBembo"
+     ;;                    :height (cdr face)))
+     ;; (set-face-attribute (car face) nil :font "Source Sans Pro" :height (cdr face)))
+     (set-face-attribute 'org-document-info nil
+                          :foreground nil
+                          :slant 'italic
+                          :inherit 'variable-pitch)
+     ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+     (set-face-attribute 'org-hide nil
+                          :inherit 'fixed-pitch)
+     (set-face-attribute 'org-block nil
+                          :foreground nil
+                          :inherit 'fixed-pitch)
+     (set-face-attribute 'org-block-begin-line nil
+                          :foreground nil
+                          :height 0.8
+                          :slant 'italic
+                          :inherit 'fixed-pitch)
+     (set-face-attribute 'org-ellipsis nil
+                          :foreground nil
+                          :height 1.2
+                          :inherit 'fixed-pitch)
+     (set-face-attribute 'org-meta-line nil
+                          :foreground nil
+                          :inherit 'fixed-pitch))
+;; (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
+;; (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+;; (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
+;; (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+;; (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+;; (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+;; (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+;; (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
+;; (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+;; (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
+
+(use-package org
+  :pin org
+  :hook (org-mode . mario/org-mode-setup)
+  :config
+  (setq org-directory mario/org-dir
+           org-src-preserve-indentation nil
+           org-src-tab-acts-natively t
+           org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
+           ;;org-ellipsis " ▾"
+           ;; org-ellipsis " "
+           org-ellipsis " "
+           org-edit-src-content-indentation 0)
+  (mario/org-font-setup))
+#+end_src
+*** Roam
+#+begin_src emacs-lisp
+(use-package org-roam
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory mario/org-roam-dir)
+  :config
+  (setq org-roam-mode-sections
+    (list #'org-roam-backlinks-insert-section
+          #'org-roam-reflinks-insert-section
+          ;;#'org-roam-unlinked-references-insert-section
+          ))
+  (org-roam-setup)
+;;  (define-key evil-normal-state-map (kbd "TAB") 'next-buffer)
+;;  (define-key evil-normal-state-map (kbd "<backtab>") 'previous-buffer)
+
+;;  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+;;  (evil-global-set-key 'motion "k" 'evil-next-visual-line)
+;;  (evil-global-set-key 'motion "j" 'evil-previous-visual-line)
+  (evil-set-initial-state 'message-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state))
+
+#+end_src
+*** Org Tempo
+#+begin_src emacs-lisp
+(use-package org-tempo
+  :ensure nil)
+
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    #+end_src
+*** Org Babel
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp .t )
+   (shell . t)))
+#+end_src
+*** Custom Function
+**** dwim-at-point
+#+begin_src emacs-lisp
+
+(defun +org/dwim-at-point (&optional arg)
+  "Do-what-I-mean at point.
+
+If on a:
+- checkbox list item or todo heading: toggle it.
+- clock: update its time.
+- headline: cycle ARCHIVE subtrees, toggle latex fragments and inline images in
+  subtree; update statistics cookies/checkboxes and ToCs.
+- footnote reference: jump to the footnote's definition
+- footnote definition: jump to the first reference of this footnote
+- table-row or a TBLFM: recalculate the table's formulas
+- table-cell: clear it and go into insert mode. If this is a formula cell,
+  recaluclate it instead.
+- babel-call: execute the source block
+- statistics-cookie: update it.
+- latex fragment: toggle it.
+- link: follow it
+- otherwise, refresh all inline images in current tree."
+  (interactive "P")
+  (if (button-at (point))
+      (call-interactively #'push-button)
+    (let* ((context (org-element-context))
+           (type (org-element-type context)))
+      ;; skip over unimportant contexts
+      (while (and context (memq type '(verbatim code bold italic underline strike-through subscript superscript)))
+        (setq context (org-element-property :parent context)
+              type (org-element-type context)))
+      (pcase type
+        (`headline
+         (cond ((memq (bound-and-true-p org-goto-map)
+                      (current-active-maps))
+                (org-goto-ret))
+               ((and (fboundp 'toc-org-insert-toc)
+                     (member "TOC" (org-get-tags)))
+                (toc-org-insert-toc)
+                (message "Updating table of contents"))
+               ((string= "ARCHIVE" (car-safe (org-get-tags)))
+                (org-force-cycle-archived))
+               ((or (org-element-property :todo-type context)
+                    (org-element-property :scheduled context))
+                (org-todo
+                 (if (eq (org-element-property :todo-type context) 'done)
+                     (or (car (+org-get-todo-keywords-for (org-element-property :todo-keyword context)))
+                         'todo)
+                   'done))))
+         ;; Update any metadata or inline previews in this subtree
+         (org-update-checkbox-count)
+         (org-update-parent-todo-statistics)
+         (when (and (fboundp 'toc-org-insert-toc)
+                    (member "TOC" (org-get-tags)))
+           (toc-org-insert-toc)
+           (message "Updating table of contents"))
+         (let* ((beg (if (org-before-first-heading-p)
+                         (line-beginning-position)
+                       (save-excursion (org-back-to-heading) (point))))
+                (end (if (org-before-first-heading-p)
+                         (line-end-position)
+                       (save-excursion (org-end-of-subtree) (point))))
+                (overlays (ignore-errors (overlays-in beg end)))
+                (latex-overlays
+                 (cl-find-if (lambda (o) (eq (overlay-get o 'org-overlay-type) 'org-latex-overlay))
+                             overlays))
+                (image-overlays
+                 (cl-find-if (lambda (o) (overlay-get o 'org-image-overlay))
+                             overlays)))
+           (+org--toggle-inline-images-in-subtree beg end)
+           (if (or image-overlays latex-overlays)
+               (org-clear-latex-preview beg end)
+             (org--latex-preview-region beg end))))
+
+        (`clock (org-clock-update-time-maybe))
+
+        (`footnote-reference
+         (org-footnote-goto-definition (org-element-property :label context)))
+
+        (`footnote-definition
+         (org-footnote-goto-previous-reference (org-element-property :label context)))
+
+        ((or `planning `timestamp)
+         (org-follow-timestamp-link))
+
+        ((or `table `table-row)
+         (if (org-at-TBLFM-p)
+             (org-table-calc-current-TBLFM)
+           (ignore-errors
+             (save-excursion
+               (goto-char (org-element-property :contents-begin context))
+               (org-call-with-arg 'org-table-recalculate (or arg t))))))
+
+        (`table-cell
+         (org-table-blank-field)
+         (org-table-recalculate arg)
+         (when (and (string-empty-p (string-trim (org-table-get-field)))
+                    (bound-and-true-p evil-local-mode))
+           (evil-change-state 'insert)))
+
+        (`babel-call
+         (org-babel-lob-execute-maybe))
+
+        (`statistics-cookie
+         (save-excursion (org-update-statistics-cookies arg)))
+
+        ((or `src-block `inline-src-block)
+         (org-babel-execute-src-block arg))
+
+        ((or `latex-fragment `latex-environment)
+         (org-latex-preview arg))
+
+        (`link
+         (let* ((lineage (org-element-lineage context '(link) t))
+                (path (org-element-property :path lineage)))
+           (if (or (equal (org-element-property :type lineage) "img")
+                   (and path (image-type-from-file-name path)))
+               (+org--toggle-inline-images-in-subtree
+                (org-element-property :begin lineage)
+                (org-element-property :end lineage))
+             (org-open-at-point arg))))
+
+        ((guard (org-element-property :checkbox (org-element-lineage context '(item) t)))
+         (let ((match (and (org-at-item-checkbox-p) (match-string 1))))
+           (org-toggle-checkbox (if (equal match "[ ]") '(16)))))
+
+        (_
+         (if (or (org-in-regexp org-ts-regexp-both nil t)
+                 (org-in-regexp org-tsr-regexp-both nil  t)
+                 (org-in-regexp org-link-any-re nil t))
+             (call-interactively #'org-open-at-point)
+           (+org--toggle-inline-images-in-subtree
+            (org-element-property :begin context)
+            (org-element-property :end context))))))))
+
+   (add-hook 'org-mode-hook
+           (lambda ()
+               (evil-local-set-key 'normal (kbd "RET") '+org/dwim-at-point)))
+#+end_src
+**** Org Hide/Show Properties
+#+begin_src emacs-lisp
+(defun mario/org-hide-properties ()
+  "Hide all org-mode headline property drawers in buffer. Could be slow if it has a lot of overlays."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward
+            "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
+      (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
+        (overlay-put ov_this 'display "")
+        (overlay-put ov_this 'hidden-prop-drawer t))))
+  (put 'org-toggle-properties-hide-state 'state 'hidden))
+
+(defun mario/org-show-properties ()
+  "Show all org-mode property drawers hidden by org-hide-properties."
+  (interactive)
+  (remove-overlays (point-min) (point-max) 'hidden-prop-drawer t)
+  (put 'org-toggle-properties-hide-state 'state 'shown))
+
+(defun mario/org-toggle-properties ()
+  "Toggle visibility of property drawers."
+  (interactive)
+  (if (eq (get 'org-toggle-properties-hide-state 'state) 'hidden)
+      (mario/org-show-properties)
+    (mario/org-hide-properties)))
+
+#+end_src
+** Projectile
+#+begin_src emacs-lisp
+;;   (use-package projectile
+;;     :config
+;;     (projectile-global-mode 1))
+
+(use-package projectile
+  :config (projectile-mode)
+  :init
+  (when (file-directory-p "~/code/")
+    (setq projectile-project-search-path '("~/code/")))
+  (setq projectile-swith-project-action #'projectile-dired))
+
+#+end_src
+** Helpful
+#+begin_src emacs-lisp
+(use-package helpful 
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
+#+end_src
+** Rainbow Delimiters
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+** Dired
+   #+begin_src emacs-lisp
+   ;; TODO: How to integrate with evil?
+   (cond
+    ((eq system-type 'darwin)
+           (setq insert-directory-program "/usr/local/bin/gls")))
+    (use-package dired
+       :ensure nil
+       :init (which-key-mode)
+       :commands (dired dired-jump)
+       :bind (("C-x C-j" . dired-jump))
+       :custom ((dired-listing-switches "-agho --group-directories-first"))
+       :config
+       (evil-collection-define-key 'normal 'dired-mode-map
+         "h" 'dired-single-up-directory
+         "A" 'dired-create-directory
+         "a" 'dired-create-empty-file
+         "d" 'dired-flag-file-deletion
+         "c" 'dired-do-copy
+         "fp" 'project-dired
+         "C" 'dired-do-copy-regexp
+         (kbd "C-d") 'dired-do-flagged-delete
+         "r" 'dired-do-rename
+         "s" 'dired-find-file-other-window
+         "M" 'dired-unmark
+         "Z" 'dired-do-compress-to
+         "z" 'dired-do-compress
+         "l" 'dired-single-buffer))
+   #+end_src
+*** Icons Dired
+    #+begin_src emacs-lisp
+    (use-package all-the-icons-dired
+	:hook (dired-mode . all-the-icons-dired-mode))
+    #+end_src
+***  Dired Single
+    #+begin_src emacs-lisp
+    (use-package dired-single
+      :commands (dired dired-jump))
+    #+end_src
+** Nav Flash
+   #+begin_src emacs-lisp
+   (use-package nav-flash)
+   (nav-flash-show)
+   #+end_src
+** Hydra
+#+begin_src emacs-lisp
+(use-package hydra
+  :defer t)
+
+(defhydra hydra-text-scale (:timeout 4)
+  "scale text"
+  ("k" text-scale-increase "in")
+  ("j" text-scale-decrease "out")
+  ("DEL" (text-scale-adjust 0) "reset")
+  ("q" nil "finished" :exit t)
+  ("RET" nil "finished" :exit t))
+
+(leader
+  :keymaps 'normal
+  "ts" '(hydra-text-scale/body :which-key "scale text"))
+#+end_src
+** Visual Fill Colum
+#+begin_src emacs-lisp
+(defun mario/org-mode-visual-fill()
+  (setq visual-fill-column-width 150
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+(use-package visual-fill-column
+  :hook (org-mode . mario/org-mode-visual-fill))
+#+end_src
+
+#+RESULTS:
+** Hl-TODO
+#+begin_src emacs-lisp
+(use-package hl-todo
+  :config
+  (setq hl-todo-keyword-faces
+    '(("TODO" . "#008080")
+      ("FIXME" . "#fb4934")
+      ("HACK" . "#fa8019")
+      ("CHECK" . "#fabd2f"))))
+;   :bind (:map hl-todo-mode-map
+;          ("C-j" . 'hl-todo-next)
+;          ("C-k" . 'hl-todo-previous)
+;          ("C-i" . 'hl-todo-insert)))
+
+
+#+end_src
+** Auto Save
+#+begin_src emacs-lisp
+;;(use-package super-save
+;;  :defer 1
+;;  :config
+;;  (super-save-mode +1)
+;;  (setq super-save-auto-save-when-idle t))
+#+end_src
+* Dev
+** Magit
+#+begin_src emacs-lisp
+(use-package magit)
+#+end_src
+* Global Keybinding
+#+begin_src emacs-lisp
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit) ;; Make ESC quit prompts
+#+end_src
+* Misc
+#+begin_src emacs-lisp
 (defun mario/generate-config()
  "Generate README.org"
         (interactive)
@@ -188,107 +740,23 @@
     (org-ctrl-c-ctrl-c)
     (org-babel-tangle)
     (find-file "~/.config/emacs/init.el"))
-
 #+end_src
-
-* Dashboard
-#+begin_src emacs-lisp  
-(use-package dashboard
-  :init      ;; tweak dashboard config before loading it
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
-  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  (setq dashboard-center-content nil) ;; set to 't' for centered content
-  (setq dashboard-items '((recents . 5)
-                          (agenda . 5 )
-                          (bookmarks . 3)
-                          (projects . 3)
-                          (registers . 3)))
-  :config
-  (dashboard-setup-startup-hook)
-  (dashboard-modify-heading-icons '((recents . "file-text")
-			      (bookmarks . "book"))))
-#+end_src
-
-* Dired
-#+begin_src emacs-lisp  
-(use-package all-the-icons-dired
-    :hook (dired-mode . all-the-icons-dired-mode))
-  (use-package dired
-     :ensure nil
-     :commands (dired dired-jump)
-     :bind (("C-x C-j" . dired-jump))
-     :custom ((dired-listing-switches "-agho --group-directories-first"))
-     :config
-     (evil-collection-define-key 'normal 'dired-mode-map
-       "h" 'dired-single-up-directory
-       "l" 'dired-single-buffer))
-  (use-package dired-single
-    :commands (dired dired-jump))
-#+end_src
-* Org
-  #+begin_src emacs-lisp
-(setq org-directory mario/org-dir)
-(setq org-src-preserve-indentation nil
-      org-src-tab-acts-natively t
-      org-edit-src-content-indentation 0)
-  #+end_src
-* Org-Roam
+** Open with
 #+begin_src emacs-lisp
-(use-package org-roam
-  :ensure t
-  :init
-  (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory mario/org-roam-dir)
-  :config
-  (org-roam-setup))
-(nvmap :prefix "SPC"
-	"n a" '(org-agenda :whichkey "Org Agenda")
-	"n f" '(org-roam-node-find :whichkey "Roam Find")
-	"n l" '(org-roam-buffer-toggle :whichkey "Roam Buffer")
-	"n c" '(org-roam-capture :whichkey "Roam Capture")
-	"n j" '(org-roam-dailies-capture-today :whichkey "Roam Capture"))
-#+end_src
-
-* Org-tempo
-#+begin_src emacs-lisp
-(use-package org-tempo
-  :ensure nil)
-#+end_src
-* Projectile
-#+begin_src emacs-lisp
-(use-package projectile
-  :config
-  (projectile-global-mode 1))
-(nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
-       "."     '(find-file :which-key "Find file")
-       "f e"   '(find-file "~/.config/doom/config.org" :whichkey "Edit emacs config")
-       "f f"   '(find-file :which-key "Find file"))
-#+end_src
-
-* Nav Flash
-  #+begin_src emacs-lisp
-  (use-package nav-flash)
-  (require 'nav-flash)
-  (nav-flash-show)
-  #+End_src
-* Rainbow Delimiters
-  #+begin_src emacs-lisp
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-  #+end_src
-* Helpful
-
-#+begin_src emacs-lisp
-(use-package helpful 
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
+(defun mario/open-with (arg)
+  "Open visited file in default external program.
+When in dired mode, open file under the cursor.
+With a prefix ARG always prompt for command to use."
+  (interactive "P")
+  (let* ((current-file-name
+          (if (eq major-mode 'dired-mode)
+              (dired-get-file-for-visit)
+            buffer-file-name))
+         (open (pcase system-type
+                 (`darwin "open")
+                 ((or `gnu `gnu/linux `gnu/kfreebsd) "xdg-open")))
+         (program (if (or arg (not open))
+                      (read-shell-command "Open current file with: ")
+                    open)))
+    (call-process program nil 0 nil current-file-name)))
 #+end_src
