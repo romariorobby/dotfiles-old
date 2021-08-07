@@ -8,8 +8,12 @@
 #
 # Note that .tex files which you wish to compile with XeLaTeX should have the
 # string "xelatex" somewhere in a comment/command in the first 5 lines.
-
-file=$(readlink -f "$1")
+case "$OSTYPE" in
+    linux*) file=$(readlink -f "$1") ;;
+    darwin*) [ -x "$(command -v "greadlink")" ] || brew instal coreutils 
+             file=$(greadlink -f "$1")
+             ;;
+esac
 dir=${file%/*}
 base="${file%.*}"
 ext="${file##*.}"
