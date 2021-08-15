@@ -10,7 +10,7 @@ export PATH="$PATH:$(du "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
 export PATH="$HOME/.local/bin${PATH:+:${PATH}}"
 unsetopt PROMPT_SP
 
-export PATH=$PATH:~/.config/emacs-doom/bin
+export PATH=$PATH:$HOME/.config/emacs-doom/bin
 export NPM_CONFIG_PREFIX=~/.local/
 
 # Default programs:
@@ -67,6 +67,8 @@ export LESS=-R
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 
+# spicetify
+export SPICETIFY_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/spicetify"
 # Calibre
 export CALIBRE_USE_DARK_PALETTE=1
 export CALIBRE_CONFIG_DIRECTORY="${XDG_CONFIG_HOME:-$HOME/.config}/calibre"

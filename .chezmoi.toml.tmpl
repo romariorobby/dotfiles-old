@@ -1,43 +1,49 @@
 # vim:ft=toml
-
+# TODO: How to make env var conditional ?
 #
 # Used to customize configuration when doing a `chezmoi init $repos`.
 #
 {{/* Boolean */}}
 {{- $minimal := false -}}
-{{- $secret := true -}}
 
+{{- $secret := false -}}
 {{- $bw := false -}}
+{{- $pass := false -}}
 {{- "" -}}
 
 {{- $name := "Romario" -}}
 {{- $git_name := "romariorobby" -}}
 {{- $git_email := "romariorobby@yahoo.com" -}}
 
-{{- if (env "SECRETOFF") -}}
-{{- $secret = false -}}
-{{- end -}}
-
-# FIXME: There no reason to use this, if theres no alternative password manager
 {{- if (env "BW") -}}
-{{- $bw = true -}}
+{{-   $secret = true -}}
+{{-   $pass = false -}}
+{{-   $bw = true -}}
 {{- end -}}
 
-{{- if (env "DOTMIN") -}}
-{{- $minimal = true -}}
+{{- if (env "PASS") -}}
+{{-   $secret = true -}}
+{{-   $pass = true -}}
+{{-   $bw = false -}}
+{{- end -}}
+
+{{- if (env "MINIMAL") -}}
+{{-   $minimal = true -}}
 {{- end }}
 
 {{- if (env "PROMPT") }}
-{{- $minimal = promptBool "minimal" -}}
-{{- if $minimal -}}
-{{- $secret = false -}}
-{{- else }}
-{{- $secret = promptBool "secret" -}}
-{{- end -}}
+{{-   $minimal = promptBool "minimal" -}}
+{{-   if $minimal -}}
+{{-     $bw = false -}}
+{{-     $pass = false -}}
+{{-   else }}
+{{-     $bw = promptBool "bw" -}}
+{{-     $pass = promptBool "pass" -}}
+{{-   end -}}
 
-{{- $name := promptString "Username for Chezmoi" -}}
-{{- $git_name := promptString "Git Username for author/commiter" -}}
-{{- $git_email := promptString "Git Email Adress for author/commiter" -}}
+{{-   $name := promptString "Username for Chezmoi" -}}
+{{-   $git_name := promptString "Git Username for author/commiter" -}}
+{{-   $git_email := promptString "Git Email Adress for author/commiter" -}}
 {{- end -}}
 
 # GPG
@@ -49,8 +55,8 @@ encryption = "gpg"
   name = "{{ $name }}"
   minimal = {{ $minimal }}
   secret = {{ $secret }}
+  pass = {{ $pass }}
   bw = {{ $bw }}
     [data.git]
 	    name = "{{ $git_name }}"
 	    email = "{{ $git_email }}"
-

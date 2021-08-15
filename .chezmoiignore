@@ -15,6 +15,10 @@
 !.config/shell
 !.config/git
 !.config/lf
+# doom emacs
+!.config/doom
+# vanilla emacs
+!.config/emacs
 #!.config/nvim/
 
 # re-including and re-excluding

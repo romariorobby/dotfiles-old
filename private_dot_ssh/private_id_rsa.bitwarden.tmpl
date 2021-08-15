@@ -5,11 +5,5 @@
 {{-     else if (eq .chezmoi.os "darwin") }}
 {{-       (bitwarden "item" "macbook-sshpriv").notes -}}
 {{-     end -}}
-{{-   else -}}
-{{-     if (eq .chezmoi.os "linux") }}
-{{-       passRaw "ssh/archlaptop-sshpriv" -}}
-{{-     else if (eq .chezmoi.os "darwin") }}
-{{-       passRaw "ssh/macbook-sshpriv" -}}
-{{-     end -}}
 {{-   end -}}
 {{- end -}}

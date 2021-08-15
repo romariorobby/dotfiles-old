@@ -1,5 +1,6 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
+
 ;; To install a package with Doom you must declare them here and run 'doom sync'
 ;; on the command line, then restart Emacs for the changes to take effect -- or
 ;; use 'M-x doom/reload'.
@@ -55,9 +56,10 @@
 (package! org-clock-convenience)
 (package! org-roam
   :recipe (:host github :repo "org-roam/org-roam"))
-(package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
-;;(package! company-org-roam
-;;  :recipe (:host github :repo "jethrokuan/company-org-roam"))
+(package! company-org-roam
+  :recipe (:host github :repo "jethrokuan/company-org-roam"))
+(package! org-roam-server
+  :recipe (:host github :repo "org-roam/org-roam-server"))
 ;(package! org-roam-bibtex
 ;  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 (package! skeewer-mode
