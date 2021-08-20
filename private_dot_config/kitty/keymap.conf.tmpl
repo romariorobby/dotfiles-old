@@ -34,7 +34,11 @@ map kitty_mod+tab>k move_tab_backward
 detect_urls yes
 open_url_modifiers alt
 # open_url_modifiers kitty_mod
+{{ if eq .chezmoi.os "linux" -}}
 open_url_with dmenuhandler
+{{ else }}
+open_url_with default
+{{ end }}
 url_prefixes http https file ftp gemini irc gopher mailto news git
 #
 terminal_select_modifiers alt
