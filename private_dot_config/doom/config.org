@@ -72,10 +72,25 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 #+end_src
 ***
 * Keybinding
+** Key
 :PROPERTIES:
 :ID:       e91ee5a8-a693-44ea-8d97-6797d21a1720
 :END:
 #+begin_src emacs-lisp
+;; Super+
+;; Resizing Window / Buffer split
+;; (map! "s-," #'evil-window-decrease-width)
+;; (map! "s-." #'evil-window-increase-width)
+;; (map! "s--" #'evil-window-decrease-height)
+;; (map! "s-=" #'evil-window-increase-height)
+;; Alt+
+(map! "M-," #'evil-window-decrease-width)
+(map! :n "M-." #'evil-window-increase-width)
+(map! "M--" #'evil-window-decrease-height)
+(map! "M-=" #'evil-window-increase-height)
+
+;; Peek line nu without jump
+(map! "C-:" #'consult-goto-line)
 (map! :leader
        "h" #'evil-window-left
        "j" #'evil-window-down
@@ -83,15 +98,162 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
        "v" #'evil-window-vsplit
        "s" #'evil-window-split
        "k" #'evil-window-up
-       :nv "/" #'evilnc-comment-operator
+       :nv "/" nil
+      (:prefix ("/" . "Slash")
+       :desc "Grep Project Files" :nv "t" #'+default/search-project
+       :desc "Commenting" :nv "/" #'evilnc-comment-or-uncomment-lines)
        :desc "help" "H" help-map
-       "f z" #'mario/browse-dotfiles
+       ;; overriding default map
+       :desc "Switch Buffer" "b b" #'consult-buffer
+       :desc "Switch Buffer" "b f" #'consult-buffer
+       :desc "Switch workspace buffer" "b B" #'+vertico/switch-workspace-buffer
+       :desc "Kill buffer" "b c" #'kill-current-buffer
+       :desc "Clone buffer" "b y" #'clone-indirect-buffer
+       :desc "Grep Text" "f t" #'+vertico/project-search
+       "f ." #'mario/browse-dotfiles
+       "t p" #'org-toggle-properties
       (:prefix ("y" . "yank/copy")
         :desc "org-store-link" "o" #'org-store-link
         :desc "copy-id-from-agenda" "a" #'mario/copy-idlink-to-clipboard)
        "n z" #'mario/switch-to-agenda)
 #+end_src
 * Org
+** Custom function
+*** Org Hook
+:PROPERTIES:
+:ID:       fa24119b-092e-4f86-a551-210c0e705788
+:END:
+#+begin_src emacs-lisp
+(defun mario/org-hook ()
+    (org-hide-properties))
+#+end_src
+
+*** inbox-capture
+:PROPERTIES:
+:ID:       aeb399ac-ded1-4db7-afaa-e0edc547f8e5
+:END:
+#+begin_src emacs-lisp
+(defun mario/org-inbox-capture ()
+  (interactive)
+  "Capture a task in agenda mode."
+  (org-capture nil "i"))
+#+end_src
+*** Advance TODO
+:PROPERTIES:
+:ID:       5b77bcc0-0b1a-4715-a564-e9939f7ad160
+:END:
+#+begin_src emacs-lisp
+(defun mario/advance-todo ()
+  ;;(org-todo 'right)
+  (org-todo "NEXT")
+  (remove-hook 'org-clock-in-hook #'mario/advance-todo))
+#+end_src
+*** Clock in and advance
+:PROPERTIES:
+:ID:       fcd173bd-f8dc-4e72-806f-025e19fccc5b
+:END:
+#+begin_src emacs-lisp
+(defun mario/clock-in-and-advance ()
+  (interactive)
+  (add-hook 'org-clock-in-hook 'mario/advance-todo)
+  (org-agenda-clock-in))
+#+end_src
+*** Org Show/Hide/Toggle Properties
+:PROPERTIES:
+:ID:       49325209-045f-4e0d-aa76-5c36d4ca2116
+:END:
+#+begin_src emacs-lisp
+(defun org-hide-properties ()
+  "Hide all org-mode headline property drawers in buffer. Could be slow if it has a lot of overlays."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward
+            "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
+      (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
+        (overlay-put ov_this 'display "")
+        (overlay-put ov_this 'hidden-prop-drawer t))))
+  (put 'org-toggle-properties-hide-state 'state 'hidden))
+
+(defun org-show-properties ()
+  "Show all org-mode property drawers hidden by org-hide-properties."
+  (interactive)
+  (remove-overlays (point-min) (point-max) 'hidden-prop-drawer t)
+  (put 'org-toggle-properties-hide-state 'state 'shown))
+;; toggle properties
+(defun org-toggle-properties ()
+  "Toggle visibility of property drawers."
+  (interactive)
+  (if (eq (get 'org-toggle-properties-hide-state 'state) 'hidden)
+      (org-show-properties)
+    (org-hide-properties)))
+#+end_src
+*** Copy idlink to clipboard
+:PROPERTIES:
+:ID:       d0e78e4a-b158-4b83-898d-88a2d6a22a15
+:END:
+#+begin_src emacs-lisp
+(defun mario/copy-idlink-to-clipboard()
+       (interactive)
+       (when (eq major-mode 'org-agenda-mode) ;switch to orgmode
+     (org-agenda-show)
+     (org-agenda-goto))
+       (when (eq major-mode 'org-mode) ; do this only in org-mode buffers
+     (setq mytmphead (nth 4 (org-heading-components)))
+         (setq mytmpid (funcall 'org-id-get-create))
+     (setq mytmplink (format "[[id:%s][%s]]" mytmpid mytmphead))
+     (kill-new mytmplink)
+     (message "Copied %s to killring (clipboard)" mytmplink)))
+
+#+end_src
+*** Switch to agenda
+:PROPERTIES:
+:ID:       8fb41583-b784-4181-be73-1f1a074d037b
+:END:
+#+begin_src emacs-lisp
+(defun mario/switch-to-agenda()
+  (interactive)
+  (org-agenda nil " "))
+#+end_src
+*** is project p
+:PROPERTIES:
+:ID:       f5760a07-7b88-42bc-b744-41314d5f09ba
+:END:
+#+begin_src emacs-lisp
+  (defun mario/is-project-p()
+    "Any Task with todo keyword subtask"
+    (save-restriction
+      (widen)
+      (let ((has-subtask)
+            (subtree-end (save-excursion (org-end-of-subtree t)))
+            (is-a-task (member (nth 2(org-heading-components)) org-todo-keywords-1)))
+          (save-excursion
+            (forward-line 1)
+            (while (and (not has-subtask)
+                        (< (point) subtree-end)
+                        (re-search-forward "^\*+ " subtree-end t))
+              (when (member (org-get-todo-state) org-todo-keywords-1)
+                (setq has-subtask t))))
+          (and is-a-task has-subtask))))
+#+end_src
+*** skip project
+:PROPERTIES:
+:ID:       52b44427-807b-47a5-9e6b-1b856030ebb0
+:END:
+#+begin_src emacs-lisp
+  (defun mario/skip-projects ()
+  "Skip trees that are projects"
+  (save-restriction
+    (widen)
+    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+      (cond
+       ((org-is-habit-p)
+        next-headline)
+       ((mario/is-project-p)
+        next-headline)
+       (t
+        nil)))))
+#+end_src
 ** Org
 *** Configuration
 :PROPERTIES:
@@ -119,9 +281,9 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 ;;(add-hook! org-mode
 ;;  (lambda() (add-hook 'after-save-hook #'mario/tangle-config)))
 (require 'org-habit)
-(after! org
-  (map! :leader
-        "c" #'org-capture))
+;; (after! org
+;;   (map! :leader
+;;         "c" #'org-capture))
 (setq org-todo-keywords
       '((sequence "TODO(t)" "PROJ(p)" "NEXT(n)" "|" "DONE(d)")
         (sequence "PROJ(p)" "|" "HOLD(h@/!)")
@@ -198,6 +360,8 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 :END:
 #+begin_src emacs-lisp
 (use-package! org-roam
+  ;; :hook (after-init . org-roam-mode)
+  :hook (org-mode . mario/org-hook)
   :init
   (setq org-roam-v2-ack t)
   (map! :leader
@@ -208,7 +372,7 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
         :desc "Find file in notes" "F" #'+default/find-in-notes
         :desc "Browse Notes" "C-f" #'+default/browse-notes
         :desc "org-roam-ref-find" "k" #'org-roam-ref-find
-        :desc "org-roam-show-graph" "g" #'org-roam-show-graph
+        :desc "org-roam-show-graph(UI)" "g" #'org-roam-ui-mode
         :desc "org-roam-capture" "x" #'org-roam-capture
         :desc "org-roam-dailies-capture-today" "k" #'org-roam-dailies-capture-today)
   (setq org-roam-directory mario/org-roam-dir
@@ -219,15 +383,21 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
   (setq org-roam-mode-sections
         (list #'org-roam-backlinks-insert-section
               #'org-oram-reflinks-insert-section
-              ;;#'org-roam-unlinked-references-insert-section
+              #'org-roam-unlinked-references-insert-section
               ))
-  ;;(set-popup-rules!
-  ;;  `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
-  ;;     :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
-  ;;    ("^\\*org-roam: " ; node dedicated org-roam buffer
-  ;;     :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2)))
-  (org-roam-setup))
+  (set-popup-rules!
+   `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
+      :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
+     ("^\\*org-roam: " ; node dedicated org-roam buffer
+      :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2)))
+  ;; Wrap org-roam-buffer
+  (add-hook 'org-roam-mode-hook #'turn-on-visual-line-mode)
+  (remove-hook 'org-roam-mode-hook #'help-mode)
+  ;; (add-hook 'org-roam-mode-hook #'evil-mode)
+  ;; (add-hook 'org-roam-mode-hook #'which-key-mode)
+  (org-roam-db-autosync-mode))
 #+end_src
+
 *** UI
 :PROPERTIES:
 :ID:       3fa15bc3-ba97-46cc-95fc-9f0419b29be7
@@ -293,142 +463,13 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 ;;        org-journal-enable-agenda-integration t))
 #+end_src
 ** Pomodoro
-** Custom function
-*** inbox-capture
+** Noter
 :PROPERTIES:
-:ID:       aeb399ac-ded1-4db7-afaa-e0edc547f8e5
+:ID:       cf5afc83-8b7f-4c0a-a001-945a6d1fa811
 :END:
 #+begin_src emacs-lisp
-(defun mario/org-inbox-capture ()
-  (interactive)
-  "Capture a task in agenda mode."
-  (org-capture nil "i"))
+(after! org-noter
+  org-noter-doc-split-fraction '(0.57 0.43))
 #+end_src
-*** Advance TODO
-:PROPERTIES:
-:ID:       5b77bcc0-0b1a-4715-a564-e9939f7ad160
-:END:
-#+begin_src emacs-lisp
-(defun mario/advance-todo ()
-  ;;(org-todo 'right)
-  (org-todo "NEXT")
-  (remove-hook 'org-clock-in-hook #'mario/advance-todo))
-#+end_src
-*** Clock in and advance
-:PROPERTIES:
-:ID:       fcd173bd-f8dc-4e72-806f-025e19fccc5b
-:END:
-#+begin_src emacs-lisp
-(defun mario/clock-in-and-advance ()
-  (interactive)
-  (add-hook 'org-clock-in-hook 'mario/advance-todo)
-  (org-agenda-clock-in))
-#+end_src
-*** Org Hide Properties
-:PROPERTIES:
-:ID:       49325209-045f-4e0d-aa76-5c36d4ca2116
-:END:
-#+begin_src emacs-lisp
-(defun org-hide-properties ()
-  "Hide all org-mode headline property drawers in buffer. Could be slow if it has a lot of overlays."
-  (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward
-            "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
-      (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
-        (overlay-put ov_this 'display "")
-        (overlay-put ov_this 'hidden-prop-drawer t))))
-  (put 'org-toggle-properties-hide-state 'state 'hidden))
 
-#+end_src
-*** Org Show Properties
-:PROPERTIES:
-:ID:       4602b7d2-b670-4184-806a-628c1ba89b81
-:END:
-#+begin_src emacs-lisp
-(defun org-show-properties ()
-  "Show all org-mode property drawers hidden by org-hide-properties."
-  (interactive)
-  (remove-overlays (point-min) (point-max) 'hidden-prop-drawer t)
-  (put 'org-toggle-properties-hide-state 'state 'shown))
-#+end_src
-*** Org Toggle Properties
-:PROPERTIES:
-:ID:       7e121b78-fc14-4a48-baa3-da47240847c0
-:END:
-#+begin_src emacs-lisp
-(defun org-toggle-properties ()
-  "Toggle visibility of property drawers."
-  (interactive)
-  (if (eq (get 'org-toggle-properties-hide-state 'state) 'hidden)
-      (org-show-properties)
-    (org-hide-properties)))
-#+end_src
-*** Copy idlink to clipboard
-:PROPERTIES:
-:ID:       d0e78e4a-b158-4b83-898d-88a2d6a22a15
-:END:
-#+begin_src emacs-lisp
-(defun mario/copy-idlink-to-clipboard()
-       (interactive)
-       (when (eq major-mode 'org-agenda-mode) ;switch to orgmode
-     (org-agenda-show)
-     (org-agenda-goto))
-       (when (eq major-mode 'org-mode) ; do this only in org-mode buffers
-     (setq mytmphead (nth 4 (org-heading-components)))
-         (setq mytmpid (funcall 'org-id-get-create))
-     (setq mytmplink (format "[[id:%s][%s]]" mytmpid mytmphead))
-     (kill-new mytmplink)
-     (message "Copied %s to killring (clipboard)" mytmplink)))
-
-#+end_src
-*** Switch to agenda
-:PROPERTIES:
-:ID:       8fb41583-b784-4181-be73-1f1a074d037b
-:END:
-#+begin_src emacs-lisp
-(defun mario/switch-to-agenda()
-  (interactive)
-  (org-agenda nil " "))
-#+end_src
-*** is project p
-:PROPERTIES:
-:ID:       f5760a07-7b88-42bc-b744-41314d5f09ba
-:END:
-#+begin_src emacs-lisp
-  (defun mario/is-project-p()
-    "Any Task with todo keyword subtask"
-    (save-restriction
-      (widen)
-      (let ((has-subtask)
-            (subtree-end (save-excursion (org-end-of-subtree t)))
-            (is-a-task (member (nth 2(org-heading-components)) org-todo-keywords-1)))
-          (save-excursion
-            (forward-line 1)
-            (while (and (not has-subtask)
-                        (< (point) subtree-end)
-                        (re-search-forward "^\*+ " subtree-end t))
-              (when (member (org-get-todo-state) org-todo-keywords-1)
-                (setq has-subtask t))))
-          (and is-a-task has-subtask))))
-#+end_src
-*** skip project
-:PROPERTIES:
-:ID:       52b44427-807b-47a5-9e6b-1b856030ebb0
-:END:
-#+begin_src emacs-lisp
-  (defun mario/skip-projects ()
-  "Skip trees that are projects"
-  (save-restriction
-    (widen)
-    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-      (cond
-       ((org-is-habit-p)
-        next-headline)
-       ((mario/is-project-p)
-        next-headline)
-       (t
-        nil)))))
-#+end_src
 * Deft
