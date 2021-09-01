@@ -15,17 +15,22 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 :END:
 #+begin_src emacs-lisp
 (setq user-full-name "Romario"
-      user-mail-address "romario@com"
+      user-mail-address "rmrvubl@yahoo.com"
       display-line-numbers-type nil            ; turn off line number , you can toggle it with <leader>tl
       undo-limit 80000000                         ; Raise undo-limit to 80Mb
       auto-save-default t                         ; Nobody likes to loose work, I certainly don't
       evil-split-window-below t                   ; Switch to            after splitting
+      ;; Default Browser
+      ;; browse-url-browser-function 'xwidget-webkit-browse-url
       evil-vsplit-window-right t)
 ;; Show battery mode if on laptop
 (unless (equal "Battery Status not available"
                (battery))
   (display-battery-mode 1))
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu) ; hide dashboard shortmen
+(setq-default delete-by-moving-to-trash t) ;; delete to system trash instead
+(add-to-list 'default-frame-alist '(inhibit-double-buffering . t)) ;;stops flickering
+
 #+end_src
 *** Org Tangle - Auto Generate Config
 :PROPERTIES:
@@ -47,6 +52,21 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 #+begin_src emacs-lisp
 (setq doom-theme 'mario-gruvbox
       doom-gruvbox-dark-variant "hard")
+;; Removing split border
+(custom-set-faces!
+  `(vertical-border :background ,(doom-color 'bg) :foreground ,(doom-color 'bg)))
+
+(when (boundp 'window-divider-mode)
+  (setq window-divider-default-places nil
+        window-divider-default-bottom-width 0
+        window-divider-default-right-width 0)
+  (window-divider-mode -1))
+
+;; Padding and line spacing
+;;(set-frame-parameter nil 'internal-border-width 15)
+;;(setq-default left-margin-width 2)
+;;(setq-default right-margin-width 2)
+;;(setq-default line-spacing 0.35)
 #+end_src
 ** Font
 :PROPERTIES:
@@ -74,7 +94,7 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 * Keybinding
 ** Key
 :PROPERTIES:
-:ID:       e91ee5a8-a693-44ea-8d97-6797d21a1720
+:ID:       0457f88d-5b6d-477a-955b-69be9d53e04f
 :END:
 #+begin_src emacs-lisp
 ;; Super+
@@ -88,6 +108,31 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 (map! :n "M-." #'evil-window-increase-width)
 (map! "M--" #'evil-window-decrease-height)
 (map! "M-=" #'evil-window-increase-height)
+(map! :localleader :map org-capture-mode-map
+      :n "w" #'org-capture-finalize
+      :n "s" #'org-capture-finalize
+      :n "q" #'org-capture-kill
+      :n "r" #'org-capture-refile)
+(map! :map org-capture-mode-map
+      :n "s" #'org-capture-finalize
+      :n "w" #'org-capture-finalize
+      :n "q" #'org-capture-kill
+      :n "r" #'org-capture-refile)
+(map! :leader
+      :n "SPC" nil
+      :n "p f" nil)
+
+(cond ((and IS-MAC (+macos--open-with open-in-kitty "kitty" default-directory))
+       (map! :leader
+             (:prefix "o"
+              :desc "Open with kitty" "i" #'+macos/open-in-kitty))))
+
+(map! :map org-mode-map
+      :n "g {" #'outline-up-heading
+      :n "g [" #'org-previous-visible-heading
+      :n "g ]" #'org-next-visible-heading
+      ) ;; goto parent heading
+
 
 ;; Peek line nu without jump
 (map! "C-:" #'consult-goto-line)
@@ -99,6 +144,7 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
        "s" #'evil-window-split
        "k" #'evil-window-up
        :nv "/" nil
+       "b \\" #'doom/toggle-narrow-buffer
       (:prefix ("/" . "Slash")
        :desc "Grep Project Files" :nv "t" #'+default/search-project
        :desc "Commenting" :nv "/" #'evilnc-comment-or-uncomment-lines)
@@ -116,18 +162,34 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
         :desc "org-store-link" "o" #'org-store-link
         :desc "copy-id-from-agenda" "a" #'mario/copy-idlink-to-clipboard)
        "n z" #'mario/switch-to-agenda)
+(map! :map org-mode-map
+      :localleader
+      ;; how to unblock org-store-link!!!
+      "v" #'org-view-output-file
+      "V" #'org-view-output-file-html
+      :nv "n" nil
+      (:prefix ("y" . "yank/copy")
+       "o" #'org-store-link
+       "a" #'mario/copy-id-link-to-clipboard)
+      (:prefix ("\\" . "narrow")
+       "\\" #'org-toggle-narrow-to-subtree
+       "s" #'org-narrow-to-subtree
+       "b" #'org-narrow-to-block
+       "e" #'org-narrow-to-element))
+#+end_src
+
+** Dired
+:PROPERTIES:
+:ID:       26b60258-64f2-4394-bcd2-ddb07657e775
+:END:
+#+begin_src emacs-lisp
+(map! :map dired-mode-map
+      :n "h" #'dired-up-directory
+      :n "l" #'dired-find-file)
+      ;; :n "l" #'dired-find-alternate-file)
 #+end_src
 * Org
 ** Custom function
-*** Org Hook
-:PROPERTIES:
-:ID:       fa24119b-092e-4f86-a551-210c0e705788
-:END:
-#+begin_src emacs-lisp
-(defun mario/org-hook ()
-    (org-hide-properties))
-#+end_src
-
 *** inbox-capture
 :PROPERTIES:
 :ID:       aeb399ac-ded1-4db7-afaa-e0edc547f8e5
@@ -254,6 +316,136 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
        (t
         nil)))))
 #+end_src
+*** Org-View Output File
+:PROPERTIES:
+:ID:       8c366f09-c67d-4bcb-ae50-d37289a8165c
+:END:
+#+begin_src emacs-lisp
+;; PDF
+(defun org-view-output-file (&optional org-file-path)
+  "Visit buffer open on the first output file (if any) found, using `org-view-output-file-extensions'"
+  (interactive)
+  (let* ((org-file-path (or org-file-path (buffer-file-name) ""))
+         (dir (file-name-directory org-file-path))
+         (basename (file-name-base org-file-path))
+         (output-file nil))
+    (dolist (ext org-view-output-file-extensions)
+      (unless output-file
+        (when (file-exists-p
+               (concat dir basename "." ext))
+          (setq output-file (concat dir basename "." ext)))))
+    (if output-file
+        (if (member (file-name-extension output-file) org-view-external-file-extensions)
+            (browse-url-xdg-open output-file)
+          (pop-to-buffer (or (find-buffer-visiting output-file)
+                             (find-file-noselect output-file))))
+      (message "No exported file found"))))
+
+(defvar org-view-output-file-extensions '("pdf" "md" "rst" "txt" "tex" "html")
+  "Search for output files with these extensions, in order, viewing the first that matches")
+
+;; PDF
+(defvar org-view-external-file-extensions '("html")
+  "File formats that should be opened externally.")
+
+(defcustom org-html-use-webkit t
+  "Use embedded webkit to preview.
+This requires GNU/Emacs version >= 26 and built with the `--with-xwidgets`
+option."
+  :type 'boolean)
+
+(defun org-html-browser (url)
+  "Use browser specified by user to load URL.
+Use default browser if nil."
+  (if org-html-url-browser
+      (let ((browse-url-generic-program org-html-url-browser)
+            (browse-url-generic-args roam-url-args))
+        (ignore browse-url-generic-program)
+        (ignore browse-url-generic-args)
+        (browse-url-generic url))
+    (browse-url url)))
+
+(defun org-html-open-url (url)
+  "Ask the browser to load URL.
+Use default browser unless `xwidget' is available."
+  (if (and org-html-use-webkit
+           (featurep 'xwidget-internal))
+      (progn
+        (xwidget-webkit-browse-url url)
+        (let ((buf (xwidget-buffer (xwidget-webkit-current-session))))
+          (when (buffer-live-p buf)
+            (and (eq buf (current-buffer)) (quit-window))
+            (let (display-buffer-alist)(pop-to-buffer buf)))))
+    (org-html-browser url)))
+
+(defun org-view-output-file-html (&optional org-file-path)
+  "Visit buffer open on the first output file (if any) found, using `org-view-output-file-extensions'"
+  (interactive)
+  (let* ((org-file-path (or org-file-path (buffer-file-name) ""))
+         (dir (file-name-directory org-file-path))
+         (basename (file-name-base org-file-path))
+         (output-file nil))
+    (dolist (ext org-view-output-file-extensions-html)
+      (unless output-file
+        (when (file-exists-p
+               (concat dir basename "." ext))
+          (setq output-file (concat dir basename "." ext)))))
+    (if output-file
+        (if (member (file-name-extension output-file) org-view-external-file-extensions)
+            (defun org-html-preview-url ()
+                "Return grip preview url."
+                 (format "file://%s" output-file))
+            (org-html-open-url org-html-preview-url))
+      (message "No exported file found"))))
+
+(defvar org-view-output-file-extensions-html '( "html")
+  "Search for output files with these extensions, in order, viewing the first that matches")
+
+(defvar org-view-external-file-extensions '("html")
+  "File formats that should be opened externally.")
+#+end_src
+*** Org-roam ui func
+:PROPERTIES:
+:ID:       5d4e2e59-72c6-45bf-af42-1e79ea2d7306
+:END:
+#+begin_src emacs-lisp
+(defcustom org-roam-ui-use-webkit t
+  "Use embedded webkit to preview.
+This requires GNU/Emacs version >= 26 and built with the `--with-xwidgets`
+option."
+  :type 'boolean
+  :group 'roam)
+
+(defun org-roam-ui-browser (url)
+  "Use browser specified by user to load URL.
+Use default browser if nil."
+  (if org-roam-ui-url-browser
+      (let ((browse-url-generic-program org-roam-ui-url-browser)
+            (browse-url-generic-args roam-url-args))
+        (ignore browse-url-generic-program)
+        (ignore browse-url-generic-args)
+        (browse-url-generic url))
+    (browse-url url)))
+
+(defun org-roam-ui-open-url (url)
+  "Ask the browser to load URL.
+Use default browser unless `xwidget' is available."
+  (if (and org-roam-ui-use-webkit
+           (featurep 'xwidget-internal))
+      (progn
+        (xwidget-webkit-browse-url url)
+        (let ((buf (xwidget-buffer (xwidget-webkit-current-session))))
+          (when (buffer-live-p buf)
+            (and (eq buf (current-buffer)) (quit-window))
+            (let (display-buffer-alist)(pop-to-buffer buf)))))
+    (org-roam-ui-browser url)))
+
+(define-minor-mode org-roam-ui-open-in-browser
+  "open org-roam-ui in the browser"
+ :lighter "roam"
+ (org-roam-ui-open-url "http://127.0.0.1:35901"))
+
+#+end_src
 ** Org
 *** Configuration
 :PROPERTIES:
@@ -261,9 +453,12 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 :END:
 #+begin_src emacs-lisp
 (setq mario/org-agenda-dir (file-truename "~/Documents/Docdump/gtd/")
-      mario/org-dir (file-truename "~/Documents/Docdump")
-      mario/org-journal-dir (file-truename "~/Documents/Docdump/journals")
-      mario/org-roam-dir (file-truename "~/Documents/Docdump"))
+      mario/org-dir (file-truename "~/Documents/Docdump/")
+      mario/org-journal-dir (file-truename "~/Documents/Docdump/journals/daily/")
+      mario/org-roam-dir (file-truename "~/Documents/Docdump/"))
+(setq org-attach-id-dir (expand-file-name "assets" mario/org-dir)
+      org-attach-dir-relative t)
+(setq org-habit-show-habits-only-for-today t)
 (setq org-directory mario/org-dir
       org-ellipsis " "
       org-archive-location (concat org-directory ".archive/%s::")
@@ -353,15 +548,26 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
                           :inherit 'fixed-pitch)
 
 #+end_src
+
+** Agenda
+:PROPERTIES:
+:ID:       b6d1d519-2603-4eb8-835d-78930e799095
+:END:
+#+begin_src emacs-lisp
+(setq org-capture-templates
+        `(("i" "Inbox" entry (file ,(expand-file-name "inbox.org" mario/org-agenda-dir))
+           ,(concat "* TODO %?\n"
+                    "/Entered on/ %u"))
+          ("r" "Reading List" entry (file ,(expand-file-name "books.org" mario/org-agenda-dir))
+           ,(concat "* TODO %?\n"))))
+#+end_src
 ** Roam
 *** Roam
 :PROPERTIES:
-:ID:       1ae2c2f7-4200-4ce8-ab9e-516ea2c25330
+:ID:       a936fc4a-1989-4471-a4b5-9ace9e27d58e
 :END:
 #+begin_src emacs-lisp
 (use-package! org-roam
-  ;; :hook (after-init . org-roam-mode)
-  :hook (org-mode . mario/org-hook)
   :init
   (setq org-roam-v2-ack t)
   (map! :leader
@@ -374,10 +580,24 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
         :desc "org-roam-ref-find" "k" #'org-roam-ref-find
         :desc "org-roam-show-graph(UI)" "g" #'org-roam-ui-mode
         :desc "org-roam-capture" "x" #'org-roam-capture
-        :desc "org-roam-dailies-capture-today" "k" #'org-roam-dailies-capture-today)
+        :desc "org-roam-yesterday" "h" #'org-roam-dailies-goto-yesterday
+        :desc "org-roam-today" "j" #'org-roam-dailies-goto-today
+        :desc "org-roam-tomorrow" "k" #'org-roam-dailies-goto-tomorrow
+        :desc "org-roam-date" "l" #'org-roam-dailies-goto-date
+        (:prefix (";" . "journal")
+         :desc "Previous Entry" "h" #'org-journal-previous-entry
+         :desc "New Entry" "j" #'org-journal-new-entry
+         :desc "search forever" "s" #'org-journal-search-forever
+         :desc "Next Entry" "k" #'org-journal-next-entry))
+  (map! :map org-mode-map
+        :localleader
+        :prefix "m"
+        "u" #'org-roam-update-org-id-locations)
   (setq org-roam-directory mario/org-roam-dir
         org-roam-dailies-directory "journals/daily"
         org-roam-db-gc-threshold most-positive-fixnum
+        ;; Only create ID in interactive mode
+        ;; org-id-link-to-org-use-id 'create-if-interactive'
         org-id-link-to-org-use-id t)
   :config
   (setq org-roam-mode-sections
@@ -385,6 +605,7 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
               #'org-oram-reflinks-insert-section
               #'org-roam-unlinked-references-insert-section
               ))
+;; Actually i don't need to these its configured by doom itself.
   (set-popup-rules!
    `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
@@ -392,10 +613,26 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2)))
   ;; Wrap org-roam-buffer
   (add-hook 'org-roam-mode-hook #'turn-on-visual-line-mode)
-  (remove-hook 'org-roam-mode-hook #'help-mode)
-  ;; (add-hook 'org-roam-mode-hook #'evil-mode)
-  ;; (add-hook 'org-roam-mode-hook #'which-key-mode)
-  (org-roam-db-autosync-mode))
+  (setq org-roam-capture-templates
+        '(("d" "default" plain
+           "%?"
+           :if-new (file+head "pages/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("b" "Book" plain
+           "%?"
+           :if-new (file+head "pages/books/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("z" "Zettle" plain
+           "%?"
+           :if-new (file+head "pages/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)))
+  (set-company-backend! 'org-mode '(company-capf)))
 #+end_src
 
 *** UI
@@ -408,7 +645,12 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
   :after org-roam)
 (use-package! org-roam-ui
   :after org-roam
-  :commands (org-roam-ui-mode))
+  :commands (org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-browser-function #'xwidget-webkit-browse-url
+        org-roam-ui-sync-theme t
+        org-roam-ui-use-webkit nil
+        ))
 #+end_src
 ** Agenda
 :PROPERTIES:
@@ -417,9 +659,17 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 #+begin_src emacs-lisp
 ;; Org-Agenda
 (map! :map org-agenda-mode-map
-      :leader
-      "m x" #'mario/org-inbox-capture
-      "m c I" #'mario/clock-in-and-advance)
+      :localleader
+      (:prefix ("z" . "Calendar")
+       "c" #'mario/calendar
+       "s" #'org-gcal-sync
+       "f" #'org-gcal-fetch
+       "d" #'org-gcal-delete-at-point
+       "i" #'org-gcal-post-at-point
+       "S" #'org-gcal--sync-unlock)
+      "x" #'mario/org-inbox-capture
+      "z" #'mario/calendar
+      "c I" #'mario/clock-in-and-advance)
 (require 'find-lisp)
 (setq org-agenda-files
       (append (find-lisp-find-files mario/org-agenda-dir "\.org$")
@@ -432,9 +682,10 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
   :config
   (setq org-agenda-custom-commands `((" " "Agenda"
                                      ((agenda ""
-                                              ((org-agenda-span 'week)
-                                              (org-deadline-warning-days 365)))
-                                      (todo "TODO"
+                                              ((org-agenda-span 'day)
+                                               (org-agenda-start-day nil)
+                                               (org-deadline-warning-days 365)))
+                                      (alltodo ""
                                            ((org-agenda-overriding-header "Inbox")
                                             (org-agenda-files '(,(expand-file-name "inbox.org" mario/org-agenda-dir)))))
                                       (todo "NEXT"
@@ -447,20 +698,42 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
                                       (todo "TODO"
                                            ((org-agenda-overriding-header "One-off Tasks")
                                             (org-agenda-files '(,(expand-file-name "next.org" mario/org-agenda-dir)))
-                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))))))
+                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))))
+                                   ("h" "Routines / Habits"
+                                     ((todo "TODO"
+                                           ((org-agenda-overriding-header "Routines & Habits")
+                                            (org-agenda-files '(,(expand-file-name "habits.org" mario/org-agenda-dir)))))
+                                      (todo "NEXT"
+                                           ((org-agenda-overriding-header "Reading Unfinished")
+                                            (org-agenda-files '(,(expand-file-name "books.org" mario/org-agenda-dir)))))
+                                      (todo "TODO"
+                                           ((org-agenda-overriding-header "Reading List")
+                                            (org-agenda-files '(,(expand-file-name "books.org" mario/org-agenda-dir)))))))
+                                   ("n" "North Star"
+                                     ;; How to Filter only heading of this TODO?
+                                     ((todo "PROJ"
+                                           ((org-agenda-overriding-header "Active Project")
+                                            (org-agenda-files '(,(expand-file-name "projects.org" mario/org-agenda-dir)))))
+                                      (todo "TODO"
+                                           ((org-agenda-overriding-header "Project TODOS")
+                                            (org-agenda-files '(,(expand-file-name "projects.org" mario/org-agenda-dir)))))
+                                      (todo "HOLD|CANCELLED"
+                                           ((org-agenda-overriding-header "PROJECTS ONHOLD / CANCELLED")
+                                            (org-agenda-files '(,(expand-file-name "projects.org" mario/org-agenda-dir))))))))))
 #+end_src
 ** Journal
 :PROPERTIES:
 :ID:       95d25d03-90f2-4a81-b3ba-4f6310b00fbc
 :END:
 #+begin_src emacs-lisp
-;;(after! org-journal
-;;  (setq org-journal-date-prefix "#+TITLE: "
-;;        org-journal-file-format "%Y-%m-%d.org"
-;;        org-journal-time-format "%I:%M%p"
-;;        org-journal-date-format "%A, %d %B %Y"
-;;        org-journal-dir mario/org-journal-dir
-;;        org-journal-enable-agenda-integration t))
+(after! org-journal
+ (setq org-journal-date-prefix "#+title: "
+       org-journal-file-format "%Y-%m-%d.org"
+       org-journal-time-format "%I:%M%p"
+       ;; org-journal-date-format "%A, %d %B %Y"
+       org-journal-date-format "%Y-%m-%d"
+       org-journal-dir mario/org-journal-dir
+       org-journal-enable-agenda-integration t))
 #+end_src
 ** Pomodoro
 ** Noter
@@ -472,4 +745,65 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
   org-noter-doc-split-fraction '(0.57 0.43))
 #+end_src
 
+** Calendar / Gcal
+:PROPERTIES:
+:ID:       5b22395f-5920-42b3-9e33-baeb02d4b082
+:END:
+#+begin_src emacs-lisp
+(defun mario/calendar ()
+  (interactive)
+  (cfw:open-calendar-buffer
+   :contents-sources
+   (list
+    (cfw:org-create-file-source "Inbox" (expand-file-name "inbox.org" mario/org-agenda-dir) "Cyan")  ; other org source
+    (cfw:org-create-file-source "org-gcal" (expand-file-name "cal.org" mario/org-agenda-dir) "Green") ; other org source
+    (cfw:ical-create-source "gcal" (shell-command-to-string "pass api/rmrvubl-gcal-ics") "IndianRed") ; gcal ICS
+    ;; (cfw:org-create-source "Green")  ; org-agenda source
+    ;; (cfw:org-create-file-source "Inbox" "~/Documents/Docdump/gtd/inbox.org" "Cyan")  ; other org source
+    ;; (cfw:org-create-file-source "Project" "~/Documents/Docdump/gtd/projects.org" "black")  ; other org source
+    ;; (cfw:howm-create-source "Blue")  ; howm source
+    ;; (cfw:cal-create-source "Orange") ; diary source
+    ;; (cfw:ical-create-source "Moon" "~/moon.ics" "Gray")  ; ICS source1
+   )))
+(require 'org-gcal)
+;; How to hide this in emacs? through pass?
+(setq org-gcal-client-id (shell-command-to-string "pass api/rmrvubl-org-gcal-id")
+      org-gcal-client-secret (shell-command-to-string "pass api/rmrvubl-org-gcal-secret")
+      org-gcal-fetch-file-alist '(("rmrvubl@gmail.com" .  "~/Documents/Docdump/gtd/cal.org"))) ;; Which sync to gcal file
+                                  ;; ("another-mail@gmail.com" .  "~/task.org")))
+#+end_src
+* Pdf
+:PROPERTIES:
+:ID:       7113d133-6e71-4b4f-a177-78d89e856034
+:END:
+#+begin_src emacs-lisp
+(use-package pdf-view
+  :hook (pdf-tools-enabled . pdf-view-themed-minor-mode)
+  :hook (pdf-tools-enabled . hide-mode-line-mode)
+  :config
+  (setq pdf-view-resize-factor 1.1)
+  (setq-default pdf-view-display-size 'fit-page))
+#+end_src
+* Mu4e
+:PROPERTIES:
+:ID:       90217926-6308-4c01-81bc-04408e5b5be3
+:END:
+#+begin_src emacs-lisp
+(after! mu4e
+  (setq sendmail-program (executable-find "msmtp"))
+  (setq +mu4e-gmail-accounts '(("rmrvubl@gmail.com" . "/rmrvubl")))
+
+  (add-to-list 'mu4e-bookmarks
+               '(:name "Yesterday's messages" :query "date:2d..1d" :key ?y) t))
+#+end_src
+
 * Deft
+:PROPERTIES:
+:ID:       83ea417a-dfe3-4b24-aa73-446ba23a0560
+:END:
+#+begin_src emacs-lisp
+(setq deft-directory mario/org-roam-dir
+      deft-recursive t
+      deft-use-filter-string-for-filename t
+      deft-default-extension "org")
+#+end_src
