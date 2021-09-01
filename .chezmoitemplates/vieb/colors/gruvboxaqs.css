@@ -149,7 +149,7 @@ body:not(#app) ::placeholder {color: var(--placeholder-text);}
 #tabs &gt; span {color: var(--fg);background: var(--tab-background);display: flex;margin: 0 .1em .1em 0;flex: 1;overflow: hidden;white-space: nowrap;height: 1.9em;}
 #tabs &gt; span &gt; img {margin: auto 0 auto .25em;padding: 0;height: 1.5em;width: 1.5em;min-height: 1.5em;min-width: 1.5em;pointer-events: none;}
 #tabs &gt; span &gt; span {margin: auto 0 auto .25em;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
-#tabs .visible-tab {background: var(--visible-tab); color: var(--visible-tab-fg);}
+#tabs .visible-tab {background: var(--visible-tab); color: var(--visible-tab-fg);font-weight: bold;}
 #tabs [suspended] {background: var(--tab-suspended);color: var(--tab-suspended-fg); text-decoration:line-through;}
 #tabs.multiple #current-tab {border-left: solid .3em var(--tab-split);}
 #tabs .pinned {min-width: 1.9em !important;max-width: 1.9em;width: 1.9em;padding: 0;}
