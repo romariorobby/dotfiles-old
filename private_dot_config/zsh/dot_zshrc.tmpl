@@ -15,10 +15,8 @@ HISTFILE=~/.cache/zsh/history
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc"
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc"
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc"
-# FZF
-[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
-[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 
+{{- if ne .chezmoi.os "darwin" }}
 #MACOS
 # TODO: make more simpler
 if [[ ! "$PATH" == */usr/local/opt/fzf/bin* ]]; then
@@ -32,10 +30,16 @@ fi
 # Key bindings
 # ------------
 [ -f "/usr/local/opt/fzf/shell/key-bindings.zsh" ] && source "/usr/local/opt/fzf/shell/key-bindings.zsh"
-##########
 
+{{ end }}
+
+{{- if ne .chezmoi.os "darwin" }}
+# FZF
+[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 # FIXME: custom fzf (deprecated)
 #[ -f $HOME/.local/bin/fzf/binding.zsh ] && source $HOME/.local/bin/fzf/binding.zsh
+{{ end }}
 
 # Basic auto/tab complete:
 autoload -U compinit
@@ -86,9 +90,13 @@ openvim() {
     nvim $(fzf)
 }
 bindkey -s '^o' 'lfcd\n'
-
-# FIXME: NOT WORK ON MACOS 
+{{- if eq .chezmoi.os "darwin" }}
+# MacOS - OPT-f
+bindkey -s 'ƒ' 'openvim\n'
+{{ else }}
+# Linux - ALT-f
 bindkey -s '\ef' 'openvim\n'
+{{ end }}
 
 #bindkey -s '^a' 'bc -lq\n'
 
@@ -101,9 +109,13 @@ bindkey '^[[P' delete-char
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^n' edit-command-line
 
-source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null
+{{- if eq .chezmoi.os "darwin" }}
 #macOS
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+[ -d "/usr/local/share/zsh-syntax-highlighting" ] && source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+{{ else }}
+# Linux
+[ -d "/usr/share/zsh/plugins/fast-syntax-hightlighting" ] && source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null
+{{ end }}
 
 #source /usr/share/zsh/plugins/rbw/rbw.zsh 2>/dev/null
 #source /usr/lib/zsh-git-prompt/zshrc.sh Bitwarden CLI
@@ -114,4 +126,4 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/d
 # export BW_SESSION="$(bw login BW_EMAIL $BW_MASTER --raw)"
 # export BW_SESSION="$(bw unlock $BW_MASTER 2>/dev/null | grep 'export' | sed -E 's/.*export BW_SESSION="(.*==)"$/\1/')"
 #
-kitty + complete setup zsh | source /dev/stdin
+[ -x "$(command -v "kitty")" ] && kitty + complete setup zsh | source /dev/stdin
