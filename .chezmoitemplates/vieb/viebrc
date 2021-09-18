@@ -225,12 +225,17 @@ emap <C-p> <S-TAB>
 " Paste in explorer mode
 "
 {{- if eq .chezmoi.os "darwin" }}
-" Opt + p/P
+" Opt + {}
+" p
 emap <A-π> <M-v>
+" v
+emap <A-√> <M-v>
+" P
 emap <A-∏> <openFromClipboard>
 {{ else }}
 " Alt + p / P
 emap <A-p> <C-v>
+emap <A-v> <C-v>
 emap <A-P> <openFromClipboard>
 {{ end }}
 
@@ -238,7 +243,6 @@ emap <A-P> <openFromClipboard>
 imap <C-o> <editWithVim>
 
 " Action . SPC-a
-nmap <Space>af <toggleFullscreen>
 nmap <Space>ad <:downloads>
 nmap <Space>ap <:print>
 nmap <Space>ax <:devtools>
@@ -262,10 +266,13 @@ nmap <Space>bqh <:lclose>
 nmap <Space>bp <:pin>
 nmap <Space>bl <nextTab>
 nmap <Space>bh <previousTab>
-" nmap <Space>bt <:set guitabbar=never>
-" nmap <Space>bT <:set guitabbar=always>
 nmap <Space>by <pageToClipboard>
 nmap <Space>y <pageToClipboard>
+nmap Y <pageToClipboard>
+" nmap <Space>bt <:set guitabbar=never>
+" nmap <Space>bT <:set guitabbar=always>
+nmap M <:mute> 
+nmap ` <:pin> 
 nmap <Space>bm <:mute> 
 nmap <Space>bG <:buffer 999>
 nmap <Space>b$ <:buffer 999>
@@ -284,8 +291,11 @@ pmap <Space>di <p.downloadImage>
 pmap <Space>dl <p.downloadLink>
 
 " Toggle . SPC-t
-nmap <Space>tb <:set guitabbar=never>
-nmap <Space>tB <:set guitabbar=always>
+nmap <Space>tB <:set guitabbar=never>
+nmap <Space>tb <:set guitabbar=always>
+nmap <Space>tN <:set guinavbar=never>
+nmap <Space>tn <:set guinavbar=always>
+nmap <Space>tf <toggleFullscreen>
 
 " Open . SPC-o
 " This seems broken?
