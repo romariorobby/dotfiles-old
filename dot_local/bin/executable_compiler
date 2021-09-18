@@ -51,7 +51,7 @@ case "$ext" in
 	mom) preconv "$file" | refer -PS -e | groff -mom -kept -T pdf > "$base".pdf ;;
 	ms) preconv "$file" | refer -PS -e | groff -me -ms -kept -T pdf > "$base".pdf ;;
 	org) emacs "$file" --batch -u "$USER" -f org-latex-export-to-pdf ;;
-	py) python "$file" ;;
+	py) [ "$OSTYPE" == "darwin*" ] && python3 "$file" || python "$file" ;;
 	[rR]md) Rscript -e "rmarkdown::render('$file', quiet=TRUE)" ;;
 	rs) cargo build ;;
 	sass) sassc -a "$file" "$base.css" ;;
