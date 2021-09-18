@@ -9,6 +9,10 @@ export PATH="$PATH:$(du "$HOME/.local/bin" | cut -f2 | paste -sd ':')"
 {{ end }}
 export PATH="$HOME/.local/bin${PATH:+:${PATH}}"
 unsetopt PROMPT_SP
+{{ if (eq .chezmoi.os "darwin") }}
+# Lua path MacOS
+export PATH="/usr/local/opt/lua/bin:$PATH"
+{{ end }}
 
 export PATH=$PATH:$HOME/.config/emacs-doom/bin
 export NPM_CONFIG_PREFIX=~/.local/
