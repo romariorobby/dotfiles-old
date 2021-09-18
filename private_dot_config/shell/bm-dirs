@@ -31,6 +31,7 @@ lswm  ~/.local/src/dwm/
 lsst  ~/.local/src/st/
 lsdm  ~/.local/src/dmenu/
 lsbl ~/.local/src/yadav-dwmblocks/
+las	 ~/Library/Application\ Support/
 dt	  ${XDG_DATA_HOME:-$HOME/.local/share}
 dtgk  ${XDG_DATA_HOME:-$HOME/.local/share}/getkeys/
 dtch   ${XDG_DATA_HOME:-$HOME/.local/share}/chezmoi
