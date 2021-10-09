@@ -11,7 +11,11 @@
 {{- $pass := false -}}
 {{- "" -}}
 
+{{ if .chezmoi.os "android" }}
+{{- $name := "mariodroid" -}}
+{{ else }}
 {{- $name := "Romario" -}}
+{{- end -}}
 {{- $git_name := "romariorobby" -}}
 {{- $git_email := "romariorobby@yahoo.com" -}}
 

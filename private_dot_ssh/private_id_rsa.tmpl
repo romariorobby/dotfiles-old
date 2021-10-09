@@ -1,15 +1,15 @@
 {{- if .secret -}}
 {{-   if .bw -}}
 {{-     if (eq .chezmoi.os "linux") }}
-{{-       (bitwarden "item" "archlaptop-sshpriv").notes -}}
+{{-       (bitwarden "item" "archlaptop-rsapriv").notes -}}
 {{-     else if (eq .chezmoi.os "darwin") }}
-{{-       (bitwarden "item" "macbook-sshpriv").notes -}}
+{{-       (bitwarden "item" "macbook-rsapriv").notes -}}
 {{-     end -}}
 {{-   else if .pass -}}
 {{-     if (eq .chezmoi.os "linux") }}
-{{-       passRaw "ssh/archlaptop-sshpriv" -}}
+{{-       passRaw "ssh/archlaptop-rsapriv" -}}
 {{-     else if (eq .chezmoi.os "darwin") }}
-{{-       passRaw "ssh/macbook-sshpriv" -}}
+{{-       passRaw "ssh/macbook-rsapriv" -}}
 {{-     end -}}
 {{-   end -}}
 {{- end -}}

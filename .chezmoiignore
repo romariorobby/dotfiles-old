@@ -14,7 +14,9 @@
 
 # adding on all OSes
 !.emacs.d
+{{- if ne .chezmoi.os "android" -}}
 !.config/kitty
+{{ end }}
 !.config/tmux
 !.config/zsh
 !.config/shell
@@ -28,8 +30,10 @@
 
 # re-including and re-excluding
 !.local
+{{- if ne .chezmoi.os "android" -}}
 !.local/share
 .local/share/*
+{{ end }}
 !.local/bin
 .local/bin/*
 
@@ -39,6 +43,9 @@
 !.local/bin/texclear
 !.local/share/vault/
 
+{{ if eq .chezmoi.os "android" -}}
+!.local/bin/shortcut
+{{ end }}
 {{ if eq .chezmoi.os "linux" -}}
 # adding only linux
 !.xinitrc
@@ -88,8 +95,8 @@
 {{- else }}
 
 # Full Version
-# Ignore this file if OS != LINUX
 {{- if ne .chezmoi.os "linux" }}
+# Ignore this file if OS != LINUX
 .config/awesome
 .config/bspwm
 .config/calcurse

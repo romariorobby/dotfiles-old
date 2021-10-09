@@ -8,7 +8,7 @@ alias \
 		grep="grep --color=auto" 
 		rm="rm -vi" \
 {{ end }}
-{{ if (eq .chezmoi.os "linux") }}
+{{ if (or (eq .chezmoi.os "linux") (eq .chezmoi.os "android")) }}
 alias \
 		ls="ls -hN --color=auto --group-directories-first" \
 		la="ls -a -hN --color=auto --group-directories-first" \
@@ -17,6 +17,10 @@ alias \
 		rm="rm -vI" \
 		xevs='xev |	awk -F"[ )]+" "/^KeyPress/ { a[NR+2] } NR in a { printf \"%-3s %s\n\", \$5, \$8 } "' \
 		xevg="xev | grep -A6 KeyPress"\
+{{ end }}
+{{ if (eq .chezmoi.os "android") }}
+alias \
+		hh="~/storage/shared/" \
 {{ end }}
 alias \
 		acp="advcp -g" \

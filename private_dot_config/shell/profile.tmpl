@@ -20,8 +20,11 @@ export NPM_CONFIG_PREFIX=~/.local/
 # Default programs:
 {{ if (eq .chezmoi.os "darwin") }}
 export TERMINAL="kitty"
-{{ end }}
+{{ else }}
+# TODO: check chezmoi docs
+# better if we can check whether `terminal` exist or not.
 export TERMINAL="st"
+{{ end }}
 export EDITOR="nvim"
 export VISUAL="nvim"
 export CODEEDITOR="nvim"

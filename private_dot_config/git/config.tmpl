@@ -1,6 +1,10 @@
 # vim:ft=gitconfig
 [user]
+{{ if eq .chezmoi.os "android" }}
+	name = mariodroid
+{{ else }}
 	name = {{ .git.name }}
+{{ end }}
 	email = {{ .git.email }}
 
 [http]

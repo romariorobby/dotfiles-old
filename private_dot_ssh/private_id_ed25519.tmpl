@@ -1,0 +1,19 @@
+{{- if .secret -}}
+{{-   if .bw -}}
+{{-     if (eq .chezmoi.os "linux") }}
+{{-       (bitwarden "item" "archlaptop-ed25519priv").notes -}}
+{{-     else if (eq .chezmoi.os "darwin") }}
+{{-       (bitwarden "item" "macbook-ed25519priv").notes -}}
+{{-     else if (eq .chezmoi.os "android") }}
+{{-       (bitwarden "item" "android-ed25519priv").notes -}}
+{{-     end -}}
+{{-   else if .pass -}}
+{{-     if (eq .chezmoi.os "linux") }}
+{{-       passRaw "ssh/archlaptop-ed25519priv" -}}
+{{-     else if (eq .chezmoi.os "darwin") }}
+{{-       passRaw "ssh/macbook-ed25519priv" -}}
+{{-     else if (eq .chezmoi.os "android") }}
+{{-       passRaw "ssh/android-ed25519priv" -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
