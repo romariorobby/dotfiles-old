@@ -7,6 +7,7 @@
 notify-send "Streaming video"
 # try to run video in lower format
 allcpus_enabled=$(cat /sys/devices/system/cpu/cpu1/online)
+# sysctl -n hw.ncpu (macOS)
 charging_state=$(cat /sys/class/power_supply/BAT0/status)
 
 if [ "$allcpus_enabled" -eq 0 ]; then
