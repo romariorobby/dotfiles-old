@@ -1,0 +1,7 @@
+#TAG, Souce Name (URL) , Purpose
+BRE,FM,daviderestivo/emacs-head, "Emacs brew repo"
+BRE,FMX,cavaliercoder/dmidecode/dmidecode, "dmidecode repo"
+BRE,FM,homebrew/cask-fonts," Nerd font Repo"
+BRE,FM,amar1729/formulae,"Browserpass Repo"
+BRE,FM,koekeishiya/formulae, "SKHD repo"
+APT,

@@ -4,11 +4,15 @@
 # Used to customize configuration when doing a `chezmoi init $repos`.
 #
 {{/* Boolean */}}
+{{- $full := false }}
+{{- $base := false }}
 {{- $minimal := false -}}
+{{- $headless := false }}
 
 {{- $secret := false -}}
 {{- $bw := false -}}
-{{- $pass := false -}}
+{{- $passunix := false -}}
+{{- $gpg := false }}
 {{- "" -}}
 
 {{ if .chezmoi.os "android" }}
@@ -21,13 +25,13 @@
 
 {{- if (env "BW") -}}
 {{-   $secret = true -}}
-{{-   $pass = false -}}
+{{-   $passunix = false -}}
 {{-   $bw = true -}}
 {{- end -}}
 
 {{- if (env "PASS") -}}
 {{-   $secret = true -}}
-{{-   $pass = true -}}
+{{-   $passunix = true -}}
 {{-   $bw = false -}}
 {{- end -}}
 
@@ -39,10 +43,10 @@
 {{-   $minimal = promptBool "minimal" -}}
 {{-   if $minimal -}}
 {{-     $bw = false -}}
-{{-     $pass = false -}}
+{{-     $passunix = false -}}
 {{-   else }}
 {{-     $bw = promptBool "bw" -}}
-{{-     $pass = promptBool "pass" -}}
+{{-     $passunix = promptBool "pass" -}}
 {{-   end -}}
 
 {{-   $name := promptString "Username for Chezmoi" -}}
@@ -57,9 +61,12 @@ encryption = "gpg"
 
 [data]
   name = "{{ $name }}"
+  full = {{ $full }}
+  base = {{ $base }}
+  headless = {{ $headless }}
   minimal = {{ $minimal }}
   secret = {{ $secret }}
-  pass = {{ $pass }}
+  pass = {{ $passunix }}
   bw = {{ $bw }}
     [data.git]
 	    name = "{{ $git_name }}"

@@ -1,0 +1,305 @@
+#!/bin/sh
+# vim:ft=sh
+
+# TODO:
+#- Profile switch to like programming setup, Non programming setup ?
+progsfile="progs.csv"
+sreposfile="repos.csv"
+
+[ -z "$aurhelper" ] && aurhelper="paru"
+
+# TODO: find a way to better implement .chezmoi variable
+cmFull="{{ .full }}"
+cmMinimal="{{ .minimal }}"
+cmBase="{{ .base }}"
+cmHeadless="{{ .headless }}"
+gitname="{{ .git.name }}"
+error() { clear; printf "ERROR:\\n%s\\n" "$1" >&2; exit 1;}
+#TODO: checking if user not running root
+checksudo(){
+	echo "checking user sudo"
+}
+preinstallmsg() { \
+	dialog --title "Chezmoi Bootstrap - $rtypename" \
+		   --yes-label "Let's go!" \
+		   --no-label "No, nevermind!" \
+		   --yesno "The rest of the installation will now be totally automated, so you can sit back and relax.\\n\\nIt will take some time, but when done, you can relax even more with your complete system.\\n\\nNow just press <Let's go!> and the system will begin installation!" 13 60 || { clear; exit 1; }
+	}
+
+cmRtype(){
+	if [ "$cmFull" = true ]; then
+		rtype="F"
+		rtypename="FULL"
+	elif [ "$cmMinimal" = true ]; then
+		rtype="M"
+		rtypename="MINIMAL"
+	elif [ "$cmBase" = true ]; then
+		rtype="B"
+		rtypename="BASE"
+	elif [ "$cmHeadless" = true ]; then
+		rtype="H"
+		rtypename="HEADLESS"
+	else
+		error "No Type Selected"
+	fi
+}
+
+installpkg() {
+    case "$OS" in
+		"macOS")
+			brew install "$1" >/dev/null 2>&1 ;;
+        # "macOS") brew install "$1" >/dev/null 2>&1 ;;
+        "Linux")
+            case "$distro" in
+                "Arch Linux"|"Manjaro Linux")
+					# echo "MAIN> Installing ($p/$total) $1"
+					pacman --noconfirm --needed -S "$1" >/dev/null 2>&1 ;;
+                "Android*")
+					# echo "MAIN> Installing ($p/$total) $1"
+					pkg install "$1" ;;
+				# TODO: Testing on ubuntu derivative
+				# "Ubuntu") apt install "$1" ;;
+            esac
+            ;;
+    esac ;}
+
+installpreq(){
+    echo "Installing Dialog...."
+    [ -x "$(command -v "dialog")" ] || \
+        installpkg dialog || error "Are you sure you're running this as the root user, are on an $OS and have an internet connection?"
+	for x in curl git ntp zsh; do
+        [ -x "$(command -v "$x")" ] && echo "$x installed. aborted.." || installpkg "$x"
+	done
+    clear
+}
+installbrew(){ \
+	[ -d "/Library/Developer/CommandLineTools" ] && echo "XCode already installed." 5 70 || xcode-select --install
+    [ -x "$(command -v "brew")" ] && echo "Homebrew already installed." || \
+        bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    # dialog --title "RARBS Prerequisite" --infobox "Updating Homebrew..." 5 70
+    echo "Running brew update..."
+    brew update
+}
+
+installreq(){
+    # Just in case
+	[ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers
+    case $OS in
+        macOS) reqMac ;;
+        Linux) reqLinux ;;
+    esac
+
+}
+reqMac(){
+	installbrew
+
+}
+
+reqLinux(){
+	newperms "%wheel ALL=(ALL) NOPASSWD: ALL"
+    case $distro in
+        "Arch Linux"|"Manjaro Linux")
+                refreshkeys 
+                manualinstall $aurhelper-bin || manualinstall $aurhelper || error "Failed to install $aurhelper (AUR helper)."
+                ntpdate 0.id.pool.ntp.org >/dev/null 2>&1
+                ;;
+    esac
+}
+
+maininstall(){ 
+	installpkg "$1" 
+}
+
+aurinstall() {
+	echo "$aurinstalled" | grep -q "^$1$" && \
+        dialog --colors --title "RARBS Installation" --infobox "\Zb\`$1\`\Zn \Z1already installed\Zn from the AUR ($p of $total). \Z1Skipping...\Zn" 5 70 && $pauseins && return 1
+	dialog --colors --title "RARBS Installation" --infobox "Installing \Zb\`$1\`\Zn ($p of $total) from the AUR. $1 $2" 5 70
+	sudo -u "$name" $aurhelper -S --noconfirm "$1" >/dev/null 2>&1 ;}
+gitinstall(){
+	echo "GIT> Cloning ($p/$total) $1"
+}
+npminstall(){
+	echo "NPM> Installing ($p/$total) $1"
+	[ -x "$(command -v "npm")" ] || installpkg npm || installpkg node
+	# npm install --quiet "$1" / --silent
+	# quiety only log warning and error / silent completly remove output
+	yes | npm install "$1" >/dev/null 2>&1
+}
+
+pipinstall(){
+    case "$OS" in
+        "macOS") [ -x "$(command -v "pip")" ] || python3 -m ensurepip --upgrade >/dev/null 2>&1 ;;
+            *) [ -x "$(command -v "pip")" ] || installpkg python-pip >/dev/null 2>&1 ;;
+    esac
+	echo "PIP> Installing ($p/$total) $1"
+	yes | pip install -q "$1"
+}
+cargoinstall(){
+	echo "CARGO> Installing ($p/$total) $1"
+
+}
+addrepos(){
+	case "$OS" in
+		"macOS")
+			echo "Adding ($r/$totalrepos) $1"
+			brew tap "$1" >/dev/null 2>&1 ;;
+		# Linux)
+		# 	case "$distro" in
+		# 		"Ubuntu") ;;
+		# 	esac
+		# 	;;
+	esac
+}
+
+getOS() { \
+    case $kernel_name in
+        Darwin) 
+                OS=$darwin_name
+                ;;
+        Linux|GNU*) OS=Linux ;;
+        *) error "Unknown OS: '$kernel_name'" ;;
+    esac
+}
+
+getDistro(){
+    case $OS in
+        Linux)
+            if [[ -f /etc/os-release ]]; then
+                    source /etc/os-release
+			elif [[ -d /system/app/ && -d /system/priv-app ]]; then
+				distro="Android $(getprop ro.build.version.release)"
+            fi
+            distro="${NAME}"
+            ;;
+        "macOS"|"Mac OS X")
+            case $osx_version in
+                10.15*) codename="macOS Catalina" ;;
+                10.16*|11.*) codename="macOS Big Sur";;
+                12.*) codename="macOS Monterey";;
+                *) codename="macOS" ;;
+            esac
+            distro="$codename $osx_version $osx_build"
+			;;
+    esac
+}
+
+filterfile(){
+	case "$OS" in
+		"macOS") 
+			case "$rtype" in
+				# order matter must be exactly like this ,FMBH,
+				# -E version
+				"F") ([ -f "$progsfile" ] && grep -E '^BRE,F[A-Z]*,' $progsfile > /tmp/progs.csv )
+					 ([ -f "$srepofile" ] && grep -E '^BRE,F[A-Z]*,' $sreposfile > /tmp/repos.csv )
+					;;
+				"M") ([ -f "$progsfile" ] && grep -E '^BRE,[A-Z]?M([A-Z]?)*,' $progsfile > /tmp/progs.csv )
+					 ([ -f "$sreposfile" ] && grep -E '^BRE,[A-Z]?M([A-Z]?)*,' $sreposfile > /tmp/repos.csv )
+					;;
+				"B") ([ -f "$progsfile" ] && grep -E '^BRE,([A-Z]?)*B[A-Z]?,' $progsfile > /tmp/progs.csv )
+					 ([ -f "$sreposfile" ] && grep -E '^BRE,([A-Z]?)*B[A-Z]?,' $sreposfile > /tmp/repos.csv )
+					;;
+				# "H") ([ -f "$progsfile" ] && grep -E '^BRE,([A-Z]?)*H,' $progsfile > /tmp/progs.csv ) ;;
+
+				# non -E version
+				# "F") ([ -f "$progsfile" ] && grep '^BRE,F[A-Z]\?.*$' $progsfile > /tmp/progs.csv ) ;;
+				# "M") ([ -f "$progsfile" ] && grep '^BRE,[A-Z]\?M.*$' $progsfile > /tmp/progs.csv ) ;;
+				# "B") ([ -f "$progsfile" ] && grep '^BRE,.*B[A-Z]\?,' $progsfile > /tmp/progs.csv ) ;;
+				# "H") ([ -f "$progsfile" ] && grep '^BRE,.*H' $progsfile > /tmp/progs.csv ) ;;
+			esac
+			;;
+		# TODO: UNTESTED
+		"Linux") 
+            case "$distro" in
+                "Arch Linux"|"Manjaro Linux")
+					case "$rtype" in
+						"F") ([ -f "$progsfile" ] && grep -E '^PAC,F[A-Z]*,' $progsfile > /tmp/progs.csv ) ;;
+						"M") ([ -f "$progsfile" ] && grep -E '^PAC,[A-Z]?M([A-Z]?)*,' $progsfile > /tmp/progs.csv ) ;;
+						"B") ([ -f "$progsfile" ] && grep -E '^PAC,([A-Z]?)*B[A-Z]?,' $progsfile > /tmp/progs.csv ) ;;
+						"H") ([ -f "$progsfile" ] && grep -E '^PAC,([A-Z]?)*H,' $progsfile > /tmp/progs.csv ) ;;
+					esac
+					;;
+                "Android*")
+					case "$rtype" in
+						"F") ([ -f "$progsfile" ] && grep -E '^PKG,F[A-Z]*,' $progsfile > /tmp/progs.csv ) ;;
+						"M") ([ -f "$progsfile" ] && grep -E '^PKG,[A-Z]?M([A-Z]?)*,' $progsfile > /tmp/progs.csv ) ;;
+						"B") ([ -f "$progsfile" ] && grep -E '^PKG,([A-Z]?)*B[A-Z]?,' $progsfile > /tmp/progs.csv ) ;;
+						# "H") ([ -f "$progsfile" ] && grep -E '^PKG,([A-Z]?)*H,' $progsfile > /tmp/progs.csv ) ;;
+					esac
+					;;
+			esac
+			;;
+	esac
+	# TODO: Grouping with main packages
+	# PIP,NPM,GIT,CARGO, and other programming language package manager
+	case "$rtype" in
+		"F") ([ -f "$progsfile" ] && grep -E '^PIP,|^NPM,|^GIT,|^CAR,' $progsfile | grep -E "[A-Z]+,F[A-Z]*," > /tmp/progs.csv ) ;;
+		"M") ([ -f "$progsfile" ] && grep -E '^PIP,|^NPM,|^GIT,|^CAR,' $progsfile | grep -E "[A-Z]+,[A-Z]?M([A-Z]?)*," >> /tmp/progs.csv ) ;;
+		"B") ([ -f "$progsfile" ] && grep -E '^PIP,|^NPM,|^GIT,|^CAR,' $progsfile | grep -E "[A-Z]+,([A-Z]?)*B[A-Z]?," >> /tmp/progs.csv ) ;;
+	esac
+}
+addingrepoloop(){
+	while IFS=, read -r pkgtag rtypetag source comment; do
+		r=$((r+1))
+		totalrepos=$(wc -l < /tmp/repos.csv | awk '{print $1}')
+		echo "$comment" | grep -q "^\".*\"$" && comment="$(echo "$comment" | sed "s/\(^\"\|\"$\)//g")"
+		case "$pkgtag" in
+			*) addrepos "$source" "$comment" ;;
+		esac
+	done < /tmp/repos.csv ;}
+installationloop(){
+	filterfile
+	addingrepoloop
+	total=$(wc -l < /tmp/progs.csv | awk '{print $1}')
+	while IFS=, read -r pkgtag rtypetag program comment; do
+		echo "$comment" | grep -q "^\".*\"$" && comment="$(echo "$comment" | sed "s/\(^\"\|\"$\)//g")"
+		p=$((p+1))
+		case "$pkgtag" in
+			# "PAC"|"PKG"|"BRE"|"APT") echo "$p TYPE: $rtypetag, PKG: $pkgtag, NAMEPKG: $program" ;;
+			"PAC"|"PKG"|"BRE"|"APT") 
+				echo "MAIN> Installing ($p/$total) $program"
+				maininstall "$program" "$comment";;
+			"AUR") aurinstall "$program" "$comment" ;;
+			"GIT") gitinstall "$program" "$comment" ;;
+			"PIP") pipinstall "$program" "$comment" ;;
+			"NPM") npminstall "$program" "$comment" ;;
+		esac
+	done < /tmp/progs.csv
+}
+postinstall(){
+	case "$OS" in
+		"macOS") bash $PWD/set_osx_default.sh ;;
+	esac
+
+}
+
+getUname(){
+    IFS=" " read -ra uname <<< "$(uname -srm)"
+
+    kernel_name="${uname[0]}"
+    kernel_version="${uname[1]}"
+    kernel_machine="${uname[2]}"
+    if [ "$kernel_name" == "Darwin" ];then
+        export SYSTEM_VERSION_COMPAT=0
+        IFS=$'\n' read -d "" -ra sw_vers <<< "$(awk -F'<|>' '/key|string/ {print $3}' \
+                                "/System/Library/CoreServices/SystemVersion.plist")"
+            for ((i=0;i<${#sw_vers[@]};i+=2)) {
+                case ${sw_vers[i]} in
+                    ProductName)          darwin_name=${sw_vers[i+1]} ;;
+                    ProductVersion)       osx_version=${sw_vers[i+1]} ;;
+                    ProductBuildVersion)  osx_build=${sw_vers[i+1]}   ;;
+                esac
+            }
+    fi
+}
+# Emacs OSX
+# brew services start davidrestive/emacs-head/emacs-head@28
+getUname
+getOS
+getDistro
+cmRtype
+installpreq
+installreq
+# preinstallmsg
+installationloop
+# postinstall
+echo "Installation Finished" >&2; exit

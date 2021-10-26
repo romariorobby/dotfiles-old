@@ -1,0 +1,21 @@
+* 
+* Progs.csv
+** First Tag
+*** Main Package Manager
+   - PKG = Termux Android (termux)
+   - APT = Ubuntu Package Manager
+   - PAC = Pacman (Arch)
+	 - AUR = Arch User Repo
+   - BRE = Homebrew (OSX)
+*** Other Package Manager
+   - PIP = Python
+   - CAR = Rust Cargo
+   - NPM = NodeJS
+** Second Tag (Type)
+   - F = Full
+   - M = Minimal
+   - B = Base
+   - H = Headless
+   - O = Optional
+   - X = Dump
+   - Z = Dump
