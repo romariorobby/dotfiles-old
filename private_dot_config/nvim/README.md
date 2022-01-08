@@ -1,0 +1,24 @@
+# Plugins
+- Telescope
+- Bufferline
+- Nvimtree
+- Whichkey
+- LSP
+- indentblankline
+- nvim-cmp
+- colorizer
+- toggleterm
+- luasnip
+- vimsurround
+- todocomments
+## Git
+- gitlinker
+- gitsigns
+- neogit
+
+## Documents
+- orgmode
+- vimwiki
+- glow
+- markdownpreview
+- neorg
