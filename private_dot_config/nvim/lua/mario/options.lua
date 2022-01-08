@@ -33,6 +33,7 @@ local options = {
 	showmode = false, -- we don't need to see things like -- INSERT -- anymore
 	list = true, -- [Indentblankline]
 	inccommand = "split"  -- Make substitution work in realtime
+	-- joinspaces = true, -- automatically insert two spaces after .,!,!
 }
 for k, v in pairs(options) do
 	vim.opt[k] = v

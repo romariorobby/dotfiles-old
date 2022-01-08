@@ -14,6 +14,7 @@
 	- [ ] Tab/ bar?
 	- [ ] Create custom theme
 		- [ ] Dark and light variant
+	- [ ] Zen mode
 	- Git
 		- [ ] Neogit
 		- [X] Gisigns

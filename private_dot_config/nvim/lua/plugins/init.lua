@@ -417,7 +417,7 @@ return packer.startup(function()
 		"phaazon/hop.nvim",
 		disable = not plugin_status.hop,
 		config = function()
-			require("plugin.hop")
+			require("plugins.hop")
 		end,
 	})
 	use({
@@ -434,6 +434,14 @@ return packer.startup(function()
 		run = {
 			"npm install --prefix server",
 		},
+	})
+	-- Peek Number
+	use({
+		"nacro90/numb.nvim",
+		disable = not plugin_status.numb,
+		config = function()
+			require("numb").setup()
+		end,
 	})
 
 	if packer.PACKER_BOOSTRAP then

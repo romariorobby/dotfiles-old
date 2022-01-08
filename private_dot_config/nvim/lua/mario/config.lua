@@ -11,6 +11,8 @@ return {
 			},
 		},
 		hop = true,
+		bracey = false,
+		numb = true,
 		peekup = false,
 		quickscope = false,
 		todocomments = true,

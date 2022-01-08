@@ -11,5 +11,4 @@ gitlinker.setup {
 		-- action_callback = actions.open_in_browser,
 		print_url = true,
 	},
-	mappings = "<leader>gy",
 }

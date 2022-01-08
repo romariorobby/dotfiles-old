@@ -347,13 +347,39 @@ if plugin_status.hop then
 	-- vim.api.nvim_set_keymap('n', '<localleader>s', ":HopChar2<cr>", {silent = true})
 	-- vim.api.nvim_set_keymap('n', '<localleader>s', ":HopWord<cr>", {silent = true})
 end
+if plugin_status.git.gitlinker then
+	-- nnoremap("<leader>gy", "<cmd>lua require'gitlinker'.get_buf_range_url('n', {action_callback = require'gitlinker.actions'.copy_to_clipboard})<cr>", {label ="Gitlink: Yank on cursor"})
+	nnoremap("<leader>gy", "<cmd>lua require'gitlinker'.get_buf_range_url('n')<cr>", {label ="Gitlink: Yank on cursor"})
+	nnoremap("<leader>gY", "<cmd>lua require'gitlinker'.get_repo_url('n')<cr>", {label ="Gitlink: Yank Root Dir"})
+	nnoremap(
+		"<leader>go",
+		"<cmd>lua require'gitlinker'.get_buf_range_url('n', {action_callback = require'gitlinker.actions'.open_in_browser})<cr>",
+		{label = "Gitlink: Open on cursor"})
+	nnoremap(
+		"<leader>gO",
+		"<cmd>lua require'gitlinker'.get_repo_url('n', {action_callback = require'gitlinker.actions'.open_in_browser})<cr>",
+		{label = "Gitlink: Open Root Dir"})
+
+	-- Visual
+	vnoremap("<leader>gy", "<cmd>lua require'gitlinker'.get_buf_range_url('v')<cr>", {label ="Gitlink: Yank on cursor"})
+	vnoremap("<leader>gY", "<cmd>lua require'gitlinker'.get_repo_url('v')<cr>", {label ="Gitlink: Yank Root Dir"})
+	vnoremap(
+		"<leader>go",
+		"<cmd>lua require'gitlinker'.get_buf_range_url('v', {action_callback = require'gitlinker.actions'.open_in_browser})<cr>",
+		{label ="Gitlink: Open on cursor"})
+	vnoremap("<leader>gO",
+		"<cmd>lua require'gitlinker'.get_repo_url('v', {action_callback = require'gitlinker.actions'.open_in_browser})<cr>",
+		{label = "Gitlink: Open Root Dir"})
+end
 if plugin_status.toggleterm then
 	name("<leader>tt", { label = "Terminal" })
 	nnoremap("<leader>ttt", "<cmd>ToggleTerm<CR>", { label = "Terminal" })
-	nnoremap("<leader>ttl", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", { label = "Lazygit" })
+	nnoremap({"<leader>ttl", "<leader>g1"}, "<cmd>lua _LAZYGIT_TOGGLE()<CR>", { label = "Lazygit" })
 	nnoremap("<leader>tth", "<cmd>lua _HTOP_TOGGLE()<CR>", { label = "Htop" })
 end
-
+if plugin_status.neogit then
+	nnoremap("<leader>g2", "<cmd>Neogit<cr>", {label = "neogit"})
+end
 M.md_keymaps = function()
 	if plugin_status.glow then
 		nnoremap("<LocalLeader>g", "<cmd>Glow<cr>", { buffer = 0, label = "Glow" })
