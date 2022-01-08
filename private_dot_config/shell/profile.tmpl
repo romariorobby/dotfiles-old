@@ -18,13 +18,10 @@ export PATH=$PATH:$HOME/.config/emacs-doom/bin
 export NPM_CONFIG_PREFIX=~/.local/
 
 # Default programs:
-{{ if (eq .chezmoi.os "darwin") }}
-export TERMINAL="kitty"
-{{ else }}
 # TODO: check chezmoi docs
 # better if we can check whether `terminal` exist or not.
-export TERMINAL="st"
-{{ end }}
+export TERMINAL="kitty"
+# export TERMINAL="st"
 export EDITOR="nvim"
 export VISUAL="nvim"
 export CODEEDITOR="nvim"
@@ -41,7 +38,7 @@ export NOTMUCH_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/notmuch"
 #export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority" # This line will break some DMs.
 export XINITRC="${XDG_CONFIG_HOME:-$HOME/.config}/x11/xinitrc"
 export LESSHISTFILE="-"
-export VSCODE_PORTABLE="$XDG_CONFIG_HOME/VSCodium"
+export VSCODE_PORTABLE="${XDG_CONFIG_HOME:-$HOME/.config}/VSCodium"
 export GITBARE="$HOME/repos/mario/bare"
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 export BASHRCDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/bash"
@@ -54,8 +51,10 @@ export GRADLE_USER_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/gradle"
 export INPUTRC="${XDG_CONFIG_HOME:-$HOME/.config}/shell/inputrc"
 export RUSTUP_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/rustup"
 export NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
+export SYNCTHING_DIR="$HOME/Sync"
 # ANDROID
 #
+{{ if (eq .chezmoi.os "linux") }}
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="${XDG_CONFIG_HOME}/java"
 export ANDROID_SDK_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/android"
 export ANDROID_AVD_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/android"
@@ -68,6 +67,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1	# Fix for Java applications in dwm
 export XMONAD_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/xmonad"
 export XMONAD_DATA_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/xmonad"
 export XMONAD_CACHE_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/xmonad"
+{{ end }}
 #OTher
 export DICS="/usr/share/stardict/dic/"
 export LESS=-R
@@ -80,12 +80,14 @@ export SPICETIFY_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/spicetify"
 export CALIBRE_USE_DARK_PALETTE=1
 export CALIBRE_CONFIG_DIRECTORY="${XDG_CONFIG_HOME:-$HOME/.config}/calibre"
 
+{{ if (eq .chezmoi.os "linux") }}
 # XRDM 
 export XRDM_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources.d"
 export XRDM_FONT_DIR="$XRDM_DIR/fonts"
 export XRDM_COLOR_DIR="$XDRM_DIR/colors"
 export XRDM_PRESET_DIR="$XRDM_DIR/presets"
 export XRDM_PROGRAM_DIR="$XRDM_DIR/programs"
+{{ end }}
 
 [ -f ${XDG_CONFIG_HOME:-$HOME/.config}/lf/LF_ICONS ] && source ${XDG_CONFIG_HOME:-$HOME/.config}/lf/LF_ICONS
 [ ! -f ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ] && shortcuts >/dev/null 2>&1 &
