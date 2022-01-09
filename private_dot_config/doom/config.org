@@ -86,9 +86,17 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
 :END:
 #+begin_src emacs-lisp
 (defun mario/browse-dotfiles ()
-  "Browse the files in ~/.dotfiles."
+  "Browse the files in dotfiles"
   (interactive)
-  (doom-project-browse (expand-file-name "~/.config/")))
+  (doom-project-browse (expand-file-name (or (concat (xdg-config-home) "/") "~/.config"))))
+#+end_src
+***
+*** Browse Chezmoi
+#+begin_src emacs-lisp
+(defun mario/browse-chezdot ()
+  "Browse the files in chezmoi"
+  (interactive)
+  (doom-project-browse (expand-file-name (or (concat (xdg-data-home) "/chezmoi/") "~/.local/share/chezmoi/"))))
 #+end_src
 ***
 * Keybinding
@@ -159,8 +167,9 @@ this file. Emacs searches the =`load-path'= when you load packages with `require
        "f ." #'mario/browse-dotfiles
        "t p" #'org-toggle-properties
       (:prefix ("y" . "yank/copy")
-        :desc "org-store-link" "o" #'org-store-link
-        :desc "copy-id-from-agenda" "a" #'mario/copy-idlink-to-clipboard)
+        :desc "copy id" "i" #'org-id-copy)
+        ;; :desc "org-store-link" "o" #'org-store-link)
+        ;; :desc "copy-id-from-agenda" "a" #'mario/copy-idlink-to-clipboard)
        "n z" #'mario/switch-to-agenda)
 (map! :map org-mode-map
       :localleader
@@ -452,10 +461,10 @@ Use default browser unless `xwidget' is available."
 :ID:       09b334ec-e9bb-4e79-96e3-8ad61101705e
 :END:
 #+begin_src emacs-lisp
-(setq mario/org-agenda-dir (file-truename "~/Documents/Docdump/gtd/")
-      mario/org-dir (file-truename "~/Documents/Docdump/")
-      mario/org-journal-dir (file-truename "~/Documents/Docdump/journals/daily/")
-      mario/org-roam-dir (file-truename "~/Documents/Docdump/"))
+(setq mario/org-dir (file-truename "~/Sync/Media/documents/mariodump/") ;; this dir must be root of the documents
+      mario/org-roam-dir mario/org-dir
+			mario/org-agenda-dir (concat mario/org-dir "gtd/")
+      mario/org-journal-dir (concat mario/org-dir "journals/"))
 (setq org-attach-id-dir (expand-file-name "assets" mario/org-dir)
       org-attach-dir-relative t)
 (setq org-habit-show-habits-only-for-today t)
@@ -508,7 +517,7 @@ Use default browser unless `xwidget' is available."
 :ID:       ad94d1fb-c9e7-4b37-a66c-75dec098aee7
 :END:
 #+begin_src emacs-lisp
-;; TODO: How to iterate to list ?
+;; TODO: How to iterate to list ? and fallback to monospace if not exists
 (custom-set-faces!
   '(outline-1 :font "ETbb" :height 1.4)
   '(outline-2 :font "ETbb" :height 1.3)
@@ -594,7 +603,7 @@ Use default browser unless `xwidget' is available."
         :prefix "m"
         "u" #'org-roam-update-org-id-locations)
   (setq org-roam-directory mario/org-roam-dir
-        org-roam-dailies-directory "journals/daily"
+        org-roam-dailies-directory "journals"
         org-roam-db-gc-threshold most-positive-fixnum
         ;; Only create ID in interactive mode
         ;; org-id-link-to-org-use-id 'create-if-interactive'
@@ -626,6 +635,10 @@ Use default browser unless `xwidget' is available."
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
+          ("m" "markdown" plain "" :target
+           (file+head "pages/${slug}-%<%Y-%m-%dT%H%M%S>.md"
+                      "---\ntitle: ${title}\nid: %<%Y-%m-%dT%H%M%S>\ncategory: \n---\n")
+           :unnarrowed t)
           ("z" "Zettle" plain
            "%?"
            :if-new (file+head "pages/%<%Y%m%d%H%M%S>-${slug}.org"
@@ -634,7 +647,19 @@ Use default browser unless `xwidget' is available."
            :unnarrowed t)))
   (set-company-backend! 'org-mode '(company-capf)))
 #+end_src
-
+*** Md Roam
+#+begin_src emacs-lisp
+(use-package! md-roam
+  :after org-roam
+  :config
+  (set-company-backend! 'markdown-mode 'company-capf)
+  (setq org-roam-file-extensions '("org" "md")
+        ;; md-roam-use-markdown-file-links t
+        md-roam-file-extension "md")
+  (md-roam-mode 1))
+;; Markdown Image inline size
+(setq markdown-max-image-size '(500 . 500))
+#+end_src
 *** UI
 :PROPERTIES:
 :ID:       3fa15bc3-ba97-46cc-95fc-9f0419b29be7
