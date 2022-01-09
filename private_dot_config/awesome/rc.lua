@@ -114,17 +114,17 @@ end
 awful.layout.layouts = {
 	awful.layout.suit.tile,
 	awful.layout.suit.floating,
-	awful.layout.suit.tile.left,
-	awful.layout.suit.tile.bottom,
-	awful.layout.suit.tile.top,
-	awful.layout.suit.fair,
-	awful.layout.suit.fair.horizontal,
-	awful.layout.suit.spiral,
-	awful.layout.suit.spiral.dwindle,
 	awful.layout.suit.max,
-	awful.layout.suit.max.fullscreen,
-	awful.layout.suit.magnifier,
-	awful.layout.suit.corner.nw,
+	awful.layout.suit.spiral,
+	-- awful.layout.suit.spiral.dwindle,
+	-- awful.layout.suit.tile.left,
+	-- awful.layout.suit.tile.bottom,
+	-- awful.layout.suit.tile.top,
+	-- awful.layout.suit.fair,
+	-- awful.layout.suit.fair.horizontal,
+	-- awful.layout.suit.max.fullscreen,
+	-- awful.layout.suit.magnifier,
+	-- awful.layout.suit.corner.nw,
 	-- awful.layout.suit.corner.ne,
 	-- awful.layout.suit.corner.sw,
 	-- awful.layout.suit.corner.se,
@@ -351,6 +351,9 @@ local globalkeys = gears.table.join(
 	map({ modkey, "Shift" }, "k", function()
 		awful.client.swap.byidx(-1)
 	end, { description = "swap with previous client by index", group = "client" }),
+	map({ modkey }, "space", function()
+		awful.client.swap.byidx(1)
+	end, { description = "swap windows", group = "client" }),
 	map({ modkey, "Control" }, "j", function()
 		awful.screen.focus_relative(1)
 	end, { description = "focus the next screen", group = "screen" }),
@@ -390,10 +393,10 @@ local globalkeys = gears.table.join(
 	map({ modkey, "Control" }, "l", function()
 		awful.tag.incncol(-1, nil, true)
 	end, { description = "decrease the number of columns", group = "layout" }),
-	map({ modkey }, "space", function()
+	map({ modkey }, "]", function()
 		awful.layout.inc(1)
 	end, { description = "select next", group = "layout" }),
-	map({ modkey, "Shift" }, "space", function()
+	map({ modkey}, "[", function()
 		awful.layout.inc(-1)
 	end, { description = "select previous", group = "layout" }),
 
@@ -433,7 +436,7 @@ local clientkeys = gears.table.join(
 		c:kill()
 	end, { description = "close", group = "client" }),
 	awful.key(
-		{ modkey, "Control" },
+		{ modkey, "Shift" },
 		"space", function (c)
 			c.floating = not c.floating
 			c:raise()
@@ -451,7 +454,7 @@ local clientkeys = gears.table.join(
 	-- 		c:raise()
 	-- 	end, { description = "titlebar toogle", group = "client"}
 	-- ),
-	awful.key({ modkey, "Control" }, "Return", function(c)
+	awful.key({ modkey, "Control" }, "space", function(c)
 		c:swap(awful.client.getmaster())
 	end, { description = "move to master", group = "client" }),
 	awful.key({ modkey }, "o", function(c)
@@ -637,8 +640,7 @@ client.connect_signal("request::titlebars", function(c)
 			awful.titlebar.widget.closebutton(c),
 			awful.titlebar.widget.minimizebutton(c),
 			-- fullscreenbutton(c),
-			-- awful.titlebar.widget.maximizedbutton(c),
-			-- awful.titlebar.widget.fullscreenbutton(c),
+			awful.titlebar.widget.maximizedbutton(c),
 
 			awful.titlebar.widget.floatingbutton(c),
 			awful.titlebar.widget.stickybutton(c),

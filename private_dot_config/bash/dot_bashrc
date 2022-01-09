@@ -1,11 +1,10 @@
 #
 # ~/.config/bash/.bashrc
 #
-
+# local Completions
+source "${BASHRCDOTDIR:-$HOME/.config/bash}/completions"
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
-
-alias ls='ls --color=auto'
 
 PS1="\[\e[31m\][\[\e[m\]\[\e[94m\]\u\[\e[m\]@\[\e[96m\]\h\[\e[m\]:\[\e[35m\]\w\[\e[m\]\[\e[31m\]]\[\e[m\] (\$(git branch 2>/dev/null | grep '^*' | colrm 1 2)) \$ "
 set -o vi
