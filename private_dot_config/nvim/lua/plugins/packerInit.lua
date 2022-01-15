@@ -1,26 +1,19 @@
 local cmd = vim.cmd
 local fn = vim.fn
 local execute = vim.api.nvim_command
-cmd("packadd packer.nvim")
+-- cmd("packadd packer.nvim")
 
-local status_ok, packer = pcall(require, "packer")
-if not status_ok then
+local present, packer = pcall(require, "packer")
+if not present then
+-- if vim.fn.input "Download Packer? (y for yes) " ~= "y" then
+--    return
+-- end
 	local packer_path = vim.fn.stdpath("data") .. "/site/pack/packer/opt/packer.nvim"
 
-	-- if fn.empty(fn.glob(install_path)) > 0 then
-  -- 	PACKER_BOOTSTRAP = fn.system {
-	-- 		"git",
-	-- 		"clone",
-	-- 		"--depth",
-	-- 		"1",
-	-- 		"https://github.com/wbthomason/packer.nvim",
-	-- 		install_path,
-	-- 	}
-	-- end
-	-- remove the dir before cloning
 	print("Cloning packer..")
+	-- remove the dir before cloning
 	fn.delete(packer_path, "rf")
-	PACKER_BOOSTRAP = fn.system({
+	PACKER_BOOTSTRAP = fn.system({
 		"git",
 		"clone",
 		"--depth",
@@ -28,12 +21,15 @@ if not status_ok then
 		"https://github.com/wbthomason/packer.nvim",
 		packer_path,
 	})
-
+	print(PACKER_BOOTSTRAP)
 	cmd("packadd packer.nvim")
-	status_ok, packer = pcall(require, "packer")
-
-	if status_ok then
-		print("Packer cloned successfully.\nClose and reopen Neovim..")
+	ready, packer = pcall(require, "packer")
+--
+	if ready then
+		vim.notify("Close and reopen Neovim..", "info")
+		if vim.fn.input "Quit Now ? (y for yes) " == "y" then
+			vim.cmd[[silent :qa!]]
+		end
 	else
 		error("Couldn't clone packer !\nPacker path: " .. packer_path .. "\n" .. packer)
 	end

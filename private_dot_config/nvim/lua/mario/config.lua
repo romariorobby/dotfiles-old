@@ -39,6 +39,7 @@ return {
 				buf = true,
 				path = true,
 				cmd = true,
+				luasnip = true,
 			},
 		},
 		icons = {

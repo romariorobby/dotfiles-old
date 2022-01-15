@@ -294,8 +294,14 @@ return packer.startup(function()
 	use({
 		"L3MON4D3/LuaSnip",
 		disable = not plugin_status.luasnip,
+		config = function ()
+			require("plugins.luasnip")
+		end
 	})
-	-- use "saadparwaiz1/cmp_luasnip" -- snippet completions
+	use({
+		"saadparwaiz1/cmp_luasnip", -- snippet completions
+		disable = not plugin_status.nvim_cmp.ext.luasnip,
+	})
 
 	use({
 		"rafamadriz/friendly-snippets", -- a bunch of snippets to use
@@ -309,6 +315,8 @@ return packer.startup(function()
 		"ellisonleao/glow.nvim",
 		disable = not plugin_status.glow,
 		config = function()
+			vim.g.glow_use_pager = true
+			vim.g.glow_style = "dark"
 			vim.g.glow_border = "rounded"
 			vim.g.glow_width = 240
 		end,
@@ -442,6 +450,14 @@ return packer.startup(function()
 		config = function()
 			require("numb").setup()
 		end,
+	})
+	use({
+		'~/repos/chezmoi.nvim',
+		 config = function()
+			 require"chezmoi".setup({
+				 exec = "chezmoi",
+			})
+	end,
 	})
 
 	if packer.PACKER_BOOSTRAP then

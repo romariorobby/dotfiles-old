@@ -1,9 +1,9 @@
 -- local cmd = vim.cmd
 local options = {
-	--	clipboard = "unnamedplus", -- Access system clipboard
+	-- clipboard = "unnamedplus", -- Access system clipboard
 	pumheight = 10, -- popmenu height in command mode?
 	completeopt = { "menuone", "noselect" }, -- mostly just for cmp
-	cmdheight = 2, -- more space in the neovim command line for displaying messages
+	cmdheight = 1, -- more space in the neovim command line for displaying messages
 	number = true, -- `nu` Line number
 	relativenumber = true, -- `rnu` Relative number
 	mouse = "n", -- Enable mouse support
@@ -20,6 +20,7 @@ local options = {
 	hlsearch = true, -- `insearch` Highlihgt all matches search
 	ignorecase = false, -- ignore case in search pattern
 	smartcase = true, -- smart case
+	-- joinspaces = true, --  remove extraspaces
 	smartindent = true, --
 	termguicolors = true, -- set term gui colors for terminal
 	splitright = true, -- put hsplit below of current window
@@ -33,7 +34,6 @@ local options = {
 	showmode = false, -- we don't need to see things like -- INSERT -- anymore
 	list = true, -- [Indentblankline]
 	inccommand = "split"  -- Make substitution work in realtime
-	-- joinspaces = true, -- automatically insert two spaces after .,!,!
 }
 for k, v in pairs(options) do
 	vim.opt[k] = v

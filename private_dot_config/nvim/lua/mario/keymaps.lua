@@ -2,6 +2,7 @@ local status_ok, config = pcall(require, "mario.config")
 if not status_ok then
 	return
 end
+
 local M = {}
 local plugin_status = config.plugins
 
@@ -17,8 +18,8 @@ local cmap = qs.cmap
 local nmap = qs.nmap
 local map = qs.map
 local name = qs.name
-
-map("<F1>", "<Nop>") -- :help just enough
+local noremap = qs.noremap
+-- map("<F1>", "<Nop>") -- :help just enough
 map("<Space>", "<Nop>")
 -- Fun, freeze arrow :)
 inoremap("<Up>", "<C-o>:echom '---> k <---'<CR>")
@@ -77,6 +78,7 @@ nnoremap("<leader>bnv", "<cmd>vsplit | ene | startinsert<cr>", { label = "New bu
 if plugin_status.bufferline then
 	nnoremap("<Tab>", "<cmd>BufferLineCycleNext<cr>")
 	nnoremap("<S-Tab>", "<cmd>BufferLineCyclePrev<cr>")
+	nnoremap({ "<leader>bC", "<leader>bd" }, "<cmd>bdelete!<cr>", { label = "Delete" })
 	nnoremap("<leader>bf", "<cmd>BufferLinePick<cr>", { label = "Swith" })
 	nnoremap("<leader>bc", "<cmd>BufferLinePickClose<cr>", {label = "Close"})
 	nnoremap("<leader>bl", "<cmd>BufferLineCycleNext<cr>", {label = "Next"})
@@ -97,8 +99,8 @@ if plugin_status.bufferline then
 	nnoremap("<leader>b5", "<cmd>BufferLineGoToBuffer 5<cr>", {label = "Buffer 5"})
 	nnoremap("<leader>b6", "<cmd>BufferLineGoToBuffer 6<cr>", {label = "Buffer 6"})
 else
-	nnoremap({ "<leader>bc", "<leader>bd" }, "<cmd>bdelete<cr>", { label = "Delete" })
-	nnoremap("<leader>bC", "<cmd>bwipeout<cr>", { label = "Wipeout" })
+	nnoremap({ "<leader>bc", "<leader>bd" }, "<cmd>bdelete!<cr>", { label = "Delete" })
+	nnoremap("<leader>bC", "<cmd>bwipeout!<cr>", { label = "Wipeout" })
 	nnoremap({ "<S-Tab>", "<leader>bh", "<leader>b[" }, "<cmd>bprevious<cr>", { label = "Previous" })
 	nnoremap({ "<Tab>", "<leader>bl", "<leader>b]" }, "<cmd>bnext<cr>", { label = "Next" })
 	nnoremap({ "<leader>bg", "<leader>b0" }, "<cmd>bfirst<cr>", { label = "First Buffer" })
@@ -339,6 +341,11 @@ M.lsp_keymaps = function(bufnr)
 	-- Autoformat when save file
 	-- vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
 end
+-- if plugin_status.chezmoi then
+nnoremap("<leader>aca", ":ChezmoiAdd ")
+nnoremap("<leader>acA", "<cmd>ChezmoiAdd --exact<CR>")
+nnoremap("<leader>acD", "<cmd>ChezmoiForget<CR>")
+-- end
 if plugin_status.hop then
 	-- See if this this conflict or not with vim surround
 	nnoremap('s', ":HopChar2<cr>")

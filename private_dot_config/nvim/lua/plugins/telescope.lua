@@ -99,13 +99,14 @@ telescope.setup {
 			mappings = {
 				["i"] = {
 					-- your custom insert mode mappings
-					["<C-a>"] = fb_actions.create_file,
+					["<C-a>"] = fb_actions.create,
 					["<A-.>"] = fb_actions.toggle_hidden,
+					["<C-d>"] = fb_actions.remove,
 				},
 				["n"] = {
 					-- your custom normal mode mappings
 					["."] = fb_actions.toggle_hidden,
-					["d"] = fb_actions.remove_file,
+					["d"] = fb_actions.remove,
 				},
 			},
 		},

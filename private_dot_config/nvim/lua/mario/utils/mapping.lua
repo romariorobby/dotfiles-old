@@ -68,10 +68,18 @@ local function make_mapper(config, o)
 
 		if type(lhs) == 'table' then
 			for _, key in ipairs(lhs) do
-				vim.api.nvim_set_keymap(config.mode, key, rhs, opts)
+				if vim.fn.has "nvim-0.7" then
+					vim.keymap.set(config.mode, key, rhs, opts)
+				else
+					vim.api.nvim_set_keymap(config.mode, key, rhs, opts)
+				end
 			end
 		else
-			vim.api.nvim_set_keymap(config.mode, lhs, rhs, opts)
+			if vim.fn.has "nvim-0.7" then
+				vim.keymap.set(config.mode, lhs, rhs, opts)
+			else
+				vim.api.nvim_set_keymap(config.mode, lhs, rhs, opts)
+			end
 		end
   end
 end

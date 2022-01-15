@@ -1,0 +1,26 @@
+{
+  "name": "nvim-snippets",
+  "author": "mario",
+  "engines": {
+    "vscode": "^1.11.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "shellscript",
+          "shell",
+          "sh"
+        ],
+        "path": "./shell.json"
+      },
+      {
+        "language": [
+          "ledger",
+					"org"
+        ],
+        "path": "./global.json"
+      }
+    ]
+  }
+}

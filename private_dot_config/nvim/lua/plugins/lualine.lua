@@ -39,6 +39,8 @@ local filetype = {
 	-- icon = nil,
 }
 
+function chezmoi() return require 'chezmoi'.status() end
+
 local branch = {
 	"branch",
 	icons_enabled = true,
@@ -84,7 +86,7 @@ lualine.setup({
 	sections = {
 		lualine_a = { branch, diagnostics },
 		lualine_b = { },
-		lualine_c = { filename },
+		lualine_c = { filename, chezmoi },
 		-- lualine_x = { "encoding", "fileformat", "filetype" },
 		lualine_x = { diff, spaces, filetype, 'filesize','encoding'},
 		lualine_y = { location },

@@ -1,0 +1,13 @@
+#!/bin/sh
+sudo -v
+cd ~
+sudo rm -r neovim
+git clone --depth 1 https://github.com/neovim/neovim
+cd neovim
+sudo make CMAKE_BUILD_TYPE=Release install
+cd ~
+sudo rm -r neovim
+# Hello
+# Remove nvim
+#sudo rm /usr/local/bin/nvim
+#sudo rm -r /usr/local/share/nvim/
